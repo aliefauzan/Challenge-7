@@ -19,7 +19,9 @@
     "icons:xcode": "node scripts/make-icons.mjs --appiconset \"safari/ScamShield/Shared (App)/Assets.xcassets/AppIcon.appiconset\"",
     "safari:build": "node scripts/safari.mjs build",
     "safari:open": "node scripts/safari.mjs open",
-    "safari:sim": "node scripts/safari.mjs sim"
+    "safari:sim": "node scripts/safari.mjs sim",
+    "safari:archive": "node scripts/safari.mjs archive",
+    "pack": "node scripts/pack.mjs"
   },
   "dependencies": {
     "tldts": "^6.1.86"

@@ -4,14 +4,21 @@
 //   npm run safari:build [-- --mac-only | --ios-only] [--signed] [--test-ruleset]
 //   npm run safari:open      launch the macOS app (registers the extension with Safari)
 //   npm run safari:sim       install and launch the iOS app on the booted Simulator
+//   npm run safari:archive [-- --mac-only | --ios-only] [--build-number N]
+//                            signed Release archives for App Store Connect
 //
 // Without --signed, the macOS app is signed to run locally (ad hoc) and the
 // Simulator app is not signed, so no Apple account is needed. --signed uses
 // the project's team with automatic signing. --test-ruleset bundles the
 // end-to-end test ruleset (known-scam.localhost and friends) for
 // test/safari and the manual checklist; never ship such a build.
+//
+// The version shown to users comes from package.json (MARKETING_VERSION).
+// The build number (CURRENT_PROJECT_VERSION) is the date and time,
+// YYYYMMDD.HHMM, so every archive is numbered higher than the one before;
+// --build-number overrides it.
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -21,6 +28,23 @@ const DERIVED = join(ROOT, "safari", "build");
 const MAC_APP = join(DERIVED, "Build", "Products", "Debug", "ScamShield.app");
 const SIM_APP = join(DERIVED, "Build", "Products", "Debug-iphonesimulator", "ScamShield.app");
 const BUNDLE_ID = "com.aliefauzan.scamshield";
+const TEAM = "62ZRZ6VZKC";
+const PLATFORMS = [
+  { name: "macOS", scheme: "ScamShield (macOS)", destination: "generic/platform=macOS", skip: "--ios-only" },
+  { name: "iOS", scheme: "ScamShield (iOS)", destination: "generic/platform=iOS", skip: "--mac-only" },
+];
+
+const VERSION = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")).version;
+
+function buildNumber(args) {
+  const i = args.indexOf("--build-number");
+  if (i >= 0) return args[i + 1];
+  const d = new Date();
+  const p = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}.${p(d.getHours())}${p(d.getMinutes())}`;
+}
+
+const versionSettings = (args) => [`MARKETING_VERSION=${VERSION}`, `CURRENT_PROJECT_VERSION=${buildNumber(args)}`];
 
 function run(cmd, args, { quiet = false } = {}) {
   const res = spawnSync(cmd, args, { cwd: ROOT, encoding: "utf8", maxBuffer: 256 * 1024 * 1024, stdio: quiet ? "pipe" : "inherit" });
@@ -34,9 +58,9 @@ function run(cmd, args, { quiet = false } = {}) {
   return res.stdout ?? "";
 }
 
-function xcodebuild(scheme, destination, signing) {
+function xcodebuild(scheme, destination, settings) {
   console.log(`building ${scheme}…`);
-  run("xcodebuild", ["-project", PROJECT, "-scheme", scheme, "-configuration", "Debug", "-destination", destination, "-derivedDataPath", DERIVED, "build", ...signing], { quiet: true });
+  run("xcodebuild", ["-project", PROJECT, "-scheme", scheme, "-configuration", "Debug", "-destination", destination, "-derivedDataPath", DERIVED, "build", ...settings], { quiet: true });
 }
 
 async function build(args) {
@@ -50,13 +74,33 @@ async function build(args) {
   }
   run("node", ["scripts/build.mjs", "--target", "safari", ...extra]);
   const signed = args.includes("--signed");
+  const version = versionSettings(args);
   if (!args.includes("--ios-only")) {
-    xcodebuild("ScamShield (macOS)", "generic/platform=macOS", signed ? [] : ["CODE_SIGN_IDENTITY=-", "CODE_SIGN_STYLE=Manual", "DEVELOPMENT_TEAM="]);
+    xcodebuild("ScamShield (macOS)", "generic/platform=macOS", [...version, ...(signed ? [] : ["CODE_SIGN_IDENTITY=-", "CODE_SIGN_STYLE=Manual", "DEVELOPMENT_TEAM="])]);
     console.log(`built ${MAC_APP}`);
   }
   if (!args.includes("--mac-only")) {
-    xcodebuild("ScamShield (iOS)", "generic/platform=iOS Simulator", signed ? [] : ["CODE_SIGNING_ALLOWED=NO"]);
+    xcodebuild("ScamShield (iOS)", "generic/platform=iOS Simulator", [...version, ...(signed ? [] : ["CODE_SIGNING_ALLOWED=NO"])]);
     console.log(`built ${SIM_APP}`);
+  }
+}
+
+// Release archives with the team's automatic signing. Uploading them is a
+// separate step in Xcode's Organizer (or xcrun altool) and needs an active
+// Apple Developer Program membership.
+function archive(args) {
+  if (args.includes("--test-ruleset")) {
+    console.error("archives always use the bundled ruleset; drop --test-ruleset");
+    process.exit(2);
+  }
+  run("node", ["scripts/build.mjs", "--target", "safari"]);
+  const version = versionSettings(args);
+  for (const p of PLATFORMS) {
+    if (args.includes(p.skip)) continue;
+    const out = join(DERIVED, `ScamShield-${VERSION}-${p.name}.xcarchive`);
+    console.log(`archiving ${p.scheme}…`);
+    run("xcodebuild", ["-project", PROJECT, "-scheme", p.scheme, "-configuration", "Release", "-destination", p.destination, "-derivedDataPath", DERIVED, "-archivePath", out, "-allowProvisioningUpdates", "archive", `DEVELOPMENT_TEAM=${TEAM}`, "CODE_SIGN_STYLE=Automatic", ...version], { quiet: true });
+    console.log(`archived ${out} (${version.join(", ")})`);
   }
 }
 
@@ -69,6 +113,7 @@ function need(path) {
 
 const [command = "build", ...args] = process.argv.slice(2);
 if (command === "build") await build(args);
+else if (command === "archive") archive(args);
 else if (command === "open") {
   need(MAC_APP);
   run("open", [MAC_APP]);
@@ -79,6 +124,6 @@ else if (command === "open") {
   run("xcrun", ["simctl", "launch", "booted", BUNDLE_ID]);
   console.log("installed on the booted Simulator; turn it on in Settings → Apps → Safari → Extensions");
 } else {
-  console.error("usage: node scripts/safari.mjs build|open|sim [--mac-only|--ios-only] [--signed] [--test-ruleset]");
+  console.error("usage: node scripts/safari.mjs build|archive|open|sim [--mac-only|--ios-only] [--signed] [--test-ruleset] [--build-number N]");
   process.exit(2);
 }
