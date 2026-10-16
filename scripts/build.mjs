@@ -2,9 +2,10 @@
 // Builds the extension for one or both targets (R1 "Build").
 //   node scripts/build.mjs --target chrome|safari|all   (default: all)
 //   node scripts/build.mjs --watch                      rebuild on change
+//   node scripts/build.mjs --ruleset <file.json>        bundle another ruleset (test builds)
 import * as esbuild from "esbuild";
 import { readFileSync, writeFileSync, mkdirSync, rmSync, copyFileSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { writeIcons, EXTENSION_SIZES } from "./make-icons.mjs";
 
@@ -23,10 +24,11 @@ const ENTRIES = {
 const STATIC = ["src/popup/popup.html", "src/popup/popup.css", "src/blocked/blocked.html", "src/blocked/blocked.css"];
 
 function parseArgs(argv) {
-  const args = { target: "all", watch: false };
+  const args = { target: "all", watch: false, ruleset: null };
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === "--watch") args.watch = true;
     else if (argv[i] === "--target") args.target = argv[++i];
+    else if (argv[i] === "--ruleset") args.ruleset = resolve(argv[++i]);
     else if (argv[i].startsWith("--target=")) args.target = argv[i].slice("--target=".length);
     else throw new Error(`unknown argument: ${argv[i]}`);
   }
@@ -64,7 +66,17 @@ function writeExtensionIcons(target) {
   drawn.add(target);
 }
 
-function options(target) {
+// Points the background's bundled-ruleset import at another file.
+function rulesetPlugin(file) {
+  return {
+    name: "tm-ruleset",
+    setup(build) {
+      build.onResolve({ filter: /\/data\/default-ruleset\.json$/ }, () => ({ path: file }));
+    },
+  };
+}
+
+function options(target, ruleset) {
   return {
     absWorkingDir: ROOT,
     entryPoints: { ...ENTRIES, ...TARGETS[target].entries },
@@ -76,6 +88,7 @@ function options(target) {
     minifySyntax: true, // folds TARGET branches; names and whitespace stay readable
     logLevel: "warning",
     plugins: [
+      ...(ruleset ? [rulesetPlugin(ruleset)] : []),
       {
         name: "tm-static",
         setup(build) {
@@ -101,15 +114,15 @@ async function main() {
   }
   if (args.watch) {
     for (const target of targets) {
-      const ctx = await esbuild.context(options(target));
+      const ctx = await esbuild.context(options(target, args.ruleset));
       await ctx.watch();
     }
     console.log(`watching ${targets.join(", ")} (Ctrl-C to stop)`);
     return;
   }
   for (const target of targets) {
-    await esbuild.build(options(target));
-    console.log(`built dist/${target}`);
+    await esbuild.build(options(target, args.ruleset));
+    console.log(`built dist/${target}${args.ruleset ? ` with ruleset ${args.ruleset}` : ""}`);
   }
 }
 

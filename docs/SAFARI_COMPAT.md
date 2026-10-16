@@ -42,6 +42,8 @@ Everything works only after the user sets:
 
 The popup checks `permissions.contains({origins: ["<all_urls>"]})` and shows these steps when it is false. The container app shows the same steps.
 
+On iOS 26.4 (Simulator) that call answers `false` even with All Websites set to **Allow** and content scripts running. The popup therefore also counts two other answers as access: a stored verdict for the tab (the content script ran there, which it can only do with access) and `permissions.contains` for the tab's own origin. Only when all three say no does it show the steps.
+
 ### Loopback hosts
 
 Safari applies no DNR rules to `localhost` or `127.0.0.1`. Tests that need Safari to block must use a public test hostname.

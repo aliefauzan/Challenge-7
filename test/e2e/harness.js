@@ -6,32 +6,10 @@ import { chromium } from "playwright";
 import { existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import bundled from "../../src/data/default-ruleset.json" with { type: "json" };
 import { startServer } from "./server.js";
+import { testRuleset } from "./ruleset.js";
 
 const EXT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "dist", "chrome");
-
-/** Bundled ruleset plus what the fixtures need. */
-export function testRuleset() {
-  return {
-    ...bundled,
-    version: 900000,
-    scam_domains: [...bundled.scam_domains, "known-scam.localhost"],
-    sources: { ...bundled.sources, "news.localhost": { bias: "satire", accuracy: "varies", label: "News Fixture", rating: "Satire. The stories are made up on purpose." } },
-    scam_phrases: [
-      ...bundled.scam_phrases,
-      {
-        id: "e2e-markup",
-        severity: "medium",
-        category: "urgency",
-        flags: "i",
-        description: "<img src=x onerror=window.pwned=1>",
-        why: "<b>bold</b><script>window.pwned=2</script>",
-        pattern: "\\be2e markup trigger phrase\\b",
-      },
-    ],
-  };
-}
 
 export async function waitFor(fn, { timeout = 8000, interval = 100, message = "condition" } = {}) {
   const end = Date.now() + timeout;

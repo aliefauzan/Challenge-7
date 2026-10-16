@@ -23,10 +23,11 @@ const main = () => win.document.querySelector("main");
 const byTag = (node, tag) => node.findAll((e) => e.tagName === tag.toUpperCase());
 const switches = () => main().findAll((e) => e.getAttribute("role") === "switch");
 
-async function popup({ verdict, prefs, meta, hostAccess = true, target = "chrome", nav } = {}) {
+async function popup({ verdict, prefs, meta, hostAccess = true, grantedOrigins = [], target = "chrome", nav } = {}) {
   const api = makeFakeApi();
   api.activeTab = { id: 7, url: "https://shop.example/cart" };
   api.hostAccess = hostAccess;
+  api.grantedOrigins = grantedOrigins;
   if (verdict) await api.storage.session.set({ "tm.verdict.7": verdict });
   if (prefs) await api.storage.sync.set({ "tm.prefs": prefs });
   await api.storage.local.set({ "tm.rulesetMeta": meta ?? { version: 12, fetchedAt: NOW - 2 * HOUR, errors: [] } });
@@ -75,6 +76,20 @@ test("popup page: Safari without website access shows the steps, and no request 
   assert.match(card.textContent, /ScamShield cannot check websites yet/);
   assert.deepEqual(byTag(card, "li").map((li) => li.textContent), ["Settings", "Apps", "Safari", "Extensions", "ScamShield", "All Websites", "Allow"]);
   assert.equal(byTag(card, "button").length, 0);
+});
+
+const IOS = { userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 26_4 like Mac OS X)", maxTouchPoints: 5 };
+const accessCardShown = () => main().find((e) => (e.getAttribute("class") ?? "").includes("access")) !== null;
+
+test("popup page: Safari answering false for all sites, a verdict for the tab still counts as access", async () => {
+  await popup({ hostAccess: false, target: "safari", nav: IOS, verdict: { tier: "clean", domain: "shop.example", signals: [], sourceInfo: null } });
+  assert.equal(accessCardShown(), false);
+  assert.equal(main().find((e) => e.getAttribute("data-kind")).getAttribute("data-kind"), "clean");
+});
+
+test("popup page: access to the tab's own site counts as access", async () => {
+  await popup({ hostAccess: false, grantedOrigins: ["https://shop.example/*"], target: "safari", nav: IOS });
+  assert.equal(accessCardShown(), false);
 });
 
 test("popup page: Chrome without access offers a button that asks for it", async () => {

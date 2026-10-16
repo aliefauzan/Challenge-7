@@ -109,12 +109,14 @@ export function makeFakeApi({ id = "ext-id", origin = "chrome-extension://ext-id
     // The tab the popup sees as active, and the tab an extension page runs in.
     activeTab: { id: 1, url: "https://page.example/" },
     currentTab: { id: 1 },
-    // Whether "<all_urls>" is granted, and what a permission request answers.
+    // Whether "<all_urls>" is granted, origin patterns granted on their own,
+    // and what a permission request answers.
     hostAccess: true,
+    grantedOrigins: [],
     grantOnRequest: true,
     permissions: {
       async contains({ origins = [] } = {}) {
-        return origins.every((o) => o === "<all_urls>") && api.hostAccess;
+        return origins.every((o) => (o === "<all_urls>" ? api.hostAccess : api.grantedOrigins.includes(o)));
       },
       async request(perms) {
         calls.permissionRequests.push(perms);

@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 // Builds the Safari extension and its container app.
 //
-//   npm run safari:build [-- --mac-only | --ios-only] [--signed]
+//   npm run safari:build [-- --mac-only | --ios-only] [--signed] [--test-ruleset]
 //   npm run safari:open      launch the macOS app (registers the extension with Safari)
 //   npm run safari:sim       install and launch the iOS app on the booted Simulator
 //
 // Without --signed, the macOS app is signed to run locally (ad hoc) and the
 // Simulator app is not signed, so no Apple account is needed. --signed uses
-// the project's team with automatic signing.
+// the project's team with automatic signing. --test-ruleset bundles the
+// end-to-end test ruleset (known-scam.localhost and friends) for
+// test/safari and the manual checklist; never ship such a build.
 import { spawnSync } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -37,8 +39,16 @@ function xcodebuild(scheme, destination, signing) {
   run("xcodebuild", ["-project", PROJECT, "-scheme", scheme, "-configuration", "Debug", "-destination", destination, "-derivedDataPath", DERIVED, "build", ...signing], { quiet: true });
 }
 
-function build(args) {
-  run("node", ["scripts/build.mjs", "--target", "safari"]);
+async function build(args) {
+  const extra = [];
+  if (args.includes("--test-ruleset")) {
+    const { testRuleset } = await import("../test/e2e/ruleset.js");
+    const file = join(DERIVED, "test-ruleset.json");
+    mkdirSync(DERIVED, { recursive: true });
+    writeFileSync(file, JSON.stringify(testRuleset()));
+    extra.push("--ruleset", file);
+  }
+  run("node", ["scripts/build.mjs", "--target", "safari", ...extra]);
   const signed = args.includes("--signed");
   if (!args.includes("--ios-only")) {
     xcodebuild("ScamShield (macOS)", "generic/platform=macOS", signed ? [] : ["CODE_SIGN_IDENTITY=-", "CODE_SIGN_STYLE=Manual", "DEVELOPMENT_TEAM="]);
@@ -58,7 +68,7 @@ function need(path) {
 }
 
 const [command = "build", ...args] = process.argv.slice(2);
-if (command === "build") build(args);
+if (command === "build") await build(args);
 else if (command === "open") {
   need(MAC_APP);
   run("open", [MAC_APP]);
@@ -69,6 +79,6 @@ else if (command === "open") {
   run("xcrun", ["simctl", "launch", "booted", BUNDLE_ID]);
   console.log("installed on the booted Simulator; turn it on in Settings → Apps → Safari → Extensions");
 } else {
-  console.error("usage: node scripts/safari.mjs build|open|sim [--mac-only|--ios-only] [--signed]");
+  console.error("usage: node scripts/safari.mjs build|open|sim [--mac-only|--ios-only] [--signed] [--test-ruleset]");
   process.exit(2);
 }

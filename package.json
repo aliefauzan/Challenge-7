@@ -9,6 +9,7 @@
     "test": "node --test \"test/unit/**/*.test.js\"",
     "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=\"src/**\" \"test/unit/**/*.test.js\"",
     "test:e2e": "node --test \"test/e2e/**/*.test.js\"",
+    "test:safari": "node --test \"test/safari/**/*.test.js\"",
     "lint:rules": "node scripts/lint-rules.mjs",
     "keygen": "node scripts/keygen.mjs",
     "ruleset": "node scripts/build-ruleset.mjs",

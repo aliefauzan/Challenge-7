@@ -8,9 +8,16 @@ const PREFS_KEY = "tm.prefs";
 const META_KEY = "tm.rulesetMeta";
 const ALL_SITES = { origins: ["<all_urls>"] };
 
-async function hasSiteAccess(api) {
+// Safari on iOS answers false for "<all_urls>" even when All Websites is set
+// to Allow, so that answer alone is not trusted. A verdict for the tab means
+// the content script ran there, which needs access; otherwise the tab's own
+// site is asked about too.
+async function hasSiteAccess(api, tab, verdict) {
+  if (verdict) return true;
   try {
-    return Boolean(await api.permissions?.contains(ALL_SITES));
+    if (await api.permissions?.contains(ALL_SITES)) return true;
+    const origin = /^https?:/.test(tab?.url ?? "") ? new URL(tab.url).origin : null;
+    return origin ? Boolean(await api.permissions?.contains({ origins: [`${origin}/*`] })) : false;
   } catch {
     return false;
   }
@@ -32,18 +39,19 @@ export async function startPopup({ api, doc, target, nav = {}, now = Date.now })
   let prefs = {};
 
   async function render() {
-    const [session, sync, local, hasAccess] = await Promise.all([
+    const [session, sync, local] = await Promise.all([
       verdictKey ? api.storage.session.get(verdictKey) : {},
       api.storage.sync.get(PREFS_KEY),
       api.storage.local.get(META_KEY),
-      hasSiteAccess(api),
     ]);
+    const verdict = (verdictKey && session[verdictKey]) || null;
+    const hasAccess = await hasSiteAccess(api, tab, verdict);
     prefs = sync[PREFS_KEY] ?? {};
     const view = buildPopupView({
       target,
       platform,
       tab: tab ?? null,
-      verdict: (verdictKey && session[verdictKey]) || null,
+      verdict,
       prefs,
       meta: local[META_KEY] ?? null,
       hasAccess,
