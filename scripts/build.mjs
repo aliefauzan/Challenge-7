@@ -9,8 +9,9 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const TARGETS = {
-  chrome: { esbuildTarget: "chrome137" },
-  safari: { esbuildTarget: "safari17" },
+  chrome: { esbuildTarget: "chrome137", entries: {} },
+  // Safari ignores redirect rules; a document_start guard script blocks instead.
+  safari: { esbuildTarget: "safari17", entries: { guard: "src/content/guard.js" } },
 };
 const ENTRIES = {
   background: "src/background.js",
@@ -57,7 +58,7 @@ function writeStatic(target) {
 function options(target) {
   return {
     absWorkingDir: ROOT,
-    entryPoints: ENTRIES,
+    entryPoints: { ...ENTRIES, ...TARGETS[target].entries },
     outdir: join("dist", target),
     bundle: true,
     format: "iife",

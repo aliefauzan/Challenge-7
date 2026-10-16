@@ -5,6 +5,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runInNewContext } from "node:vm";
+import { makeFakeApi } from "./fakes/api.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const TARGETS = ["chrome", "safari"];
@@ -34,7 +35,9 @@ for (const target of TARGETS) {
     assert.equal(m.version, pkg.version);
     assert.equal(m.background.service_worker ?? m.background.scripts?.[0], "background.js");
     assert.equal(m.action.default_popup, "popup.html");
-    assert.deepEqual(m.content_scripts[0].js, ["content.js"]);
+    const main = m.content_scripts.find((c) => c.js.includes("content.js"));
+    assert.equal(main.run_at, "document_idle");
+    assert.equal(main.all_frames, true);
     assert.ok(m.host_permissions.includes("<all_urls>"));
     for (const perm of ["storage", "alarms", "declarativeNetRequest", "tabs"]) {
       assert.ok(m.permissions.includes(perm), `missing permission ${perm}`);
@@ -46,11 +49,20 @@ for (const target of TARGETS) {
     for (const bundle of BUNDLES) {
       const logs = [];
       const js = readFileSync(join(ROOT, "dist", target, bundle), "utf8");
-      runInNewContext(js, { console: { debug: (msg) => logs.push(msg) } });
+      runInNewContext(js, { console: { debug: (msg) => logs.push(msg), error() {} }, chrome: makeFakeApi(), structuredClone });
       assert.deepEqual(logs, [`tm:${bundle.replace(".js", "")} loaded target=${target}`]);
     }
   });
 }
+
+test("smoke: only the Safari build has the document_start guard script", () => {
+  const guard = manifest("safari").content_scripts.find((c) => c.js.includes("guard.js"));
+  assert.equal(guard.run_at, "document_start");
+  assert.equal(guard.all_frames, false);
+  assert.ok(existsSync(join(ROOT, "dist", "safari", "guard.js")));
+  assert.ok(!existsSync(join(ROOT, "dist", "chrome", "guard.js")));
+  assert.ok(!manifest("chrome").content_scripts.some((c) => c.js.includes("guard.js")));
+});
 
 test("smoke: Safari manifest has no Chrome-only keys", () => {
   const m = manifest("safari");
