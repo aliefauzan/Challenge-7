@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Loading…</title></head>
+<body>
+  <h1>Please wait</h1>
+  <div id="app"></div>
+  <script>
+    // Scam text that arrives two seconds after load, like a single-page app.
+    setTimeout(() => {
+      const p = document.createElement("p");
+      p.textContent = "Your package is on hold at our depot. Pay the small redelivery fee to release it.";
+      document.getElementById("app").append(p);
+    }, 2000);
+  </script>
+</body>
+</html>

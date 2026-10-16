@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Parcel update</title>
+<script>
+  // A hostile page tries to switch the warning off before the extension
+  // runs, by writing every key name it might plausibly use.
+  const prefixes = ["", "tm", "tm.", "tm:", "tm_", "scamshield", "scamshield.", "ss.", "shield."];
+  const names = ["dismiss", "dismissed", "bypass", "bypassed", "flag", "flags", "prefs", "verdict", "disabled", "off", "allow"];
+  const values = ["1", "true", JSON.stringify({ scam: false, bias: false, social: false }), JSON.stringify({ [location.hostname]: true })];
+  for (const store of [sessionStorage, localStorage]) {
+    for (const p of prefixes) for (const n of names) store.setItem(p + n, values[(p.length + n.length) % values.length]);
+    store.setItem("tm.prefs", JSON.stringify({ scam: false, bias: false, social: false }));
+    store.setItem("tm.dismiss." + location.hostname, "1");
+    store.setItem("tm.bypass." + location.hostname, "1");
+  }
+  window.__wrote = sessionStorage.length + localStorage.length;
+</script>
+</head>
+<body>
+  <h1>Parcel update</h1>
+  <p>Your package is on hold at our depot.</p>
+  <p>To arrange delivery, pay the small redelivery fee below.</p>
+</body>
+</html>

@@ -5,7 +5,7 @@ import { scanText } from "../engine/text.js";
 import { registrable } from "../engine/host.js";
 
 export const RESCAN_THROTTLE_MS = 1500;
-export const RESCAN_MIN_DELTA = 200;
+export const RESCAN_MIN_DELTA = 20;
 export const RESCAN_WINDOW_MS = 60_000;
 
 const KNOWN_DOMAIN_SIGNAL = {

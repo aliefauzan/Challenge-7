@@ -46,6 +46,26 @@ test("bg verdicts: frame signals are relayed to frame 0 with the frame URL", asy
   assert.equal(sent.message.type, "frame-signals");
   assert.equal(sent.message.signals[0].frameUrl, "https://ad.example/f");
   assert.equal((await handleFrameSignals(api, { signals: [signal] }, top("https://a.example/"))).ok, false);
+  api.tabReply = undefined; // top frame has no listener yet
+  assert.equal((await handleFrameSignals(api, { signals: [signal] }, sub("https://ad.example/f"))).ok, false);
+});
+
+test("bg main: overlapping rule syncs do not collide on rule IDs", async () => {
+  const { api } = await started();
+  const errors = [];
+  const original = console.error;
+  console.error = (...args) => errors.push(args.join(" "));
+  try {
+    const payload = { ...makePayload(), version: 6 };
+    await Promise.all([api.storage.local.set({ "tm.ruleset": payload }), api.storage.sync.set({ "tm.prefs": { scam: true } }), api.storage.local.set({ "tm.ruleset": { ...payload, version: 7 } })]);
+    await new Promise((r) => setTimeout(r, 20));
+  } finally {
+    console.error = original;
+  }
+  assert.deepEqual(errors, []);
+  const ids = (await api.declarativeNetRequest.getDynamicRules()).map((r) => r.id);
+  assert.equal(new Set(ids).size, ids.length);
+  assert.ok(ids.length > 0);
 });
 
 async function started(target = "chrome", opts = {}) {

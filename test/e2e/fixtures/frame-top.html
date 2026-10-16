@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Embedded offer</title></head>
+<body>
+  <h1>Welcome</h1>
+  <p>The offer below is shown in a frame from another site.</p>
+  <iframe id="offer" title="offer" width="600" height="200"></iframe>
+  <script>
+    // Same server, different host name: a cross-origin frame.
+    document.getElementById("offer").src = location.protocol + "//frame." + location.host.split(".").slice(1).join(".") + "/one-phrase.html";
+  </script>
+</body>
+</html>

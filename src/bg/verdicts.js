@@ -38,11 +38,12 @@ export async function handleFrameSignals(api, msg, sender) {
   const frameUrl = sender.url ?? "";
   const signals = msg.signals.map((s) => ({ ...s, frameUrl }));
   try {
-    await api.tabs.sendMessage(tabId, { type: "frame-signals", signals, frameUrl }, { frameId: 0 });
+    const reply = await api.tabs.sendMessage(tabId, { type: "frame-signals", signals, frameUrl }, { frameId: 0 });
+    if (reply?.ok) return { ok: true };
   } catch {
-    return { ok: false, error: "top frame not ready" };
+    // No listener in the top frame yet.
   }
-  return { ok: true };
+  return { ok: false, error: "top frame not ready" };
 }
 
 export async function clearVerdict(api, tabId) {

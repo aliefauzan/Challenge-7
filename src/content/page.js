@@ -19,6 +19,8 @@ const RULESET_KEY = "tm.ruleset";
 const PREFS_KEY = "tm.prefs";
 const DEFAULT_PREFS = { scam: true, bias: true, social: true };
 const URL_POLL_MS = 1000;
+const FRAME_RETRIES = 5;
+const FRAME_RETRY_MS = 250;
 
 const pageKey = (href) => href.split("#")[0];
 const signalKey = (s) => `${s.id}|${s.frameUrl ?? ""}`;
@@ -183,11 +185,12 @@ export async function startContent({ api, win, now = () => Date.now() }) {
   win.setInterval(checkUrl, URL_POLL_MS);
   win.addEventListener("popstate", checkUrl);
 
-  api.runtime.onMessage.addListener((msg, sender) => {
+  api.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (sender?.id !== api.runtime.id) return false;
     if (msg?.type !== "frame-signals" || !Array.isArray(msg.signals)) return false;
     frameSignals.set(String(msg.frameUrl ?? ""), msg.signals.filter((s) => s && s.source === "text"));
     evaluate().catch((err) => console.error("tm:content", err));
+    sendResponse?.({ ok: true });
     return false;
   });
 
@@ -209,16 +212,28 @@ async function startSubFrame({ api, win, now, rules }) {
   const host = parseHttpUrl(win.location.href).hostname;
   let sentKey = "";
 
+  // The top frame's script can start after this one, so a delivery the top
+  // frame did not acknowledge is retried a few times, unless newer signals
+  // have replaced it meanwhile.
+  async function deliver(signals, key) {
+    for (let attempt = 0; attempt <= FRAME_RETRIES && key === sentKey; attempt++) {
+      if (attempt) await new Promise((resolve) => win.setTimeout(resolve, FRAME_RETRY_MS * 2 ** (attempt - 1)));
+      if (key !== sentKey) return;
+      try {
+        const reply = await api.runtime.sendMessage({ type: "frame-signals", signals, frameUrl: win.location.href });
+        if (reply?.ok) return;
+      } catch {
+        // Background unavailable; try again.
+      }
+    }
+  }
+
   async function scan(text = readText(doc)) {
     const signals = scanText(text, rules, { host });
     const key = signals.map(signalKey).join(",");
     if (!signals.length || key === sentKey) return "clean";
     sentKey = key;
-    try {
-      await api.runtime.sendMessage({ type: "frame-signals", signals, frameUrl: win.location.href });
-    } catch {
-      // Background unavailable.
-    }
+    deliver(signals, key).catch(() => {});
     return "clean";
   }
 

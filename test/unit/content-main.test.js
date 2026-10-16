@@ -57,6 +57,14 @@ test("content: scam text added 2 s after load is caught", async () => {
   assert.equal(stored(api).tier, "banner");
 });
 
+test("content: one short scam line added after load is caught", async () => {
+  const { win, content } = await boot();
+  await win.tick(2000);
+  addText(win, SCAM_TEXT);
+  await win.tick(1500);
+  assert.equal(tierShown(content), "banner");
+});
+
 test("content: a known scam domain gets the blocker with no way past", async () => {
   const { win, content } = await boot({ href: "https://login.scamshield-test.example/" });
   assert.equal(tierShown(content), "block");
@@ -135,6 +143,30 @@ test("content: a sub-frame shows no UI and forwards its text signals to the top 
   assert.equal(stored(api), undefined, "sub-frames never send a verdict");
 });
 
+test("content: a sub-frame retries until the top frame acknowledges", async () => {
+  const { win, api } = await boot({
+    subFrame: true,
+    text: FILLER + SCAM_TEXT,
+    before: (a) => {
+      a.tabReply = undefined; // the top frame's script has not started yet
+    },
+  });
+  assert.equal(api.calls.tabsSendMessage.length, 1);
+  await win.tick(250);
+  assert.equal(api.calls.tabsSendMessage.length, 2);
+  api.tabReply = { ok: true };
+  await win.tick(500);
+  assert.equal(api.calls.tabsSendMessage.length, 3);
+  await win.tick(10000);
+  assert.equal(api.calls.tabsSendMessage.length, 3, "no more sends once acknowledged");
+});
+
+test("content: a sub-frame stops retrying after a few attempts", async () => {
+  const { win, api } = await boot({ subFrame: true, text: FILLER + SCAM_TEXT, before: (a) => (a.tabReply = undefined) });
+  await win.tick(60000);
+  assert.equal(api.calls.tabsSendMessage.length, 6);
+});
+
 test("content: a clean sub-frame sends nothing", async () => {
   const { api } = await boot({ subFrame: true });
   assert.deepEqual(api.calls.tabsSendMessage, []);
@@ -146,8 +178,12 @@ test("content: the top frame merges forwarded frame signals", async () => {
   api.runtime.onMessage.fire(msg, { id: "someone-else" }, () => {});
   await settle();
   assert.equal(ui(content), null, "messages from other senders are ignored");
-  api.runtime.onMessage.fire(msg, { id: api.runtime.id }, () => {});
+  // The fake shares one onMessage between background and page, so collect
+  // every reply and look for the page's.
+  const replies = [];
+  api.runtime.onMessage.fire(msg, { id: api.runtime.id }, (r) => replies.push(r));
   await settle();
+  assert.ok(replies.some((r) => r?.ok === true), "the top frame acknowledges");
   assert.equal(tierShown(content), "banner");
   assert.equal(stored(api).signals[0].frameUrl, "https://ads.example/f");
 });

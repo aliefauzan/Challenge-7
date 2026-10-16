@@ -32,9 +32,16 @@ export function startBackground(api, deps) {
     return cache.domains;
   }
 
-  async function resyncRules() {
-    cache = null;
-    await syncBlockRules(api, { target: deps.target, payload: await ruleset(), prefs: await prefs() });
+  // One sync at a time: two overlapping ones (start-up and a storage change)
+  // would both remove the old rules and then add rules with the same IDs.
+  let syncing = Promise.resolve();
+  function resyncRules() {
+    const run = syncing.then(async () => {
+      cache = null;
+      await syncBlockRules(api, { target: deps.target, payload: await ruleset(), prefs: await prefs() });
+    });
+    syncing = run.catch(() => {});
+    return run;
   }
 
   const refresh = () => refreshRuleset(api, { url: deps.rulesetUrl, keys: deps.keys, fetch: deps.fetch });

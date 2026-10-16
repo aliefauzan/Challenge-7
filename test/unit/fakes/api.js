@@ -58,6 +58,8 @@ export function makeFakeApi({ id = "ext-id", origin = "chrome-extension://ext-id
     // The sender that runtime.sendMessage reports, as a content script in
     // this tab and frame would be seen by the background.
     sender: { id, url: "https://page.example/", frameId: 0, tab: { id: 1, url: "https://page.example/" } },
+    // What tabs.sendMessage resolves to: the top frame's acknowledgement.
+    tabReply: { ok: true },
     runtime: {
       id,
       getURL: (path) => origin + path.replace(/^\//, ""),
@@ -140,6 +142,7 @@ export function makeFakeApi({ id = "ext-id", origin = "chrome-extension://ext-id
       },
       async sendMessage(tabId, message, options) {
         calls.tabsSendMessage.push({ tabId, message, options });
+        return api.tabReply;
       },
     },
   };
