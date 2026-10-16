@@ -14,7 +14,11 @@
     "ruleset": "node scripts/build-ruleset.mjs",
     "feeds": "node scripts/fetch-feeds.mjs",
     "plan:status": "node scripts/plan-status.mjs",
-    "icons:app": "node scripts/make-icons.mjs --app --out"
+    "icons:app": "node scripts/make-icons.mjs --app --out",
+    "icons:xcode": "node scripts/make-icons.mjs --appiconset \"safari/ScamShield/Shared (App)/Assets.xcassets/AppIcon.appiconset\"",
+    "safari:build": "node scripts/safari.mjs build",
+    "safari:open": "node scripts/safari.mjs open",
+    "safari:sim": "node scripts/safari.mjs sim"
   },
   "dependencies": {
     "tldts": "^6.1.86"

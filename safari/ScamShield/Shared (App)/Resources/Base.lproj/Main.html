@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!-- Local files only: this page never loads anything from the network. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ScamShield</title>
+    <link rel="stylesheet" href="../Style.css">
+    <script src="../Script.js" defer></script>
+</head>
+<body>
+    <main>
+        <img src="../Icon.png" width="96" height="96" alt="">
+        <h1>ScamShield</h1>
+        <p>ScamShield warns you before you open a known scam website and points out the warning signs of a scam on the pages you read.</p>
+        <p class="private">Pages are checked on this device. Nothing about your browsing leaves this device.</p>
+
+        <section class="platform-ios">
+            <h2>Turn on ScamShield in Safari</h2>
+            <ol>
+                <li>Open the <b>Settings</b> app.</li>
+                <li>Tap <b>Apps</b>, then <b>Safari</b>, then <b>Extensions</b>.</li>
+                <li>Tap <b>ScamShield</b> and turn it on.</li>
+                <li>Under <b>Permissions</b>, tap <b>All Websites</b> and choose <b>Allow</b>.</li>
+            </ol>
+            <p>ScamShield needs to see every website so it can warn you on any of them.</p>
+        </section>
+
+        <section class="platform-mac">
+            <p class="status state-unknown" id="status-unknown">Checking whether ScamShield is turned on…</p>
+            <p class="status state-on" id="status-on"><span class="dot on" aria-hidden="true"></span>ScamShield is <b>on</b> in Safari.</p>
+            <p class="status state-off" id="status-off"><span class="dot off" aria-hidden="true"></span>ScamShield is <b>off</b>. Turn it on in Safari to be protected.</p>
+            <p class="status state-error" id="status-error">Could not check whether ScamShield is on. Open Safari Settings to look.</p>
+            <ol class="mac-steps">
+                <li>Click the button below. Safari opens its <b>Extensions</b> settings.</li>
+                <li>Tick <b>ScamShield</b>.</li>
+                <li>Click <b>Edit Websites…</b> and set <b>Other Websites</b> to <b>Allow</b>.</li>
+            </ol>
+            <button type="button" id="open-settings">Open Safari Settings</button>
+        </section>
+    </main>
+</body>
+</html>

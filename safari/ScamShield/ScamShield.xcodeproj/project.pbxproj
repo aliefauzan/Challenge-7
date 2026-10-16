@@ -1,0 +1,987 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 110;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A035E5B5308290410068657D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A035E5B4308290410068657D /* AppDelegate.swift */; };
+		A035E5B7308290410068657D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A035E5B6308290410068657D /* SceneDelegate.swift */; };
+		A035E5BA308290410068657D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A035E5B8308290410068657D /* LaunchScreen.storyboard */; };
+		A035E5BD308290410068657D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A035E5BB308290410068657D /* Main.storyboard */; };
+		A035E5C6308290410068657D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A035E5C5308290410068657D /* AppDelegate.swift */; };
+		A035E5C9308290410068657D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A035E5C7308290410068657D /* Main.storyboard */; };
+		A035E5D0308290410068657D /* ScamShield Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A035E5CF308290410068657D /* ScamShield Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A035E5DA308290410068657D /* ScamShield Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A035E5D9308290410068657D /* ScamShield Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A035E5DF308290410068657D /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = A035E5A4308290400068657D /* Main.html */; };
+		A035E5E0308290410068657D /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = A035E5A4308290400068657D /* Main.html */; };
+		A035E5E1308290410068657D /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A035E5A6308290400068657D /* Icon.png */; };
+		A035E5E2308290410068657D /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A035E5A6308290400068657D /* Icon.png */; };
+		A035E5E3308290410068657D /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = A035E5A7308290400068657D /* Style.css */; };
+		A035E5E4308290410068657D /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = A035E5A7308290400068657D /* Style.css */; };
+		A035E5E5308290410068657D /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = A035E5A8308290400068657D /* Script.js */; };
+		A035E5E6308290410068657D /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = A035E5A8308290400068657D /* Script.js */; };
+		A035E5E7308290410068657D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A035E5A9308290400068657D /* ViewController.swift */; };
+		A035E5E8308290410068657D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A035E5A9308290400068657D /* ViewController.swift */; };
+		A035E5E9308290410068657D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A035E5AA308290410068657D /* Assets.xcassets */; };
+		A035E5EA308290410068657D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A035E5AA308290410068657D /* Assets.xcassets */; };
+		A035E5EB308290410068657D /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A035E5AC308290410068657D /* SafariWebExtensionHandler.swift */; };
+		A035E5EC308290410068657D /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A035E5AC308290410068657D /* SafariWebExtensionHandler.swift */; };
+		A035E609308290410068657D /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = A035E5FE308290410068657D /* popup.js */; };
+		A035E60A308290410068657D /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = A035E5FF308290410068657D /* background.js */; };
+		A035E60B308290410068657D /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = A035E600308290410068657D /* popup.html */; };
+		A035E60C308290410068657D /* blocked.js in Resources */ = {isa = PBXBuildFile; fileRef = A035E601308290410068657D /* blocked.js */; };
+		A035E60D308290410068657D /* icons in Resources */ = {isa = PBXBuildFile; fileRef = A035E602308290410068657D /* icons */; };
+		A035E60E308290410068657D /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = A035E603308290410068657D /* manifest.json */; };
+		A035E60F308290410068657D /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = A035E604308290410068657D /* popup.css */; };
+		A035E610308290410068657D /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = A035E605308290410068657D /* content.js */; };
+		A035E611308290410068657D /* guard.js in Resources */ = {isa = PBXBuildFile; fileRef = A035E606308290410068657D /* guard.js */; };
+		A035E612308290410068657D /* blocked.html in Resources */ = {isa = PBXBuildFile; fileRef = A035E607308290410068657D /* blocked.html */; };
+		A035E613308290410068657D /* blocked.css in Resources */ = {isa = PBXBuildFile; fileRef = A035E608308290410068657D /* blocked.css */; };
+		A035E614308290410068657D /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = A035E5FE308290410068657D /* popup.js */; };
+		A035E615308290410068657D /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = A035E5FF308290410068657D /* background.js */; };
+		A035E616308290410068657D /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = A035E600308290410068657D /* popup.html */; };
+		A035E617308290410068657D /* blocked.js in Resources */ = {isa = PBXBuildFile; fileRef = A035E601308290410068657D /* blocked.js */; };
+		A035E618308290410068657D /* icons in Resources */ = {isa = PBXBuildFile; fileRef = A035E602308290410068657D /* icons */; };
+		A035E619308290410068657D /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = A035E603308290410068657D /* manifest.json */; };
+		A035E61A308290410068657D /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = A035E604308290410068657D /* popup.css */; };
+		A035E61B308290410068657D /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = A035E605308290410068657D /* content.js */; };
+		A035E61C308290410068657D /* guard.js in Resources */ = {isa = PBXBuildFile; fileRef = A035E606308290410068657D /* guard.js */; };
+		A035E61D308290410068657D /* blocked.html in Resources */ = {isa = PBXBuildFile; fileRef = A035E607308290410068657D /* blocked.html */; };
+		A035E61E308290410068657D /* blocked.css in Resources */ = {isa = PBXBuildFile; fileRef = A035E608308290410068657D /* blocked.css */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A035E5D1308290410068657D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A035E59E308290400068657D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A035E5CE308290410068657D;
+			remoteInfo = "ScamShield Extension (iOS)";
+		};
+		A035E5DB308290410068657D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A035E59E308290400068657D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A035E5D8308290410068657D;
+			remoteInfo = "ScamShield Extension (macOS)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A035E5F2308290410068657D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = PlugIns;
+			files = (
+				A035E5D0308290410068657D /* ScamShield Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+		};
+		A035E5F9308290410068657D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = PlugIns;
+			files = (
+				A035E5DA308290410068657D /* ScamShield Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A035E5A5308290400068657D /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
+		A035E5A6308290400068657D /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		A035E5A7308290400068657D /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		A035E5A8308290400068657D /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		A035E5A9308290400068657D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A035E5AA308290410068657D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A035E5AC308290410068657D /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		A035E5B1308290410068657D /* ScamShield.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScamShield.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A035E5B4308290410068657D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A035E5B6308290410068657D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		A035E5B9308290410068657D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A035E5BC308290410068657D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A035E5BE308290410068657D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A035E5C3308290410068657D /* ScamShield.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScamShield.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A035E5C5308290410068657D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A035E5C8308290410068657D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A035E5CA308290410068657D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A035E5CF308290410068657D /* ScamShield Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ScamShield Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A035E5D4308290410068657D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A035E5D9308290410068657D /* ScamShield Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "ScamShield Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A035E5DE308290410068657D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A035E5FE308290410068657D /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.js; path = ../../../dist/safari/popup.js; sourceTree = "<group>"; };
+		A035E5FF308290410068657D /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = ../../../dist/safari/background.js; sourceTree = "<group>"; };
+		A035E600308290410068657D /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = ../../../dist/safari/popup.html; sourceTree = "<group>"; };
+		A035E601308290410068657D /* blocked.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = blocked.js; path = ../../../dist/safari/blocked.js; sourceTree = "<group>"; };
+		A035E602308290410068657D /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = icons; path = ../../../dist/safari/icons; sourceTree = "<group>"; };
+		A035E603308290410068657D /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../dist/safari/manifest.json; sourceTree = "<group>"; };
+		A035E604308290410068657D /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = popup.css; path = ../../../dist/safari/popup.css; sourceTree = "<group>"; };
+		A035E605308290410068657D /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = content.js; path = ../../../dist/safari/content.js; sourceTree = "<group>"; };
+		A035E606308290410068657D /* guard.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = guard.js; path = ../../../dist/safari/guard.js; sourceTree = "<group>"; };
+		A035E607308290410068657D /* blocked.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = blocked.html; path = ../../../dist/safari/blocked.html; sourceTree = "<group>"; };
+		A035E608308290410068657D /* blocked.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = blocked.css; path = ../../../dist/safari/blocked.css; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A035E5AE308290410068657D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		A035E5C0308290410068657D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		A035E5CC308290410068657D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		A035E5D6308290410068657D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A035E59D308290400068657D = {
+			isa = PBXGroup;
+			children = (
+				A035E5A2308290400068657D /* Shared (App) */,
+				A035E5AB308290410068657D /* Shared (Extension) */,
+				A035E5B3308290410068657D /* iOS (App) */,
+				A035E5C4308290410068657D /* macOS (App) */,
+				A035E5D3308290410068657D /* iOS (Extension) */,
+				A035E5DD308290410068657D /* macOS (Extension) */,
+				A035E5B2308290410068657D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A035E5A2308290400068657D /* Shared (App) */ = {
+			isa = PBXGroup;
+			children = (
+				A035E5A9308290400068657D /* ViewController.swift */,
+				A035E5AA308290410068657D /* Assets.xcassets */,
+				A035E5A3308290400068657D /* Resources */,
+			);
+			path = "Shared (App)";
+			sourceTree = "<group>";
+		};
+		A035E5A3308290400068657D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A035E5A4308290400068657D /* Main.html */,
+				A035E5A6308290400068657D /* Icon.png */,
+				A035E5A7308290400068657D /* Style.css */,
+				A035E5A8308290400068657D /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A035E5AB308290410068657D /* Shared (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				A035E5FD308290410068657D /* Resources */,
+				A035E5AC308290410068657D /* SafariWebExtensionHandler.swift */,
+			);
+			path = "Shared (Extension)";
+			sourceTree = "<group>";
+		};
+		A035E5B2308290410068657D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A035E5B1308290410068657D /* ScamShield.app */,
+				A035E5C3308290410068657D /* ScamShield.app */,
+				A035E5CF308290410068657D /* ScamShield Extension.appex */,
+				A035E5D9308290410068657D /* ScamShield Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A035E5B3308290410068657D /* iOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				A035E5B4308290410068657D /* AppDelegate.swift */,
+				A035E5B6308290410068657D /* SceneDelegate.swift */,
+				A035E5B8308290410068657D /* LaunchScreen.storyboard */,
+				A035E5BB308290410068657D /* Main.storyboard */,
+				A035E5BE308290410068657D /* Info.plist */,
+			);
+			path = "iOS (App)";
+			sourceTree = "<group>";
+		};
+		A035E5C4308290410068657D /* macOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				A035E5C5308290410068657D /* AppDelegate.swift */,
+				A035E5C7308290410068657D /* Main.storyboard */,
+				A035E5CA308290410068657D /* Info.plist */,
+			);
+			path = "macOS (App)";
+			sourceTree = "<group>";
+		};
+		A035E5D3308290410068657D /* iOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				A035E5D4308290410068657D /* Info.plist */,
+			);
+			path = "iOS (Extension)";
+			sourceTree = "<group>";
+		};
+		A035E5DD308290410068657D /* macOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				A035E5DE308290410068657D /* Info.plist */,
+			);
+			path = "macOS (Extension)";
+			sourceTree = "<group>";
+		};
+		A035E5FD308290410068657D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A035E5FE308290410068657D /* popup.js */,
+				A035E5FF308290410068657D /* background.js */,
+				A035E600308290410068657D /* popup.html */,
+				A035E601308290410068657D /* blocked.js */,
+				A035E602308290410068657D /* icons */,
+				A035E603308290410068657D /* manifest.json */,
+				A035E604308290410068657D /* popup.css */,
+				A035E605308290410068657D /* content.js */,
+				A035E606308290410068657D /* guard.js */,
+				A035E607308290410068657D /* blocked.html */,
+				A035E608308290410068657D /* blocked.css */,
+			);
+			name = Resources;
+			path = "Shared (Extension)";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A035E5B0308290410068657D /* ScamShield (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A035E5F3308290410068657D /* Build configuration list for PBXNativeTarget "ScamShield (iOS)" */;
+			buildPhases = (
+				A035E5AD308290410068657D /* Sources */,
+				A035E5AE308290410068657D /* Frameworks */,
+				A035E5AF308290410068657D /* Resources */,
+				A035E5F2308290410068657D /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A035E5D2308290410068657D /* PBXTargetDependency */,
+			);
+			name = "ScamShield (iOS)";
+			productName = "ScamShield (iOS)";
+			productReference = A035E5B1308290410068657D /* ScamShield.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A035E5C2308290410068657D /* ScamShield (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A035E5FA308290410068657D /* Build configuration list for PBXNativeTarget "ScamShield (macOS)" */;
+			buildPhases = (
+				A035E5BF308290410068657D /* Sources */,
+				A035E5C0308290410068657D /* Frameworks */,
+				A035E5C1308290410068657D /* Resources */,
+				A035E5F9308290410068657D /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A035E5DC308290410068657D /* PBXTargetDependency */,
+			);
+			name = "ScamShield (macOS)";
+			productName = "ScamShield (macOS)";
+			productReference = A035E5C3308290410068657D /* ScamShield.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A035E5CE308290410068657D /* ScamShield Extension (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A035E5EF308290410068657D /* Build configuration list for PBXNativeTarget "ScamShield Extension (iOS)" */;
+			buildPhases = (
+				A035E5CB308290410068657D /* Sources */,
+				A035E5CC308290410068657D /* Frameworks */,
+				A035E5CD308290410068657D /* Resources */,
+			);
+			buildRules = (
+			);
+			name = "ScamShield Extension (iOS)";
+			productName = "ScamShield Extension (iOS)";
+			productReference = A035E5CF308290410068657D /* ScamShield Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		A035E5D8308290410068657D /* ScamShield Extension (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A035E5F6308290410068657D /* Build configuration list for PBXNativeTarget "ScamShield Extension (macOS)" */;
+			buildPhases = (
+				A035E5D5308290410068657D /* Sources */,
+				A035E5D6308290410068657D /* Frameworks */,
+				A035E5D7308290410068657D /* Resources */,
+			);
+			buildRules = (
+			);
+			name = "ScamShield Extension (macOS)";
+			productName = "ScamShield Extension (macOS)";
+			productReference = A035E5D9308290410068657D /* ScamShield Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A035E59E308290400068657D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2700;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					A035E5B0308290410068657D = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					A035E5C2308290410068657D = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					A035E5CE308290410068657D = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					A035E5D8308290410068657D = {
+						CreatedOnToolsVersion = 27.0;
+					};
+				};
+			};
+			buildConfigurationList = A035E5A1308290400068657D /* Build configuration list for PBXProject "ScamShield" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A035E59D308290400068657D;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A035E5B2308290410068657D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A035E5B0308290410068657D /* ScamShield (iOS) */,
+				A035E5C2308290410068657D /* ScamShield (macOS) */,
+				A035E5CE308290410068657D /* ScamShield Extension (iOS) */,
+				A035E5D8308290410068657D /* ScamShield Extension (macOS) */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A035E5AF308290410068657D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+				A035E5E1308290410068657D /* Icon.png in Resources */,
+				A035E5BA308290410068657D /* LaunchScreen.storyboard in Resources */,
+				A035E5DF308290410068657D /* Main.html in Resources */,
+				A035E5E5308290410068657D /* Script.js in Resources */,
+				A035E5E9308290410068657D /* Assets.xcassets in Resources */,
+				A035E5BD308290410068657D /* Main.storyboard in Resources */,
+				A035E5E3308290410068657D /* Style.css in Resources */,
+			);
+		};
+		A035E5C1308290410068657D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+				A035E5E2308290410068657D /* Icon.png in Resources */,
+				A035E5E4308290410068657D /* Style.css in Resources */,
+				A035E5C9308290410068657D /* Main.storyboard in Resources */,
+				A035E5E6308290410068657D /* Script.js in Resources */,
+				A035E5EA308290410068657D /* Assets.xcassets in Resources */,
+				A035E5E0308290410068657D /* Main.html in Resources */,
+			);
+		};
+		A035E5CD308290410068657D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+				A035E61B308290410068657D /* content.js in Resources */,
+				A035E61C308290410068657D /* guard.js in Resources */,
+				A035E615308290410068657D /* background.js in Resources */,
+				A035E61A308290410068657D /* popup.css in Resources */,
+				A035E61E308290410068657D /* blocked.css in Resources */,
+				A035E617308290410068657D /* blocked.js in Resources */,
+				A035E616308290410068657D /* popup.html in Resources */,
+				A035E618308290410068657D /* icons in Resources */,
+				A035E61D308290410068657D /* blocked.html in Resources */,
+				A035E619308290410068657D /* manifest.json in Resources */,
+				A035E614308290410068657D /* popup.js in Resources */,
+			);
+		};
+		A035E5D7308290410068657D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+				A035E610308290410068657D /* content.js in Resources */,
+				A035E611308290410068657D /* guard.js in Resources */,
+				A035E60A308290410068657D /* background.js in Resources */,
+				A035E60F308290410068657D /* popup.css in Resources */,
+				A035E613308290410068657D /* blocked.css in Resources */,
+				A035E60C308290410068657D /* blocked.js in Resources */,
+				A035E60B308290410068657D /* popup.html in Resources */,
+				A035E60D308290410068657D /* icons in Resources */,
+				A035E612308290410068657D /* blocked.html in Resources */,
+				A035E60E308290410068657D /* manifest.json in Resources */,
+				A035E609308290410068657D /* popup.js in Resources */,
+			);
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A035E5AD308290410068657D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+				A035E5E7308290410068657D /* ViewController.swift in Sources */,
+				A035E5B5308290410068657D /* AppDelegate.swift in Sources */,
+				A035E5B7308290410068657D /* SceneDelegate.swift in Sources */,
+			);
+		};
+		A035E5BF308290410068657D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+				A035E5E8308290410068657D /* ViewController.swift in Sources */,
+				A035E5C6308290410068657D /* AppDelegate.swift in Sources */,
+			);
+		};
+		A035E5CB308290410068657D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+				A035E5EB308290410068657D /* SafariWebExtensionHandler.swift in Sources */,
+			);
+		};
+		A035E5D5308290410068657D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+				A035E5EC308290410068657D /* SafariWebExtensionHandler.swift in Sources */,
+			);
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A035E5D2308290410068657D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A035E5CE308290410068657D /* ScamShield Extension (iOS) */;
+			targetProxy = A035E5D1308290410068657D /* PBXContainerItemProxy */;
+		};
+		A035E5DC308290410068657D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A035E5D8308290410068657D /* ScamShield Extension (macOS) */;
+			targetProxy = A035E5DB308290410068657D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A035E5A4308290400068657D /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A035E5A5308290400068657D /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		A035E5B8308290410068657D /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A035E5B9308290410068657D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		A035E5BB308290410068657D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A035E5BC308290410068657D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		A035E5C7308290410068657D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A035E5C8308290410068657D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A035E5ED308290410068657D /* Debug configuration for PBXProject "ScamShield" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A035E5EE308290410068657D /* Release configuration for PBXProject "ScamShield" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		A035E5F0308290410068657D /* Debug configuration for PBXNativeTarget "ScamShield Extension (iOS)" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "ScamShield Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aliefauzan.scamshield.Extension;
+				PRODUCT_NAME = "ScamShield Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A035E5F1308290410068657D /* Release configuration for PBXNativeTarget "ScamShield Extension (iOS)" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "ScamShield Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aliefauzan.scamshield.Extension;
+				PRODUCT_NAME = "ScamShield Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A035E5F4308290410068657D /* Debug configuration for PBXNativeTarget "ScamShield (iOS)" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = ScamShield;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aliefauzan.scamshield;
+				PRODUCT_NAME = ScamShield;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A035E5F5308290410068657D /* Release configuration for PBXNativeTarget "ScamShield (iOS)" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = ScamShield;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aliefauzan.scamshield;
+				PRODUCT_NAME = ScamShield;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A035E5F7308290410068657D /* Debug configuration for PBXNativeTarget "ScamShield Extension (macOS)" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "ScamShield Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aliefauzan.scamshield.Extension;
+				PRODUCT_NAME = "ScamShield Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A035E5F8308290410068657D /* Release configuration for PBXNativeTarget "ScamShield Extension (macOS)" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "ScamShield Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aliefauzan.scamshield.Extension;
+				PRODUCT_NAME = "ScamShield Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A035E5FB308290410068657D /* Debug configuration for PBXNativeTarget "ScamShield (macOS)" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = ScamShield;
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aliefauzan.scamshield;
+				PRODUCT_NAME = ScamShield;
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A035E5FC308290410068657D /* Release configuration for PBXNativeTarget "ScamShield (macOS)" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = ScamShield;
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aliefauzan.scamshield;
+				PRODUCT_NAME = ScamShield;
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A035E5A1308290400068657D /* Build configuration list for PBXProject "ScamShield" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A035E5ED308290410068657D /* Debug configuration for PBXProject "ScamShield" */,
+				A035E5EE308290410068657D /* Release configuration for PBXProject "ScamShield" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		A035E5EF308290410068657D /* Build configuration list for PBXNativeTarget "ScamShield Extension (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A035E5F0308290410068657D /* Debug configuration for PBXNativeTarget "ScamShield Extension (iOS)" */,
+				A035E5F1308290410068657D /* Release configuration for PBXNativeTarget "ScamShield Extension (iOS)" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		A035E5F3308290410068657D /* Build configuration list for PBXNativeTarget "ScamShield (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A035E5F4308290410068657D /* Debug configuration for PBXNativeTarget "ScamShield (iOS)" */,
+				A035E5F5308290410068657D /* Release configuration for PBXNativeTarget "ScamShield (iOS)" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		A035E5F6308290410068657D /* Build configuration list for PBXNativeTarget "ScamShield Extension (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A035E5F7308290410068657D /* Debug configuration for PBXNativeTarget "ScamShield Extension (macOS)" */,
+				A035E5F8308290410068657D /* Release configuration for PBXNativeTarget "ScamShield Extension (macOS)" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		A035E5FA308290410068657D /* Build configuration list for PBXNativeTarget "ScamShield (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A035E5FB308290410068657D /* Debug configuration for PBXNativeTarget "ScamShield (macOS)" */,
+				A035E5FC308290410068657D /* Release configuration for PBXNativeTarget "ScamShield (macOS)" */,
+			);
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A035E59E308290400068657D /* Project object */;
+	validationLevel = 1;
+}

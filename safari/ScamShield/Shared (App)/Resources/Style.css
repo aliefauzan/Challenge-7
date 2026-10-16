@@ -1,0 +1,111 @@
+:root {
+    color-scheme: light dark;
+    --text: #1b1f24;
+    --muted: #4a5561;
+    --card: #f3f5f8;
+    --on: #1e7d32;
+    --off: #b3261e;
+    --accent: #1557c0;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text: #eef1f5;
+        --muted: #b9c2cc;
+        --card: #22272e;
+        --on: #6fcf7c;
+        --off: #ff8a80;
+        --accent: #8ab4ff;
+    }
+}
+
+html, body {
+    margin: 0;
+}
+
+body {
+    font: -apple-system-body;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--text);
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+main {
+    max-width: 30em;
+    margin: 0 auto;
+    padding: 24px 20px 40px;
+    text-align: center;
+}
+
+img {
+    border-radius: 22%;
+}
+
+h1 {
+    font-size: 1.6em;
+    margin: 8px 0 4px;
+}
+
+h2 {
+    font-size: 1.15em;
+    margin: 0 0 8px;
+}
+
+p {
+    margin: 8px 0;
+}
+
+.private {
+    color: var(--muted);
+}
+
+section {
+    margin-top: 20px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    background: var(--card);
+    text-align: left;
+}
+
+ol {
+    margin: 8px 0;
+    padding-left: 1.4em;
+}
+
+li {
+    margin: 6px 0;
+}
+
+.dot {
+    display: inline-block;
+    width: 0.7em;
+    height: 0.7em;
+    margin-right: 0.5em;
+    border-radius: 50%;
+}
+
+.dot.on { background: var(--on); }
+.dot.off { background: var(--off); }
+
+button {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    margin-top: 12px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Show only the parts for this platform and state. */
+body:not(.platform-ios) .platform-ios,
+body:not(.platform-mac) .platform-mac,
+body:not(.state-on) .state-on,
+body:not(.state-off) .state-off,
+body:not(.state-unknown) .state-unknown,
+body:not(.state-error) .state-error,
+body.state-on .mac-steps {
+    display: none;
+}

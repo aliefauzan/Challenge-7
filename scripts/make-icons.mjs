@@ -3,8 +3,9 @@
 //
 //   node scripts/make-icons.mjs --out dist/icons          # 16, 32, 48, 128 (transparent)
 //   node scripts/make-icons.mjs --out AppIcon --app       # 512, 1024 (opaque, for the app)
+//   node scripts/make-icons.mjs --appiconset <dir>        # every file an Xcode AppIcon set lists
 import { deflateSync } from "node:zlib";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -165,8 +166,30 @@ export function writeIcons(outdir, sizes = EXTENSION_SIZES, opts = {}) {
   return files;
 }
 
+/**
+ * Fill an Xcode AppIcon set: each image its Contents.json lists is drawn at
+ * its own pixel size (size × scale), opaque, so no size is an upscale.
+ * @returns {string[]} files written
+ */
+export function writeAppIconSet(dir) {
+  const { images } = JSON.parse(readFileSync(join(dir, "Contents.json"), "utf8"));
+  const done = new Map();
+  for (const img of images) {
+    if (!img.filename || !img.size) continue;
+    const px = Math.round(Number(img.size.split("x")[0]) * Number((img.scale ?? "1x").replace("x", "")));
+    if (done.has(img.filename)) continue;
+    writeFileSync(join(dir, img.filename), encodePng(px, px, drawIcon(px, { app: true }), { opaque: true }));
+    done.set(img.filename, px);
+  }
+  return [...done.keys()].map((f) => join(dir, f));
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
+  if (args.includes("--appiconset")) {
+    for (const f of writeAppIconSet(args[args.indexOf("--appiconset") + 1])) console.log(`wrote ${f}`);
+    process.exit(0);
+  }
   const out = args[args.indexOf("--out") + 1];
   if (!args.includes("--out") || !out) {
     console.error("usage: node scripts/make-icons.mjs --out <dir> [--app]");
