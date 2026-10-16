@@ -79,15 +79,21 @@ test("bg main: nav-check blocks listed domains in the top frame only", async () 
   assert.deepEqual(await sendMessage(api, { type: "nav-check" }, top("https://scam.com/")), { block: false });
 });
 
-test("bg main: Safari backstop sends a listed page to blocked.html; Chrome leaves it to DNR", async () => {
+test("bg main: the tabs.onUpdated backstop sends a listed page to blocked.html on both targets", async () => {
   const safari = await started("safari");
   assert.deepEqual(await safari.api.declarativeNetRequest.getDynamicRules(), []);
   await Promise.all(safari.api.tabs.onUpdated.fire(9, { status: "complete", url: "https://scam.com/x" }, { id: 9, url: "https://scam.com/x" }));
   assert.deepEqual(safari.api.calls.tabsUpdate, [{ tabId: 9, url: "chrome-extension://ext-id/blocked.html#https%3A%2F%2Fscam.com%2Fx" }]);
 
+  // A trailing-dot host is not matched by DNR requestDomains, so Chrome
+  // needs the backstop too.
   const chrome = await started("chrome");
-  await Promise.all(chrome.api.tabs.onUpdated.fire(9, { status: "complete", url: "https://scam.com/x" }, { id: 9, url: "https://scam.com/x" }));
-  assert.deepEqual(chrome.api.calls.tabsUpdate, []);
+  await Promise.all(chrome.api.tabs.onUpdated.fire(9, { status: "complete", url: "https://scam.com./x" }, { id: 9, url: "https://scam.com./x" }));
+  assert.deepEqual(chrome.api.calls.tabsUpdate, [{ tabId: 9, url: "chrome-extension://ext-id/blocked.html#https%3A%2F%2Fscam.com.%2Fx" }]);
+
+  // The blocked page itself is not http(s), so it never loops.
+  await Promise.all(chrome.api.tabs.onUpdated.fire(9, { status: "complete", url: chrome.api.calls.tabsUpdate[0].url }, { id: 9 }));
+  assert.equal(chrome.api.calls.tabsUpdate.length, 1);
 });
 
 test("bg main: navigation and tab close clear the stored verdict", async () => {

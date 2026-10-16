@@ -5,7 +5,8 @@
 // Safari: it accepts redirect rules but ignores them, and its block action
 // strands the tab on an error page. So the Safari build installs no rules;
 // a document_start content script (content/guard.js) asks `nav-check` and
-// leaves the page itself, and a tabs.onUpdated backstop catches the rest.
+// leaves the page itself. On both targets a tabs.onUpdated backstop in
+// bg/index.js catches the rest.
 import { DomainSet } from "../engine/domains.js";
 import { parseHttpUrl } from "../engine/url.js";
 

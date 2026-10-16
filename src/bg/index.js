@@ -99,9 +99,11 @@ export function startBackground(api, deps) {
       await clearVerdict(api, tabId);
       await setBadge(api, tabId, "clean");
     }
-    // Safari backstop for pages the guard script did not stop.
+    // Backstop for pages that got past the first check: on Safari, the
+    // guard script; on Chrome, DNR, whose requestDomains does not match
+    // host forms such as a trailing dot ("scam.example.").
     const url = info.url ?? tab?.url ?? "";
-    if (deps.target === "safari" && url && (await shouldBlock(url))) {
+    if (url && (await shouldBlock(url))) {
       await api.tabs.update(tabId, { url: blockedPageUrl(api, url) });
     }
   });
