@@ -42,17 +42,4 @@ test("bg flags: sender registrable uses the PSL and ignores non-http pages", () 
   assert.equal(senderRegistrable({ tab: { url: "https://www.example.com/" } }), "example.com");
 });
 
-test("bg flags: content code never touches extension or page storage for flags", () => {
-  const offenders = [];
-  const walk = (dir) => {
-    if (!existsSync(dir)) return;
-    for (const name of readdirSync(dir)) {
-      const path = join(dir, name);
-      if (statSync(path).isDirectory()) walk(path);
-      else if (path.endsWith(".js") && /\b(storage\.(session|local|sync)|sessionStorage|localStorage)\b/.test(readFileSync(path, "utf8"))) offenders.push(path);
-    }
-  };
-  walk(join(ROOT, "src", "content"));
-  walk(join(ROOT, "src", "ui"));
-  assert.deepEqual(offenders, []);
-});
+// The storage greps for src/content and src/ui live in security.test.js.

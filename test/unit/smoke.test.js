@@ -6,6 +6,7 @@ import { join, dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runInNewContext } from "node:vm";
 import { makeFakeApi } from "./fakes/api.js";
+import { makeFakeWindow } from "./fakes/dom.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const TARGETS = ["chrome", "safari"];
@@ -49,7 +50,8 @@ for (const target of TARGETS) {
     for (const bundle of BUNDLES) {
       const logs = [];
       const js = readFileSync(join(ROOT, "dist", target, bundle), "utf8");
-      runInNewContext(js, { console: { debug: (msg) => logs.push(msg), error() {} }, chrome: makeFakeApi(), structuredClone });
+      const window = makeFakeWindow();
+      runInNewContext(js, { console: { debug: (msg) => logs.push(msg), error() {} }, chrome: makeFakeApi(), structuredClone, window, document: window.document, URL });
       assert.deepEqual(logs, [`tm:${bundle.replace(".js", "")} loaded target=${target}`]);
     }
   });

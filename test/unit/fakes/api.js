@@ -53,11 +53,15 @@ export function makeFakeApi({ id = "ext-id", origin = "chrome-extension://ext-id
   const calls = { tabsUpdate: [], tabsCreate: [], tabsSendMessage: [], badgeText: [], badgeColor: [] };
   let dynamicRules = [];
   const alarms = new Map();
-  return {
+  const api = {
     calls,
+    // The sender that runtime.sendMessage reports, as a content script in
+    // this tab and frame would be seen by the background.
+    sender: { id, url: "https://page.example/", frameId: 0, tab: { id: 1, url: "https://page.example/" } },
     runtime: {
       id,
       getURL: (path) => origin + path.replace(/^\//, ""),
+      sendMessage: (message) => sendMessage(api, message, api.sender),
       onMessage: event(),
       onInstalled: event(),
       onStartup: event(),
@@ -114,6 +118,7 @@ export function makeFakeApi({ id = "ext-id", origin = "chrome-extension://ext-id
       },
     },
   };
+  return api;
 }
 
 /** Send a runtime message the way the browser would and await the reply. */
