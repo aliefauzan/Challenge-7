@@ -1,0 +1,53 @@
+<!doctype html>
+<!-- Hand-made feed page for end-to-end tests. The tests serve it in place of
+     https://www.facebook.com/ so the ruleset's social adapter applies. Only
+     the markup the adapter relies on is copied: posts are role="article",
+     outbound links go through the l.facebook.com/l.php wrapper. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feed fixture</title>
+<style>
+  body { font: 16px/1.5 system-ui, sans-serif; max-width: 640px; margin: 24px auto; background: #f0f2f5; }
+  [role="article"] { background: #fff; border-radius: 8px; padding: 12px 16px; margin: 12px 0; }
+</style>
+</head>
+<body>
+  <div role="feed">
+    <div role="article" id="post-scam-link">
+      <p>Huge clearance sale, 90% off everything today only!</p>
+      <a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fshop.scamshield-test.example%2Fsale&amp;h=AT0">shop.scamshield-test.example</a>
+    </div>
+    <div role="article" id="post-scam-text">
+      <p>Your computer has been infected. Call Microsoft support now.</p>
+    </div>
+    <div role="article" id="post-internal">
+      <a href="https://www.facebook.com/groups/garden">Garden club group</a>
+    </div>
+    <div role="article" id="post-nested">
+      <p>Shared a post</p>
+      <div role="article" id="post-nested-inner">
+        <a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.news.example%2Fstory">www.news.example</a>
+      </div>
+    </div>
+  </div>
+  <aside>
+    <a id="link-scam" href="https://scamshield-test.example/prize">Claim your prize</a>
+    <a id="link-internal" href="https://www.facebook.com/profile.php?id=1">Profile</a>
+  </aside>
+  <script>
+    // A post that arrives later, like infinite scroll.
+    setTimeout(() => {
+      const post = document.createElement("div");
+      post.setAttribute("role", "article");
+      post.id = "post-late";
+      const a = document.createElement("a");
+      a.href = "https://scamshield-test.example/late";
+      a.textContent = "Limited offer";
+      post.append(a);
+      document.querySelector('[role="feed"]').append(post);
+    }, 1500);
+  </script>
+</body>
+</html>

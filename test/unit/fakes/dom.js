@@ -2,6 +2,30 @@
 // what src/ui and src/content use; anything else throws, so a test fails
 // loudly if the code starts relying on something new.
 
+// Compound selectors only: tag, [attr], [attr="v"], .class, joined by commas.
+function parseSelector(selector) {
+  return selector.split(",").map((part) => {
+    const src = part.trim();
+    const re = /^([a-z0-9-]+|\*)?((?:\[[^\]]+\]|\.[\w-]+)*)$/i;
+    const m = re.exec(src);
+    if (!m) throw new Error(`fake dom: unsupported selector ${selector}`);
+    const tests = [];
+    if (m[1] && m[1] !== "*") tests.push((e) => e.tagName === m[1].toUpperCase());
+    for (const [, attr, , value] of m[2].matchAll(/\[([\w-]+)(=(?:"([^"]*)"|'[^']*'|[^\]]*))?\]/g)) {
+      tests.push((e) => e.hasAttribute(attr) && (value === undefined || e.getAttribute(attr) === value));
+    }
+    for (const [, cls] of m[2].matchAll(/\.([\w-]+)/g)) {
+      tests.push((e) => (e.getAttribute("class") ?? "").split(/\s+/).includes(cls));
+    }
+    return (e) => tests.every((t) => t(e));
+  });
+}
+
+const matcher = (selector) => {
+  const alts = parseSelector(selector);
+  return (e) => alts.some((t) => t(e));
+};
+
 class Node {
   constructor(doc) {
     this.ownerDocument = doc;
@@ -52,6 +76,40 @@ class Node {
     p.childNodes.splice(p.childNodes.indexOf(this), 1);
     this.parentNode = null;
     this.ownerDocument._mutated(p);
+  }
+
+  get parentElement() {
+    return this.parentNode instanceof Element ? this.parentNode : null;
+  }
+
+  prepend(...nodes) {
+    const rest = this.childNodes;
+    this.childNodes = [];
+    this.append(...nodes);
+    for (const c of rest) this.childNodes.push(c);
+    this.ownerDocument._mutated(this);
+  }
+
+  after(...nodes) {
+    const p = this.parentNode;
+    const i = p.childNodes.indexOf(this);
+    const tail = p.childNodes.splice(i + 1);
+    p.append(...nodes);
+    p.childNodes.push(...tail);
+  }
+
+  /** Light-DOM descendants matching a selector, in document order. */
+  querySelectorAll(selector) {
+    const test = matcher(selector);
+    const out = [];
+    const visit = (n) => {
+      for (const c of n.childNodes) {
+        if (c instanceof Element && test(c)) out.push(c);
+        visit(c);
+      }
+    };
+    visit(this);
+    return out;
   }
 
   /** Depth-first walk of elements, into open and closed shadow roots. */
@@ -153,6 +211,27 @@ class Element extends Node {
   get innerText() {
     return this.textContent;
   }
+
+  matches(selector) {
+    return matcher(selector)(this);
+  }
+
+  closest(selector) {
+    const test = matcher(selector);
+    for (let n = this; n instanceof Element; n = n.parentNode) if (test(n)) return n;
+    return null;
+  }
+
+  /** Resolved like a real <a href>. */
+  get href() {
+    const raw = this.getAttribute("href");
+    if (raw === null) return "";
+    try {
+      return new URL(raw, this.ownerDocument.URL).href;
+    } catch {
+      return raw;
+    }
+  }
 }
 
 class Document extends Node {
@@ -178,11 +257,7 @@ class Document extends Node {
   }
 
   querySelector(selector) {
-    // Only the `meta[property="og:..."]` and tag-name forms are used.
-    const meta = /^meta\[property="([^"]+)"\]$/.exec(selector);
-    if (meta) return this.find((e) => e.tagName === "META" && e.getAttribute("property") === meta[1]);
-    if (/^[a-z0-9]+$/i.test(selector)) return this.find((e) => e.tagName === selector.toUpperCase());
-    throw new Error(`fake dom: unsupported selector ${selector}`);
+    return this.querySelectorAll(selector)[0] ?? null;
   }
 
   _mutated(target) {
@@ -196,6 +271,7 @@ class Document extends Node {
  */
 export function makeFakeWindow({ href = "https://page.example/", top = null } = {}) {
   const document = new Document();
+  document.URL = href;
   let now = 0;
   let nextId = 1;
   const timers = new Map();

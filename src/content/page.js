@@ -10,6 +10,7 @@ import { decideTier } from "../engine/tier.js";
 import { parseHttpUrl } from "../engine/url.js";
 import { createFlags } from "./flags.js";
 import { scanPage, createRescanner } from "./scan.js";
+import { pickAdapter, createSurfaces } from "./surfaces.js";
 import { createRoot } from "../ui/shadow.js";
 import { scamBanner, biasBanner } from "../ui/banner.js";
 import { blocker, lockScroll } from "../ui/blocker.js";
@@ -73,6 +74,8 @@ export async function startContent({ api, win, now = () => Date.now() }) {
   let unlockScroll = null;
   let rescanner = null;
   let current = null;
+  let picked = null; // social adapter for this page, if any
+  let surfaces = null;
 
   const contentApi = { root, get verdict() { return current; } };
 
@@ -110,7 +113,9 @@ export async function startContent({ api, win, now = () => Date.now() }) {
 
   /** Scan, decide, render and report. Returns the tier. */
   async function evaluate(text = readText(doc)) {
-    const page = scanPage({ href, text, rules });
+    // On social pages, post text is judged per post (surfaces.js), not as
+    // one page, so a single scam post does not cover the whole feed.
+    const page = scanPage({ href, text: picked ? "" : text, rules });
     domain = page.domain;
     const seen = new Set(page.signals.map(signalKey));
     const extra = [...frameSignals.values()].flat().filter((s) => !seen.has(signalKey(s)) && seen.add(signalKey(s)));
@@ -140,13 +145,23 @@ export async function startContent({ api, win, now = () => Date.now() }) {
     [dismissed, bypassed] = await Promise.all([flags.getFlag("dismiss", reg), flags.getFlag("bypass", reg)]);
   }
 
+  function syncSurfaces() {
+    surfaces?.stop();
+    surfaces = null;
+    if (!picked || !prefs.social) return;
+    surfaces = createSurfaces({ win, rules, picked });
+    surfaces.start();
+  }
+
   async function startPage() {
     rescanner?.stop();
     frameSignals = new Map();
+    picked = pickAdapter(rules, href);
     await loadFlags();
     const tier = await evaluate();
     rescanner = createRescanner({ win, now, readText: () => readText(doc), onChange: (text) => evaluate(text) });
     if (tier === "block") rescanner.stop();
+    else syncSurfaces();
   }
 
   await startPage();
@@ -177,6 +192,8 @@ export async function startContent({ api, win, now = () => Date.now() }) {
     if (area === "sync" && PREFS_KEY in changes) prefs = await loadPrefs(api);
     else if (area === "local" && RULESET_KEY in changes) rules = (await loadRules(api)) ?? rules;
     else return;
+    picked = pickAdapter(rules, href);
+    if (current?.tier !== "block") syncSurfaces();
     await evaluate();
   });
 
