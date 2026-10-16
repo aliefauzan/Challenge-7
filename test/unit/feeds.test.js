@@ -29,6 +29,23 @@ test("feeds: public suffixes and allowlisted domains are dropped", () => {
   assert.deepEqual(hostsFromFeed(text, { allow }), ["phish.github.io", "evil.example"]);
 });
 
+test("feeds: shared hosting services and non-public addresses are dropped", () => {
+  const text = [
+    "https://raw.githubusercontent.com/someone/repo/main/x.html",
+    "https://storage.googleapis.com/bucket/login.html",
+    "https://www.dropbox.com/s/abc/file",
+    "https://cdn.discordapp.com/attachments/1/2/x.exe",
+    "https://bit.ly/abc",
+    "http://127.0.0.1/x",
+    "http://192.168.1.10/x",
+    "http://10.0.0.5/x",
+    "http://999.1.1.1/x",
+    "http://198.51.100.7/kit.zip",
+    "https://secure-login.bad-bank.example/",
+  ].join("\n");
+  assert.deepEqual(hostsFromFeed(text), ["198.51.100.7", "secure-login.bad-bank.example"]);
+});
+
 test("feeds: the size cap holds across feeds", async () => {
   const dir = mkdtempSync(join(tmpdir(), "tm-feeds-"));
   const srcFile = join(dir, "src.json");
