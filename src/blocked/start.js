@@ -13,15 +13,18 @@ export function blockedHost(hash) {
 }
 
 /**
+ * Shows the blocked site's name only when the background confirms it is on
+ * the scam list: the page is web-accessible, so a website could open it with
+ * a trusted bank's address in the hash. Refuses to render inside a frame.
  * @param {{api: object, win: Window, reportBase?: string}} deps
+ * @returns {Promise<{host: string, framed?: boolean}>}
  */
-export function startBlockedPage({ api, win, reportBase }) {
+export async function startBlockedPage({ api, win, reportBase }) {
   const doc = win.document;
-  const host = blockedHost(new URL(win.location.href).hash);
-
-  const domain = doc.querySelector("#domain");
-  if (host) domain.textContent = host;
-  else domain.parentElement?.remove();
+  if (win.top !== win) {
+    doc.body.replaceChildren();
+    return { host: "", framed: true };
+  }
 
   doc.querySelector("#back").addEventListener("click", async () => {
     if (win.history.length > 1) {
@@ -36,6 +39,21 @@ export function startBlockedPage({ api, win, reportBase }) {
       console.error("tm:blocked", err);
     }
   });
+
+  const hash = new URL(win.location.href).hash;
+  let host = blockedHost(hash);
+  if (host) {
+    const reply = await api.runtime.sendMessage({ type: "blocked-check", href: decodeHash(hash) }).catch(() => null);
+    if (reply?.listed !== true) host = "";
+  }
+
+  const domainLine = doc.querySelector(".domain");
+  if (host) {
+    doc.querySelector("#domain").textContent = host;
+    domainLine.removeAttribute("hidden");
+  } else {
+    domainLine.remove();
+  }
 
   const report = doc.querySelector("#report");
   const href = reportHref(host, reportBase);

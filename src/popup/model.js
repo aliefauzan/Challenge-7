@@ -80,14 +80,21 @@ export function decodeHash(hash) {
   }
 }
 
-/** The blocked site's host when `url` is our own blocked page. */
-function blockedPageHost(url) {
+/** The blocked address when `url` is our own blocked page, else null. */
+export function blockedPageAddress(url) {
   const m = /^[a-z-]+-extension:\/\/[^/]+\/blocked\.html#(.+)$/.exec(url ?? "");
-  return m ? (parseHttpUrl(decodeHash(m[1]))?.hostname ?? null) : null;
+  return m ? decodeHash(m[1]) : null;
 }
 
-function statusOf({ tab, verdict, prefs, hasAccess }) {
-  const blockedHost = blockedPageHost(tab?.url);
+const blockedPageHost = (url) => {
+  const address = blockedPageAddress(url);
+  return address == null ? null : (parseHttpUrl(address)?.hostname ?? null);
+};
+
+function statusOf({ tab, verdict, prefs, hasAccess, blockedListed }) {
+  // Any website can open the blocked page with any address in it, so the
+  // site is named only when the background confirmed it is on the list.
+  const blockedHost = blockedListed === true ? blockedPageHost(tab?.url) : null;
   if (blockedHost) {
     return { kind: "blocked", title: "ScamShield blocked a scam website", detail: "You are safe. The website did not open.", domain: blockedHost, reasons: [] };
   }
@@ -127,7 +134,8 @@ function statusOf({ tab, verdict, prefs, hasAccess }) {
 
 /**
  * @param {{target: string, platform: string, tab: {id: number, url?: string} | null,
- *   verdict: object | null, prefs: object, meta: object | null, hasAccess: boolean, now: number}} input
+ *   verdict: object | null, prefs: object, meta: object | null, hasAccess: boolean, now: number,
+ *   blockedListed?: boolean}} input
  */
 export function buildPopupView(input) {
   const prefs = { scam: true, bias: true, social: true, ...(input.prefs ?? {}) };

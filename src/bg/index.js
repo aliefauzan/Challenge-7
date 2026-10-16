@@ -61,6 +61,9 @@ export function startBackground(api, deps) {
     verdict: (msg, sender) => handleVerdict(api, msg, sender),
     "frame-signals": (msg, sender) => handleFrameSignals(api, msg, sender),
     "nav-check": async (msg, sender) => ({ block: sender.frameId === 0 && (await shouldBlock(sender.url ?? msg.href ?? "")) }),
+    // The blocked page is web-accessible, so any site can open it with any
+    // address in the hash. It shows the address only when this says yes.
+    "blocked-check": async (msg) => ({ listed: typeof msg.href === "string" && isBlockedUrl(msg.href, await scamDomains()) }),
     "ruleset-refresh": async (msg, sender) => (sender.tab ? { updated: false, error: "not allowed from a page" } : refresh()),
   };
 

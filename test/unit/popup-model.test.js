@@ -33,7 +33,7 @@ test("popup model: a shared explanation is shown once", () => {
 });
 
 test("popup model: a raw (unencoded) blocked address still names the site", () => {
-  const v = buildPopupView(base({ tab: tab("chrome-extension://abc/blocked.html#https://bad.example/a%zz?x=1") }));
+  const v = buildPopupView(base({ tab: tab("chrome-extension://abc/blocked.html#https://bad.example/a%zz?x=1"), blockedListed: true }));
   assert.equal(v.status.domain, "bad.example");
 });
 
@@ -68,9 +68,13 @@ test("popup model: browser pages and pages without a verdict are not checked yet
 
 test("popup model: on the blocked page the popup names the blocked site", () => {
   const url = `chrome-extension://abc/blocked.html#${encodeURIComponent("https://login.bad.example/pay?x=1")}`;
-  const v = buildPopupView(base({ tab: tab(url) }));
+  const v = buildPopupView(base({ tab: tab(url), blockedListed: true }));
   assert.equal(v.status.kind, "blocked");
   assert.equal(v.status.domain, "login.bad.example");
+  // A site that opened the blocked page itself gets no name in the popup.
+  const spoof = buildPopupView(base({ tab: tab(url), blockedListed: false }));
+  assert.equal(spoof.status.kind, "unchecked");
+  assert.equal(spoof.status.domain, "");
 });
 
 test("popup model: scam protection off is said plainly", () => {

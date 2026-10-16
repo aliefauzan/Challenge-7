@@ -1,7 +1,7 @@
 // Popup controller: reads the current tab's state through `api`, builds the
 // view model and renders it. Kept apart from popup.js so tests can run it
 // with a fake `api` and DOM.
-import { buildPopupView, platformOf } from "./model.js";
+import { buildPopupView, platformOf, blockedPageAddress } from "./model.js";
 import { renderPopup } from "./view.js";
 
 const PREFS_KEY = "tm.prefs";
@@ -25,6 +25,10 @@ export async function startPopup({ api, doc, target, nav = {}, now = Date.now })
   const platform = platformOf(target, nav);
   const [tab] = (await api.tabs.query({ active: true, currentWindow: true })) ?? [];
   const verdictKey = tab ? `tm.verdict.${tab.id}` : null;
+  const blockedAddress = blockedPageAddress(tab?.url);
+  const blockedListed = blockedAddress
+    ? (await api.runtime.sendMessage({ type: "blocked-check", href: blockedAddress }).catch(() => null))?.listed === true
+    : false;
   let prefs = {};
 
   async function render() {
@@ -43,6 +47,7 @@ export async function startPopup({ api, doc, target, nav = {}, now = Date.now })
       prefs,
       meta: local[META_KEY] ?? null,
       hasAccess,
+      blockedListed,
       now: now(),
     });
     root.replaceChildren(...renderPopup(view, handlers));
