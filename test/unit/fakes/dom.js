@@ -2,11 +2,11 @@
 // what src/ui and src/content use; anything else throws, so a test fails
 // loudly if the code starts relying on something new.
 
-// Compound selectors only: tag, [attr], [attr="v"], .class, joined by commas.
+// Compound selectors only: tag, #id, [attr], [attr="v"], .class, joined by commas.
 function parseSelector(selector) {
   return selector.split(",").map((part) => {
     const src = part.trim();
-    const re = /^([a-z0-9-]+|\*)?((?:\[[^\]]+\]|\.[\w-]+)*)$/i;
+    const re = /^([a-z0-9-]+|\*)?((?:\[[^\]]+\]|\.[\w-]+|#[\w-]+)*)$/i;
     const m = re.exec(src);
     if (!m) throw new Error(`fake dom: unsupported selector ${selector}`);
     const tests = [];
@@ -14,6 +14,7 @@ function parseSelector(selector) {
     for (const [, attr, , value] of m[2].matchAll(/\[([\w-]+)(=(?:"([^"]*)"|'[^']*'|[^\]]*))?\]/g)) {
       tests.push((e) => e.hasAttribute(attr) && (value === undefined || e.getAttribute(attr) === value));
     }
+    for (const [, id] of m[2].matchAll(/#([\w-]+)/g)) tests.push((e) => e.getAttribute("id") === id);
     for (const [, cls] of m[2].matchAll(/\.([\w-]+)/g)) {
       tests.push((e) => (e.getAttribute("class") ?? "").split(/\s+/).includes(cls));
     }

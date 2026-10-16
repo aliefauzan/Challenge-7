@@ -11,7 +11,7 @@ import { makeFakeWindow } from "./fakes/dom.js";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const TARGETS = ["chrome", "safari"];
 const BUNDLES = ["background.js", "content.js", "popup.js", "blocked.js"];
-const PAGES = ["popup.html", "popup.css", "blocked.html"];
+const PAGES = ["popup.html", "popup.css", "blocked.html", "blocked.css", "icons/icon-16.png", "icons/icon-32.png", "icons/icon-48.png", "icons/icon-128.png"];
 // Keys Safari does not understand; they must stay in manifest.chrome.json.
 const CHROME_ONLY_KEYS = ["minimum_chrome_version", "update_url", "key", "oauth2", "chrome_settings_overrides", "chrome_url_overrides"];
 
@@ -44,6 +44,13 @@ for (const target of TARGETS) {
       assert.ok(m.permissions.includes(perm), `missing permission ${perm}`);
     }
     assert.ok(m.web_accessible_resources.some((r) => r.resources.includes("blocked.html")));
+  });
+
+  test(`smoke: every icon in dist/${target}/manifest.json exists`, () => {
+    const m = manifest(target);
+    assert.deepEqual(Object.keys(m.icons), ["16", "32", "48", "128"]);
+    const paths = [...Object.values(m.icons), ...Object.values(m.action.default_icon ?? {})];
+    for (const p of paths) assert.ok(existsSync(join(ROOT, "dist", target, p)), `missing ${p}`);
   });
 
   test(`smoke: dist/${target} bundles carry the right TARGET`, () => {

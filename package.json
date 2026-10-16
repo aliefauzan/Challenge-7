@@ -13,7 +13,8 @@
     "keygen": "node scripts/keygen.mjs",
     "ruleset": "node scripts/build-ruleset.mjs",
     "feeds": "node scripts/fetch-feeds.mjs",
-    "plan:status": "node scripts/plan-status.mjs"
+    "plan:status": "node scripts/plan-status.mjs",
+    "icons:app": "node scripts/make-icons.mjs --app --out"
   },
   "dependencies": {
     "tldts": "^6.1.86"

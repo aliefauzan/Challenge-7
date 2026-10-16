@@ -115,6 +115,7 @@ export const STYLES = `
   padding: 8px 0;
   cursor: pointer;
 }
+.tm-report { margin: 16px 0 0; font-size: 16px; }
 button:focus-visible, a:focus-visible { outline: 3px solid #0b57d0; outline-offset: 3px; }
 @media (prefers-color-scheme: dark) {
   .tm-banner, .tm-panel { background: #1e1e1e; color: #f1f1f1; }

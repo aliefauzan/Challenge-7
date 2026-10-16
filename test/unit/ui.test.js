@@ -125,6 +125,17 @@ test("blocker: block has no way past; heading is focusable; buttons reachable", 
   assert.equal(back, 1);
 });
 
+test("blocker: a report link names only the domain and opens in a new tab", () => {
+  const { node } = blocker(verdict("block", [sig("known-scam-domain", "high", { source: "domain" })]), { onBack() {} });
+  const [link] = byTag(node, "a");
+  assert.equal(link.textContent, "Report a mistake");
+  assert.equal(link.getAttribute("target"), "_blank");
+  assert.equal(link.getAttribute("rel"), "noopener noreferrer");
+  const url = new URL(link.getAttribute("href"));
+  assert.equal(url.protocol, "https:");
+  assert.equal(url.searchParams.get("body"), "Website: page.example");
+});
+
 test("blocker: block-bypass offers the risk button; Tab wraps inside the dialog", () => {
   let bypass = 0;
   const { node } = blocker(verdict("block-bypass", [sig("h1", "high"), sig("h2", "high")]), { onBack() {}, onBypass: () => bypass++ });

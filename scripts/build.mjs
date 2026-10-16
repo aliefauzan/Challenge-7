@@ -6,6 +6,7 @@ import * as esbuild from "esbuild";
 import { readFileSync, writeFileSync, mkdirSync, rmSync, copyFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { writeIcons, EXTENSION_SIZES } from "./make-icons.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const TARGETS = {
@@ -19,7 +20,7 @@ const ENTRIES = {
   popup: "src/popup/popup.js",
   blocked: "src/blocked/blocked.js",
 };
-const STATIC = ["src/popup/popup.html", "src/popup/popup.css", "src/blocked/blocked.html"];
+const STATIC = ["src/popup/popup.html", "src/popup/popup.css", "src/blocked/blocked.html", "src/blocked/blocked.css"];
 
 function parseArgs(argv) {
   const args = { target: "all", watch: false };
@@ -55,6 +56,14 @@ function writeStatic(target) {
   for (const file of STATIC) copyFileSync(join(ROOT, file), join(outdir, file.split("/").pop()));
 }
 
+// Icons are drawn once per build run, not on every watch rebuild.
+const drawn = new Set();
+function writeExtensionIcons(target) {
+  if (drawn.has(target)) return;
+  writeIcons(join(ROOT, "dist", target, "icons"), EXTENSION_SIZES);
+  drawn.add(target);
+}
+
 function options(target) {
   return {
     absWorkingDir: ROOT,
@@ -71,7 +80,10 @@ function options(target) {
         name: "tm-static",
         setup(build) {
           build.onEnd((result) => {
-            if (result.errors.length === 0) writeStatic(target);
+            if (result.errors.length === 0) {
+              writeStatic(target);
+              writeExtensionIcons(target);
+            }
           });
         },
       },

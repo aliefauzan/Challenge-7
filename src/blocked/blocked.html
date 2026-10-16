@@ -3,11 +3,24 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Page blocked — ScamShield</title>
+    <title>Scam website blocked — ScamShield</title>
+    <link rel="stylesheet" href="blocked.css">
   </head>
   <body>
     <main>
-      <h1>This page was blocked</h1>
+      <p class="brand">ScamShield</p>
+      <h1>ScamShield stopped a scam website</h1>
+      <p class="domain">Website: <b id="domain">unknown</b></p>
+      <p class="safe">You are safe. The website did not open, and nothing was sent to it.</p>
+      <h2>What to do now</h2>
+      <ul>
+        <li>Do not go back to this website.</li>
+        <li>If someone sent you the link, do not reply to them.</li>
+        <li>If you already paid or gave a password, call your bank now.</li>
+        <li>If you are unsure, call a family member or friend you trust.</li>
+      </ul>
+      <button id="back" type="button">Go back</button>
+      <p class="report"><a id="report" target="_blank" rel="noopener noreferrer">Report a mistake</a></p>
     </main>
     <script src="blocked.js"></script>
   </body>

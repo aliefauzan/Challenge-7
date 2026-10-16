@@ -1,0 +1,69 @@
+// Popup controller: reads the current tab's state through `api`, builds the
+// view model and renders it. Kept apart from popup.js so tests can run it
+// with a fake `api` and DOM.
+import { buildPopupView, platformOf } from "./model.js";
+import { renderPopup } from "./view.js";
+
+const PREFS_KEY = "tm.prefs";
+const META_KEY = "tm.rulesetMeta";
+const ALL_SITES = { origins: ["<all_urls>"] };
+
+async function hasSiteAccess(api) {
+  try {
+    return Boolean(await api.permissions?.contains(ALL_SITES));
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * @param {{api: object, doc: Document, target: string, nav?: object, now?: () => number}} deps
+ * @returns {Promise<{render: () => Promise<void>}>}
+ */
+export async function startPopup({ api, doc, target, nav = {}, now = Date.now }) {
+  const root = doc.querySelector("main");
+  const platform = platformOf(target, nav);
+  const [tab] = (await api.tabs.query({ active: true, currentWindow: true })) ?? [];
+  const verdictKey = tab ? `tm.verdict.${tab.id}` : null;
+  let prefs = {};
+
+  async function render() {
+    const [session, sync, local, hasAccess] = await Promise.all([
+      verdictKey ? api.storage.session.get(verdictKey) : {},
+      api.storage.sync.get(PREFS_KEY),
+      api.storage.local.get(META_KEY),
+      hasSiteAccess(api),
+    ]);
+    prefs = sync[PREFS_KEY] ?? {};
+    const view = buildPopupView({
+      target,
+      platform,
+      tab: tab ?? null,
+      verdict: (verdictKey && session[verdictKey]) || null,
+      prefs,
+      meta: local[META_KEY] ?? null,
+      hasAccess,
+      now: now(),
+    });
+    root.replaceChildren(...renderPopup(view, handlers));
+  }
+
+  const handlers = {
+    onToggle: (key, on) => {
+      api.storage.sync.set({ [PREFS_KEY]: { scam: true, bias: true, social: true, ...prefs, [key]: on } });
+    },
+    onRequestAccess: () => {
+      // Must run inside the click; the browser asks the user.
+      api.permissions?.request(ALL_SITES).then(render, () => {});
+    },
+  };
+
+  api.storage.onChanged.addListener((changes, area) => {
+    const relevant =
+      (area === "session" && verdictKey in changes) || (area === "sync" && PREFS_KEY in changes) || (area === "local" && META_KEY in changes);
+    if (relevant) render().catch((err) => console.error("tm:popup", err));
+  });
+
+  await render();
+  return { render };
+}

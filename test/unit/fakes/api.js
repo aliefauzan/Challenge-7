@@ -50,7 +50,7 @@ function storageArea(areaName, onChanged) {
 
 export function makeFakeApi({ id = "ext-id", origin = "chrome-extension://ext-id/" } = {}) {
   const onChanged = event();
-  const calls = { tabsUpdate: [], tabsCreate: [], tabsSendMessage: [], badgeText: [], badgeColor: [] };
+  const calls = { tabsUpdate: [], tabsCreate: [], tabsSendMessage: [], tabsRemove: [], badgeText: [], badgeColor: [], permissionRequests: [] };
   let dynamicRules = [];
   const alarms = new Map();
   const api = {
@@ -104,8 +104,33 @@ export function makeFakeApi({ id = "ext-id", origin = "chrome-extension://ext-id
         dynamicRules.push(...structuredClone(addRules));
       },
     },
+    // The tab the popup sees as active, and the tab an extension page runs in.
+    activeTab: { id: 1, url: "https://page.example/" },
+    currentTab: { id: 1 },
+    // Whether "<all_urls>" is granted, and what a permission request answers.
+    hostAccess: true,
+    grantOnRequest: true,
+    permissions: {
+      async contains({ origins = [] } = {}) {
+        return origins.every((o) => o === "<all_urls>") && api.hostAccess;
+      },
+      async request(perms) {
+        calls.permissionRequests.push(perms);
+        if (api.grantOnRequest) api.hostAccess = true;
+        return api.grantOnRequest;
+      },
+    },
     tabs: {
       onRemoved: event(),
+      async query() {
+        return api.activeTab ? [structuredClone(api.activeTab)] : [];
+      },
+      async getCurrent() {
+        return api.currentTab ? structuredClone(api.currentTab) : undefined;
+      },
+      async remove(tabId) {
+        calls.tabsRemove.push(tabId);
+      },
       onUpdated: event(),
       async update(tabId, props) {
         calls.tabsUpdate.push({ tabId, ...props });

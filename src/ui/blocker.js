@@ -3,6 +3,7 @@
 // behind it cannot scroll.
 import { h } from "./dom.js";
 import { topSignals } from "./banner.js";
+import { reportHref } from "./report.js";
 
 const COPY = {
   block: {
@@ -32,6 +33,7 @@ export function blocker(verdict, { onBack, onBypass }) {
     controls.push(h("button", { class: "tm-risk", type: "button", onClick: () => onBypass() }, "I understand the risk — continue"));
   }
   const reasons = topSignals(verdict.signals);
+  const report = reportHref(verdict.domain);
 
   const node = h(
     "div",
@@ -45,6 +47,7 @@ export function blocker(verdict, { onBack, onBypass }) {
       reasons.length ? h("ul", { class: "tm-reasons" }, reasons.map((s) => h("li", { class: "tm-reason" }, s.description))) : null,
       h("p", { class: "tm-family" }, "Do not pay, call any number, or enter passwords here. If you are unsure, call a family member or friend you trust."),
       h("div", { class: "tm-buttons" }, controls),
+      report ? h("p", { class: "tm-report" }, h("a", { class: "tm-link", href: report, target: "_blank", rel: "noopener noreferrer" }, "Report a mistake")) : null,
     ),
   );
 
