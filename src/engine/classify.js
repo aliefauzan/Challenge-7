@@ -1,4 +1,5 @@
 // Link and social-item classification.
+import { parse } from "tldts";
 import { analyzeUrl, parseHttpUrl } from "./url.js";
 import { scanText } from "./text.js";
 
@@ -6,11 +7,15 @@ const MAX_HOPS = 5;
 
 const isFacebookWrapper = (u) => /^lm?\.facebook\.com$/.test(u.hostname) && u.pathname === "/l.php";
 
-// Google's own country domains only (google.com, google.de, google.co.id,
-// google.com.au), optionally with www. Hosts under a private suffix such as
-// google.<something>.app or google.evil.com are not Google.
-const GOOGLE_HOST = /^(www\.)?google\.(com|[a-z]{2}|com?\.[a-z]{2})$/;
-const isGoogleWrapper = (u) => u.pathname === "/url" && GOOGLE_HOST.test(u.hostname);
+// Google's own domains only: "google" directly under an ICANN public suffix
+// (google.com, google.co.id, google.com.au), optionally with www. A suffix
+// from the private section of the list (google.netlify.app) or any other
+// subdomain (google.evil.com, mail.google.com) is not unwrapped.
+function isGoogleWrapper(u) {
+  if (u.pathname !== "/url") return false;
+  const p = parse(u.hostname, { allowPrivateDomains: true });
+  return p.isIcann === true && !p.isIp && p.domainWithoutSuffix === "google" && (p.subdomain === "" || p.subdomain === "www");
+}
 
 function unwrapOnce(u) {
   if (isFacebookWrapper(u)) return u.searchParams.get("u");

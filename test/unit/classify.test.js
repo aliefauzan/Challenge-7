@@ -23,6 +23,8 @@ test("engine/classify: only real Google hosts are unwrapped", () => {
   assert.equal(classifyLink(`https://google.scam.com/url?q=${target}`, rules).kind, "scam");
   assert.equal(unwrapRedirect(`https://google.netlify.app/url?q=${target}`), `https://google.netlify.app/url?q=${target}`);
   assert.equal(unwrapRedirect(`https://www.google.com.au/url?q=${target}`), "https://clean.example/");
+  assert.equal(unwrapRedirect(`https://google.github.io/url?q=${target}`), `https://google.github.io/url?q=${target}`);
+  assert.equal(unwrapRedirect(`https://google.co.evil/url?q=${target}`), `https://google.co.evil/url?q=${target}`);
 });
 
 test("engine/classify: a chain too deep to resolve fails closed", () => {
