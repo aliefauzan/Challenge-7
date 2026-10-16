@@ -185,7 +185,24 @@ test("surfaces: on a social site the page gets chips, not a page-wide banner for
   assert.equal(byId(doc, "wrapped-scam").hasAttribute("data-tm-flagged"), true);
 });
 
-test("surfaces: social protection off adds no chips", async () => {
-  const { doc } = await bootFeed({ scam: true, bias: true, social: false });
+test("surfaces: social checks off means no chips, and the page is scanned like any other", async () => {
+  const { doc, content } = await bootFeed({ scam: true, bias: true, social: false });
   assert.equal(chipsIn(doc).length, 0);
+  assert.notEqual(content.verdict.tier, "clean", "the text-only scam post is not ignored");
+});
+
+test("surfaces: a DM view without a message selector falls back to the page text scan", async () => {
+  const href = "https://www.messenger.com/messages/t/1";
+  const win = makeFakeWindow({ href });
+  globalThis.document = win.document;
+  const p = win.document.createElement("p");
+  p.append("Congratulations, you have won! Pay the fee with a gift card to claim it.");
+  win.document.body.append(p);
+  const api = makeFakeApi();
+  api.sender = { id: api.runtime.id, url: href, frameId: 0, tab: { id: 1, url: href } };
+  const bg = startBackground(api, { target: "chrome", bundled: payloadWith(), rulesetUrl: "", keys: {}, refreshMinutes: 720, welcomeUrl: "" });
+  await bg.ready;
+  const content = await startContent({ api, win, now: win.now });
+  await settle();
+  assert.notEqual(content.verdict.tier, "clean");
 });

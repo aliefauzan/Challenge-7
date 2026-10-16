@@ -28,6 +28,12 @@ export function pickAdapter(rules, href) {
   return null;
 }
 
+/** The item selector the surface uses, or null when posts are not scanned there. */
+export function itemSelectorFor(picked) {
+  if (!picked) return null;
+  return (picked.surface === "dm" ? picked.adapter.dmItemSelector : picked.adapter.itemSelector) ?? null;
+}
+
 /**
  * @param {{win: Window, rules: import("../engine/types.js").Rules,
  *   picked: {adapter: object, surface: "feed" | "dm"}}} opts
@@ -37,7 +43,7 @@ export function createSurfaces({ win, rules, picked }) {
   const { adapter, surface } = picked;
   // Direct-message text is scanned only once the ruleset names a verified
   // selector for message items; until then only links are checked there.
-  const itemSelector = surface === "dm" ? adapter.dmItemSelector : adapter.itemSelector;
+  const itemSelector = itemSelectorFor(picked);
   const skipHost = adapter.skipLinkHosts;
   let observer = null;
   let timer = null;
