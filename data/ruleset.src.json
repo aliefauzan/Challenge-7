@@ -1,158 +1,1036 @@
 {
   "schema": 1,
-  "version": 1,
+  "version": 2,
   "generated": "2026-10-16",
-  "thresholds": { "deep_subdomain_labels": 4, "block_high_count": 2, "max_text_chars": 100000, "max_high_hits": 3 },
+  "thresholds": {
+    "deep_subdomain_labels": 4,
+    "block_high_count": 2,
+    "max_text_chars": 100000,
+    "max_high_hits": 3
+  },
   "allowlist": [
-    "amazon.com", "apple.com", "google.com", "microsoft.com", "paypal.com", "netflix.com",
-    "usps.com", "ups.com", "fedex.com", "dhl.com", "irs.gov", "ssa.gov",
-    "chase.com", "wellsfargo.com", "bankofamerica.com", "coinbase.com"
+    "amazon.com",
+    "apple.com",
+    "google.com",
+    "microsoft.com",
+    "paypal.com",
+    "netflix.com",
+    "usps.com",
+    "ups.com",
+    "fedex.com",
+    "dhl.com",
+    "irs.gov",
+    "ssa.gov",
+    "chase.com",
+    "wellsfargo.com",
+    "bankofamerica.com",
+    "coinbase.com",
+    "ebay.com",
+    "walmart.com",
+    "target.com",
+    "bestbuy.com",
+    "costco.com",
+    "citi.com",
+    "capitalone.com",
+    "usbank.com",
+    "americanexpress.com",
+    "discover.com",
+    "venmo.com",
+    "zellepay.com",
+    "cash.app",
+    "wise.com",
+    "intuit.com",
+    "norton.com",
+    "mcafee.com",
+    "att.com",
+    "verizon.com",
+    "t-mobile.com",
+    "xfinity.com",
+    "royalmail.com",
+    "evri.com",
+    "barclays.co.uk",
+    "natwest.com",
+    "hsbc.co.uk",
+    "lloydsbank.com",
+    "outlook.com",
+    "live.com",
+    "office.com",
+    "icloud.com"
   ],
   "phrase_allowlist": [
-    "ftc.gov", "consumerfinance.gov", "ic3.gov", "fbi.gov", "aarp.org", "bbb.org",
-    "consumerreports.org", "snopes.com", "factcheck.org", "scamwatch.gov.au", "actionfraud.police.uk"
+    "ftc.gov",
+    "consumerfinance.gov",
+    "ic3.gov",
+    "fbi.gov",
+    "aarp.org",
+    "bbb.org",
+    "consumerreports.org",
+    "snopes.com",
+    "factcheck.org",
+    "scamwatch.gov.au",
+    "actionfraud.police.uk",
+    "usa.gov",
+    "consumer.ftc.gov",
+    "identitytheft.gov",
+    "ncsc.gov.uk",
+    "which.co.uk",
+    "citizensadvice.org.uk",
+    "politifact.com",
+    "fullfact.org",
+    "reuters.com",
+    "apnews.com"
   ],
-  "scam_domains": ["scamshield-test.example"],
+  "scam_domains": [
+    "scamshield-test.example"
+  ],
   "impersonated_brands": [
-    "amazon", "apple", "icloud", "microsoft", "outlook", "paypal", "netflix", "venmo", "zelle",
-    "usps", "ups", "fedex", "dhl", "irs", "chase", "wellsfargo", "bankofamerica", "coinbase",
-    "facebook", "instagram", "whatsapp"
+    "amazon",
+    "apple",
+    "icloud",
+    "microsoft",
+    "outlook",
+    "paypal",
+    "netflix",
+    "venmo",
+    "zelle",
+    "usps",
+    "ups",
+    "fedex",
+    "dhl",
+    "irs",
+    "chase",
+    "wellsfargo",
+    "bankofamerica",
+    "coinbase",
+    "facebook",
+    "instagram",
+    "whatsapp",
+    "hmrc",
+    "dvla",
+    "royalmail",
+    "evri",
+    "barclays",
+    "natwest",
+    "hsbc",
+    "lloyds",
+    "norton",
+    "mcafee",
+    "citi",
+    "capitalone",
+    "amex"
   ],
-  "lookalike_brands": ["paypal", "netflix", "coinbase", "wellsfargo", "bankofamerica", "microsoft", "icloud", "venmo"],
+  "lookalike_brands": [
+    "paypal",
+    "netflix",
+    "coinbase",
+    "wellsfargo",
+    "bankofamerica",
+    "microsoft",
+    "icloud",
+    "venmo",
+    "royalmail",
+    "barclays",
+    "natwest",
+    "capitalone",
+    "americanexpress"
+  ],
   "phishing_context": [
-    "login", "signin", "verify", "verification", "secure", "security", "account", "update",
-    "support", "billing", "refund", "unlock", "suspended", "confirm", "wallet", "recovery", "my"
+    "login",
+    "signin",
+    "verify",
+    "verification",
+    "secure",
+    "security",
+    "account",
+    "update",
+    "support",
+    "billing",
+    "refund",
+    "unlock",
+    "suspended",
+    "confirm",
+    "wallet",
+    "recovery",
+    "my"
   ],
   "categories": {
-    "tech_support": { "label": "Fake tech support", "why": "Real security warnings never ask you to call a phone number or let a stranger control your computer." },
-    "gift_card": { "label": "Gift card payment", "why": "No real company, bank or government office takes payment in gift cards." },
-    "isolation": { "label": "Asks for secrecy", "why": "Scammers ask you to keep quiet so nobody you trust can warn you." },
-    "delivery": { "label": "Parcel fee", "why": "Couriers do not ask for small fees by text message or pop-up." },
-    "prize": { "label": "Prize claim", "why": "If you have to pay or share details to get a prize, it is not a prize." },
-    "government": { "label": "Government threat", "why": "Government offices send letters. They do not threaten arrest by phone or web page." },
-    "account": { "label": "Account threat", "why": "Banks and shops do not lock your account and then ask you to log in through a link." },
-    "investment": { "label": "Too-good investment", "why": "Nobody can promise guaranteed profits. Promises like this are a common way to steal savings." },
-    "payment_method": { "label": "Unusual payment", "why": "Requests to pay with crypto, wire transfers or cash machines are hard to reverse. Scammers like them for that reason." },
-    "refund": { "label": "Overpayment refund", "why": "The 'we refunded too much, please send it back' story is a trick. The first payment is never real." },
-    "urgency": { "label": "Pressure to act now", "why": "Scammers set short deadlines so you act before you can think or ask someone." }
+    "tech_support": {
+      "label": "Fake tech support",
+      "why": "Real security warnings never ask you to call a phone number or let a stranger control your computer."
+    },
+    "gift_card": {
+      "label": "Gift card payment",
+      "why": "No real company, bank or government office takes payment in gift cards."
+    },
+    "isolation": {
+      "label": "Asks for secrecy",
+      "why": "Scammers ask you to keep quiet so nobody you trust can warn you."
+    },
+    "delivery": {
+      "label": "Parcel fee",
+      "why": "Couriers do not ask for small fees by text message or pop-up."
+    },
+    "prize": {
+      "label": "Prize claim",
+      "why": "If you have to pay or share details to get a prize, it is not a prize."
+    },
+    "government": {
+      "label": "Government threat",
+      "why": "Government offices send letters. They do not threaten arrest by phone or web page."
+    },
+    "account": {
+      "label": "Account threat",
+      "why": "Banks and shops do not lock your account and then ask you to log in through a link."
+    },
+    "investment": {
+      "label": "Too-good investment",
+      "why": "Nobody can promise guaranteed profits. Promises like this are a common way to steal savings."
+    },
+    "payment_method": {
+      "label": "Unusual payment",
+      "why": "Requests to pay with crypto, wire transfers or cash machines are hard to reverse. Scammers like them for that reason."
+    },
+    "refund": {
+      "label": "Overpayment refund",
+      "why": "The 'we refunded too much, please send it back' story is a trick. The first payment is never real."
+    },
+    "urgency": {
+      "label": "Pressure to act now",
+      "why": "Scammers set short deadlines so you act before you can think or ask someone."
+    },
+    "safe_account": {
+      "label": "\"Safe account\" story",
+      "why": "Your bank will never ask you to move your money to keep it safe. Anyone who does is stealing it."
+    },
+    "family_emergency": {
+      "label": "Family emergency",
+      "why": "Scammers pretend to be a relative in trouble. Hang up and call that person on the number you already have."
+    },
+    "subscription": {
+      "label": "Fake renewal charge",
+      "why": "Fake invoices want you to call them. The number reaches the scammer, not the company."
+    },
+    "recovery": {
+      "label": "Money recovery offer",
+      "why": "People who lost money get offers to win it back for a fee. Those offers are a second scam."
+    },
+    "qr_payment": {
+      "label": "QR code trick",
+      "why": "You never need to scan a code to receive money. Scanning can send your money away or open a fake page."
+    },
+    "utility": {
+      "label": "Utility cut-off threat",
+      "why": "Power, gas and water companies send written notices first. They do not demand instant payment to stop a cut-off."
+    }
   },
   "scam_phrases": [
     {
-      "id": "tech-001", "severity": "high", "category": "tech_support", "flags": "i",
+      "id": "tech-001",
+      "severity": "high",
+      "category": "tech_support",
+      "flags": "i",
       "description": "Fake virus alert",
       "pattern": "\\b(your|this) (computer|pc|device|mac|iphone|laptop) (is|has been|was) (infected|compromised|hacked|locked)\\b",
-      "examples": { "match": ["WARNING: Your computer has been infected!", "this device is locked"], "nomatch": ["Is your computer slow? Try these tips.", "the computer was locked in a cupboard"] }
+      "examples": {
+        "match": [
+          "WARNING: Your computer has been infected!",
+          "this device is locked"
+        ],
+        "nomatch": [
+          "Is your computer slow? Try these tips.",
+          "the computer was locked in a cupboard"
+        ]
+      }
     },
     {
-      "id": "tech-002", "severity": "high", "category": "tech_support", "flags": "i",
+      "id": "tech-002",
+      "severity": "high",
+      "category": "tech_support",
+      "flags": "i",
       "description": "Asks you to call fake support",
       "pattern": "\\bcall (microsoft|apple|windows|amazon|paypal) (support|technicians?|help ?desk)\\b",
-      "examples": { "match": ["Call Microsoft Support immediately", "please call apple helpdesk"], "nomatch": ["Microsoft support pages are online", "we will call you back"] }
+      "examples": {
+        "match": [
+          "Call Microsoft Support immediately",
+          "please call apple helpdesk"
+        ],
+        "nomatch": [
+          "Microsoft support pages are online",
+          "we will call you back"
+        ]
+      }
     },
     {
-      "id": "tech-003", "severity": "medium", "category": "tech_support", "flags": "i",
+      "id": "tech-003",
+      "severity": "medium",
+      "category": "tech_support",
+      "flags": "i",
       "description": "Tells you not to close the page",
       "pattern": "\\b(do not|don'?t) (close|restart|turn off|shut down) (this|your) (window|page|tab|computer|browser)\\b",
-      "examples": { "match": ["Do not close this window", "DON'T restart your computer"], "nomatch": ["You can close this window now", "Do not forget your password"] }
+      "examples": {
+        "match": [
+          "Do not close this window",
+          "DON'T restart your computer"
+        ],
+        "nomatch": [
+          "You can close this window now",
+          "Do not forget your password"
+        ]
+      }
     },
     {
-      "id": "gift-001", "severity": "high", "category": "gift_card", "flags": "i",
+      "id": "gift-001",
+      "severity": "high",
+      "category": "gift_card",
+      "flags": "i",
       "description": "Gift card payment request",
       "pattern": "\\b(pay|payment|paid|purchase|buy|send)\\b[^.!?\\n]{0,40}\\bgift ?cards?\\b",
-      "examples": { "match": ["You must pay the fine with Google Play gift cards", "buy three gift cards and send photos"], "nomatch": ["Gift cards make great presents.", "Pay later. Gift wrapping is free"] }
+      "examples": {
+        "match": [
+          "You must pay the fine with Google Play gift cards",
+          "buy three gift cards and send photos"
+        ],
+        "nomatch": [
+          "Gift cards make great presents.",
+          "Pay later. Gift wrapping is free"
+        ]
+      }
     },
     {
-      "id": "gift-002", "severity": "high", "category": "gift_card", "flags": "i",
+      "id": "gift-002",
+      "severity": "high",
+      "category": "gift_card",
+      "flags": "i",
       "description": "Asks for the code on a card",
       "pattern": "\\b(scratch|read|send)( off)? (me )?the (codes?|numbers|pin) (on|from) the (back of the )?cards?\\b",
-      "examples": { "match": ["Scratch off the code on the back of the card", "read me the numbers on the card"], "nomatch": ["Enter the code from our email", "the pin on the map"] }
+      "examples": {
+        "match": [
+          "Scratch off the code on the back of the card",
+          "read me the numbers on the card"
+        ],
+        "nomatch": [
+          "Enter the code from our email",
+          "the pin on the map"
+        ]
+      }
     },
     {
-      "id": "secret-001", "severity": "high", "category": "isolation", "flags": "i",
+      "id": "secret-001",
+      "severity": "high",
+      "category": "isolation",
+      "flags": "i",
       "description": "Asks you to keep it secret",
       "pattern": "\\b(do not|don'?t|never) (tell|inform|talk to) (anyone|anybody|your (family|bank|children|kids|spouse|husband|wife))\\b",
-      "examples": { "match": ["Do not tell your bank about this call", "don't tell anyone, this is confidential"], "nomatch": ["Tell your family about our sale", "never tell a lie"] }
+      "examples": {
+        "match": [
+          "Do not tell your bank about this call",
+          "don't tell anyone, this is confidential"
+        ],
+        "nomatch": [
+          "Tell your family about our sale",
+          "never tell a lie"
+        ]
+      }
     },
     {
-      "id": "secret-002", "severity": "medium", "category": "isolation", "flags": "i",
+      "id": "secret-002",
+      "severity": "medium",
+      "category": "isolation",
+      "flags": "i",
       "description": "Wants it kept between you",
       "pattern": "\\bkeep (this|it) (confidential|secret|between us|private)\\b",
-      "examples": { "match": ["Please keep this confidential", "keep it between us"], "nomatch": ["keep this receipt for your records", "keep it clean"] }
+      "examples": {
+        "match": [
+          "Please keep this confidential",
+          "keep it between us"
+        ],
+        "nomatch": [
+          "keep this receipt for your records",
+          "keep it clean"
+        ]
+      }
     },
     {
-      "id": "delivery-001", "severity": "medium", "category": "delivery", "flags": "i",
+      "id": "delivery-001",
+      "severity": "medium",
+      "category": "delivery",
+      "flags": "i",
       "description": "Parcel fee request",
       "pattern": "\\b(small|unpaid|outstanding|pending) (delivery|redelivery|shipping|customs|handling) (fee|charge|payment)\\b",
-      "examples": { "match": ["Pay the small redelivery fee of $1.99", "an unpaid customs charge"], "nomatch": ["Free delivery on all orders", "shipping fee included"] }
+      "examples": {
+        "match": [
+          "Pay the small redelivery fee of $1.99",
+          "an unpaid customs charge"
+        ],
+        "nomatch": [
+          "Free delivery on all orders",
+          "shipping fee included"
+        ]
+      }
     },
     {
-      "id": "delivery-002", "severity": "medium", "category": "delivery", "flags": "i",
+      "id": "delivery-002",
+      "severity": "medium",
+      "category": "delivery",
+      "flags": "i",
       "description": "Parcel said to be on hold",
       "pattern": "\\b(package|parcel|shipment)( is| has been)? (on hold|held|suspended|undeliverable)\\b",
-      "examples": { "match": ["Your package is on hold", "parcel has been suspended due to an incomplete address"], "nomatch": ["Your package is on its way", "hold the parcel at the counter"] }
+      "examples": {
+        "match": [
+          "Your package is on hold",
+          "parcel has been suspended due to an incomplete address"
+        ],
+        "nomatch": [
+          "Your package is on its way",
+          "hold the parcel at the counter"
+        ]
+      }
     },
     {
-      "id": "prize-001", "severity": "high", "category": "prize", "flags": "i",
+      "id": "prize-001",
+      "severity": "high",
+      "category": "prize",
+      "flags": "i",
       "description": "Prize or lottery win",
       "pattern": "\\bcongrat(ulation)?s[!,. ]{0,3}you('ve| have) (won|been (selected|chosen))\\b",
-      "examples": { "match": ["Congratulations! You have won an iPhone", "congrats, you've been selected"], "nomatch": ["Congratulations on your wedding", "you have been selected for the team"] }
+      "examples": {
+        "match": [
+          "Congratulations! You have won an iPhone",
+          "congrats, you've been selected"
+        ],
+        "nomatch": [
+          "Congratulations on your wedding",
+          "you have been selected for the team"
+        ]
+      }
     },
     {
-      "id": "prize-002", "severity": "medium", "category": "prize", "flags": "i",
+      "id": "prize-002",
+      "severity": "medium",
+      "category": "prize",
+      "flags": "i",
       "description": "Claim your prize",
       "pattern": "\\b(claim|collect|redeem) your (prize|reward|winnings|jackpot)\\b",
-      "examples": { "match": ["Click here to claim your prize", "collect your winnings today"], "nomatch": ["Redeem your points in the app", "claim your seat"] }
+      "examples": {
+        "match": [
+          "Click here to claim your prize",
+          "collect your winnings today"
+        ],
+        "nomatch": [
+          "Redeem your points in the app",
+          "claim your seat"
+        ]
+      }
     },
     {
-      "id": "gov-001", "severity": "high", "category": "government", "flags": "i",
+      "id": "gov-001",
+      "severity": "high",
+      "category": "government",
+      "flags": "i",
       "description": "Social Security number threat",
       "pattern": "\\bsocial security (number|account)( has been| is| was| will be)? (suspended|blocked|frozen|compromised|cancell?ed)\\b",
-      "examples": { "match": ["Your Social Security number has been suspended", "social security account will be frozen"], "nomatch": ["Your Social Security number is private", "social security benefits explained"] }
+      "examples": {
+        "match": [
+          "Your Social Security number has been suspended",
+          "social security account will be frozen"
+        ],
+        "nomatch": [
+          "Your Social Security number is private",
+          "social security benefits explained"
+        ]
+      }
     },
     {
-      "id": "gov-002", "severity": "high", "category": "government", "flags": "i",
+      "id": "gov-002",
+      "severity": "high",
+      "category": "government",
+      "flags": "i",
       "description": "Arrest unless you pay",
       "pattern": "\\b(warrant|arrest|arrested|jail)\\b[^.!?\\n]{0,40}\\b(unless|until|if you do not|if you don'?t) (you )?pay\\b",
-      "examples": { "match": ["A warrant will be issued unless you pay today", "you will be arrested if you don't pay"], "nomatch": ["The arrest was reported by the paper", "pay your taxes on time to avoid fees"] }
+      "examples": {
+        "match": [
+          "A warrant will be issued unless you pay today",
+          "you will be arrested if you don't pay"
+        ],
+        "nomatch": [
+          "The arrest was reported by the paper",
+          "pay your taxes on time to avoid fees"
+        ]
+      }
     },
     {
-      "id": "account-001", "severity": "medium", "category": "account", "flags": "i",
+      "id": "account-001",
+      "severity": "medium",
+      "category": "account",
+      "flags": "i",
       "description": "Account locked, log in to fix",
       "pattern": "\\baccount( has been| is| was| will be)? (suspended|locked|limited|disabled|restricted)\\b[^.!?\\n]{0,40}\\b(verify|confirm|update|log ?in|sign ?in)\\b",
-      "examples": { "match": ["Your account has been suspended, verify your details", "account limited - sign in to restore access"], "nomatch": ["Your account is ready. Welcome!", "account locked. Contact the branch in person."] }
+      "examples": {
+        "match": [
+          "Your account has been suspended, verify your details",
+          "account limited - sign in to restore access"
+        ],
+        "nomatch": [
+          "Your account is ready. Welcome!",
+          "account locked. Contact the branch in person."
+        ]
+      }
     },
     {
-      "id": "invest-001", "severity": "medium", "category": "investment", "flags": "i",
+      "id": "invest-001",
+      "severity": "medium",
+      "category": "investment",
+      "flags": "i",
       "description": "Guaranteed profit claim",
       "pattern": "\\b(guaranteed|risk[- ]free) (returns?|profits?|income|earnings)\\b",
-      "examples": { "match": ["Guaranteed returns of 20% a month", "risk-free profit every day"], "nomatch": ["Returns are not guaranteed", "free returns on all shoes"] }
+      "examples": {
+        "match": [
+          "Guaranteed returns of 20% a month",
+          "risk-free profit every day"
+        ],
+        "nomatch": [
+          "Returns are not guaranteed",
+          "free returns on all shoes"
+        ]
+      }
     },
     {
-      "id": "invest-002", "severity": "high", "category": "investment", "flags": "i",
+      "id": "invest-002",
+      "severity": "high",
+      "category": "investment",
+      "flags": "i",
       "description": "Promise to multiply your money",
       "pattern": "\\b(double|triple) your (bitcoin|crypto|btc|eth|money|investment|savings)\\b",
-      "examples": { "match": ["Send 1 BTC and we double your bitcoin", "Triple your money in a week"], "nomatch": ["double your chances to win the raffle", "your money is safe with insurance"] }
+      "examples": {
+        "match": [
+          "Send 1 BTC and we double your bitcoin",
+          "Triple your money in a week"
+        ],
+        "nomatch": [
+          "double your chances to win the raffle",
+          "your money is safe with insurance"
+        ]
+      }
     },
     {
-      "id": "pay-001", "severity": "high", "category": "payment_method", "flags": "i",
+      "id": "pay-001",
+      "severity": "high",
+      "category": "payment_method",
+      "flags": "i",
       "description": "Pay at a crypto cash machine",
       "pattern": "\\b(bitcoin|crypto|btc) (atm|machine|kiosk)\\b",
-      "examples": { "match": ["Deposit the cash at a Bitcoin ATM", "go to the nearest crypto kiosk"], "nomatch": ["Bitcoin price today", "ATM fees explained"] }
+      "examples": {
+        "match": [
+          "Deposit the cash at a Bitcoin ATM",
+          "go to the nearest crypto kiosk"
+        ],
+        "nomatch": [
+          "Bitcoin price today",
+          "ATM fees explained"
+        ]
+      }
     },
     {
-      "id": "refund-001", "severity": "medium", "category": "refund", "flags": "i",
+      "id": "refund-001",
+      "severity": "medium",
+      "category": "refund",
+      "flags": "i",
       "description": "Says you were overpaid",
       "pattern": "\\b(we|i) (accidentally|mistakenly) (sent|refunded|deposited|transferred) (you )?(too much|extra|an extra|the wrong amount)\\b",
-      "examples": { "match": ["We accidentally refunded you too much", "I mistakenly sent you extra"], "nomatch": ["We sent you a refund", "I accidentally deleted the file"] }
+      "examples": {
+        "match": [
+          "We accidentally refunded you too much",
+          "I mistakenly sent you extra"
+        ],
+        "nomatch": [
+          "We sent you a refund",
+          "I accidentally deleted the file"
+        ]
+      }
     },
     {
-      "id": "urgency-001", "severity": "medium", "category": "urgency", "flags": "i",
+      "id": "urgency-001",
+      "severity": "medium",
+      "category": "urgency",
+      "flags": "i",
       "description": "Short deadline with a threat",
       "pattern": "\\b(within|in the next) (24|48|72) hours\\b[^.!?\\n]{0,40}\\b(suspended|closed|deleted|arrested|legal action|terminated)\\b",
-      "examples": { "match": ["Within 24 hours your account will be closed", "in the next 48 hours legal action will begin"], "nomatch": ["Within 24 hours we ship your order", "open 24 hours a day"] }
+      "examples": {
+        "match": [
+          "Within 24 hours your account will be closed",
+          "in the next 48 hours legal action will begin"
+        ],
+        "nomatch": [
+          "Within 24 hours we ship your order",
+          "open 24 hours a day"
+        ]
+      }
+    },
+    {
+      "id": "tech-004",
+      "severity": "high",
+      "category": "tech_support",
+      "flags": "i",
+      "description": "Asks you to install remote access",
+      "pattern": "\\b(download|install|open|run)\\b[^.!?\\n]{0,30}\\b(anydesk|teamviewer|ultraviewer|quick ?assist|remote (access|desktop|support) (app|tool|software))\\b",
+      "examples": {
+        "match": [
+          "Please download AnyDesk so our technician can fix it",
+          "install a remote access app now"
+        ],
+        "nomatch": [
+          "TeamViewer released version 15 today",
+          "We fixed the remote desktop bug"
+        ]
+      }
+    },
+    {
+      "id": "gov-003",
+      "severity": "medium",
+      "category": "government",
+      "flags": "i",
+      "description": "Demand for unpaid taxes",
+      "pattern": "\\b(you owe|unpaid|outstanding|overdue|delinquent) (back )?tax(es)?\\b[^.!?\\n]{0,50}\\b(pay|payment|arrest|warrant|penalty|penalties|today|immediately)\\b",
+      "examples": {
+        "match": [
+          "You owe back taxes and must pay today",
+          "Delinquent tax balance: payment required immediately"
+        ],
+        "nomatch": [
+          "How to check if you owe back taxes",
+          "Unpaid tax returns are processed in May"
+        ]
+      }
+    },
+    {
+      "id": "prize-003",
+      "severity": "high",
+      "category": "prize",
+      "flags": "i",
+      "description": "Fee to release a prize",
+      "pattern": "\\b(prize|winnings|reward|jackpot|lottery)\\b[^.!?\\n]{0,40}\\b(processing|release|clearance|transfer|delivery) (fee|charge|tax)\\b",
+      "examples": {
+        "match": [
+          "To receive your prize, pay the processing fee of $49",
+          "Your lottery winnings need a release fee"
+        ],
+        "nomatch": [
+          "Prize money is subject to income tax",
+          "Our reward program has no fees"
+        ]
+      }
+    },
+    {
+      "id": "invest-003",
+      "severity": "high",
+      "category": "investment",
+      "flags": "i",
+      "description": "Fee to withdraw your profits",
+      "pattern": "\\b(withdraw|unlock|release)\\b[^.!?\\n]{0,30}\\b(profits?|earnings|funds|balance)\\b[^.!?\\n]{0,30}\\b(fee|tax|deposit|commission)\\b",
+      "examples": {
+        "match": [
+          "To withdraw your profits you must first pay a 10% tax",
+          "unlock your balance with a small deposit"
+        ],
+        "nomatch": [
+          "Withdrawals are free at our cash machines",
+          "You can withdraw funds at any time"
+        ]
+      }
+    },
+    {
+      "id": "delivery-003",
+      "severity": "medium",
+      "category": "delivery",
+      "flags": "i",
+      "description": "Customs fee to release a parcel",
+      "pattern": "\\b(pay|settle)\\b[^!?\\n]{0,30}\\b(customs|import) (duty|duties|tax|fee)\\b[^!?\\n]{0,30}\\b(release|deliver|receive)\\b",
+      "examples": {
+        "match": [
+          "Pay the customs duty of $2.99 to release your parcel",
+          "please settle the import fee so we can deliver your package"
+        ],
+        "nomatch": [
+          "Customs duty is charged on imports",
+          "We release new stamps each year"
+        ]
+      }
+    },
+    {
+      "id": "account-002",
+      "severity": "medium",
+      "category": "account",
+      "flags": "i",
+      "description": "Unusual sign-in, use this link",
+      "pattern": "\\b(unusual|suspicious|unauthori[sz]ed) (sign-?in|log-?in|activity)\\b[^\\n]{0,60}\\b(click|tap|follow|use) (here|the link|this link|below)\\b",
+      "examples": {
+        "match": [
+          "We noticed unusual sign-in activity. Click here to secure your account",
+          "Suspicious login detected, tap the link below"
+        ],
+        "nomatch": [
+          "Turn on alerts for unusual activity in Settings",
+          "Click here to read our blog"
+        ]
+      }
+    },
+    {
+      "id": "pay-002",
+      "severity": "medium",
+      "category": "payment_method",
+      "flags": "i",
+      "description": "Pay by money transfer service",
+      "pattern": "\\b(send|pay|transfer)\\b[^.!?\\n]{0,30}\\b(via|by|through|with|using) (western union|moneygram|wire transfer|zelle|cash app|venmo)\\b",
+      "examples": {
+        "match": [
+          "Send the money via Western Union today",
+          "pay the deposit using Zelle"
+        ],
+        "nomatch": [
+          "Western Union has offices in 200 countries",
+          "Zelle is a fast way to split bills"
+        ]
+      }
+    },
+    {
+      "id": "refund-002",
+      "severity": "medium",
+      "category": "refund",
+      "flags": "i",
+      "description": "Asks you to send back the difference",
+      "pattern": "\\b(send|pay|return|transfer) (back )?the (difference|extra|excess|overpayment)\\b",
+      "examples": {
+        "match": [
+          "Please send back the difference",
+          "return the excess amount by gift card"
+        ],
+        "nomatch": [
+          "The difference between the plans is storage",
+          "pay the balance in full"
+        ]
+      }
+    },
+    {
+      "id": "urgency-002",
+      "severity": "medium",
+      "category": "urgency",
+      "flags": "i",
+      "description": "Final notice with a threat",
+      "pattern": "\\b(final|last) (notice|warning|reminder)\\b[^.!?\\n]{0,60}\\b(suspend|suspended|terminate|terminated|disconnect|disconnected|legal action|arrest)\\b",
+      "examples": {
+        "match": [
+          "FINAL NOTICE: your service will be disconnected",
+          "Last warning before legal action"
+        ],
+        "nomatch": [
+          "Final notice of the annual meeting",
+          "This is the last reminder to RSVP"
+        ]
+      }
+    },
+    {
+      "id": "safe-001",
+      "severity": "high",
+      "category": "safe_account",
+      "flags": "i",
+      "description": "Move money to a \"safe account\"",
+      "pattern": "\\b(move|transfer|send)\\b[^.!?\\n]{0,40}\\b(safe|secure|protected|holding) account\\b",
+      "examples": {
+        "match": [
+          "You must transfer your savings to a safe account today",
+          "move the money into a secure account we set up"
+        ],
+        "nomatch": [
+          "Keep your money in a secure account with two-step login",
+          "How to open a safe account for kids"
+        ]
+      }
+    },
+    {
+      "id": "safe-002",
+      "severity": "high",
+      "category": "safe_account",
+      "flags": "i",
+      "description": "\"Bank\" asks you to take out cash",
+      "pattern": "\\b(bank|fraud) (department|team|investigator|officer) (needs|asks|wants|requires|is asking|has asked) you to (withdraw|transfer|move) (your |the |all )?(cash|money|savings|funds)\\b",
+      "examples": {
+        "match": [
+          "The bank fraud team needs you to withdraw your cash today",
+          "the fraud investigator is asking you to move the money"
+        ],
+        "nomatch": [
+          "Our fraud team will never ask you to move money",
+          "Call your bank fraud department if your card is stolen"
+        ]
+      }
+    },
+    {
+      "id": "safe-003",
+      "severity": "high",
+      "category": "safe_account",
+      "flags": "i",
+      "description": "Someone will collect your cash or card",
+      "pattern": "\\b(courier|driver|agent|officer)\\b[^.!?\\n]{0,30}\\b(collect|pick up|come for)\\b[^.!?\\n]{0,30}\\b(cash|cards?|gold|money)\\b",
+      "examples": {
+        "match": [
+          "A courier will collect the cash from your home",
+          "our agent will pick up your card tonight"
+        ],
+        "nomatch": [
+          "The courier will collect the parcel at 5pm",
+          "Cash back on every order"
+        ]
+      }
+    },
+    {
+      "id": "family-001",
+      "severity": "high",
+      "category": "family_emergency",
+      "flags": "i",
+      "description": "Relative in trouble needs money",
+      "pattern": "\\bi('m| am) in (jail|trouble|the hospital|hospital)\\b[^.!?\\n]{0,60}\\b(send|need|wire|transfer)\\b",
+      "examples": {
+        "match": [
+          "Grandma, I'm in jail and I need bail money",
+          "I am in trouble, please send money"
+        ],
+        "nomatch": [
+          "I'm in trouble with my homework",
+          "I am in the hospital cafeteria"
+        ]
+      }
+    },
+    {
+      "id": "family-002",
+      "severity": "high",
+      "category": "family_emergency",
+      "flags": "i",
+      "description": "\"New number\" asking for money",
+      "pattern": "\\b(this is my new (number|phone)|i (lost|broke|dropped) my phone)\\b[^\\n]{0,80}\\b(send|transfer|pay|lend)\\b",
+      "examples": {
+        "match": [
+          "Hi Mum, this is my new number. Can you send me 300?",
+          "I broke my phone, can you transfer money to this account"
+        ],
+        "nomatch": [
+          "Save this is my new number in your contacts",
+          "I lost my phone at the park yesterday"
+        ]
+      }
+    },
+    {
+      "id": "family-003",
+      "severity": "medium",
+      "category": "family_emergency",
+      "flags": "i",
+      "description": "Bail or hospital money request",
+      "pattern": "\\b(bail|lawyer'?s? fee|legal fee|hospital bill)s?\\b[^.!?\\n]{0,40}\\b(send|wire|transfer|gift cards?|cash)\\b",
+      "examples": {
+        "match": [
+          "He needs bail money, send it by wire today",
+          "The lawyer's fee must be paid in cash"
+        ],
+        "nomatch": [
+          "Bail reform passed last year",
+          "Hospital bills can be confusing"
+        ]
+      }
+    },
+    {
+      "id": "sub-001",
+      "severity": "medium",
+      "category": "subscription",
+      "flags": "i",
+      "description": "Unexpected renewal charge",
+      "pattern": "\\b(your|the) (norton|mcafee|geek squad|antivirus|subscription)\\b[^.!?\\n]{0,40}\\b(auto-?renewed|renewed|charged|renewal)\\b[^.!?\\n]{0,40}\\$ ?\\d{2,4}",
+      "examples": {
+        "match": [
+          "Your Norton subscription has been renewed for $399.99",
+          "the antivirus plan auto-renewed at $ 299"
+        ],
+        "nomatch": [
+          "Your subscription renewed successfully",
+          "Norton antivirus review 2026"
+        ]
+      }
+    },
+    {
+      "id": "sub-002",
+      "severity": "medium",
+      "category": "subscription",
+      "flags": "i",
+      "description": "Call to cancel a charge",
+      "pattern": "\\b(cancel|dispute|stop) (this|the) (charge|order|renewal|payment|transaction)\\b[^.!?\\n]{0,30}\\bcall\\b",
+      "examples": {
+        "match": [
+          "To cancel this order, call 1-888-555-0199",
+          "If you did not authorize it, dispute the charge: call our helpline"
+        ],
+        "nomatch": [
+          "To cancel the order, open your account settings",
+          "Call to cancel"
+        ]
+      }
+    },
+    {
+      "id": "rec-001",
+      "severity": "medium",
+      "category": "recovery",
+      "flags": "i",
+      "description": "Offer to recover lost money",
+      "pattern": "\\b(recover|get back|retrieve)\\b[^.!?\\n]{0,20}\\b(lost|stolen|scammed) (money|funds|crypto|bitcoin|savings)\\b",
+      "examples": {
+        "match": [
+          "We can recover your lost funds within 7 days",
+          "Get back your stolen crypto with our experts"
+        ],
+        "nomatch": [
+          "Lost money? Here is what the bank can do",
+          "Recover deleted photos"
+        ]
+      }
+    },
+    {
+      "id": "rec-002",
+      "severity": "high",
+      "category": "recovery",
+      "flags": "i",
+      "description": "Recovery service wants a fee first",
+      "pattern": "\\b(recovery|refund) (agent|agency|service|team|specialist|lawyer)s?\\b[^.!?\\n]{0,60}\\b(fee|deposit|upfront|advance)\\b",
+      "examples": {
+        "match": [
+          "Our recovery agents need a small upfront fee",
+          "A refund specialist will release your money after a deposit"
+        ],
+        "nomatch": [
+          "Data recovery service prices start at $100",
+          "Refund team hours: 9-5"
+        ]
+      }
+    },
+    {
+      "id": "qr-001",
+      "severity": "medium",
+      "category": "qr_payment",
+      "flags": "i",
+      "description": "Scan a code to pay or verify",
+      "pattern": "\\bscan (the|this) qr ?code\\b[^.!?\\n]{0,40}\\b(pay|payment|verify|confirm|unlock)\\b",
+      "examples": {
+        "match": [
+          "Scan the QR code to pay the fine",
+          "scan this QR code to verify your account"
+        ],
+        "nomatch": [
+          "Scan the QR code to see the menu",
+          "QR codes explained"
+        ]
+      }
+    },
+    {
+      "id": "qr-002",
+      "severity": "high",
+      "category": "qr_payment",
+      "flags": "i",
+      "description": "Scan a code to receive money",
+      "pattern": "\\b(scan|use)\\b[^.!?\\n]{0,20}\\bqr ?code\\b[^.!?\\n]{0,30}\\b(receive|claim|get) (the |your )?(money|payment|refund|funds|prize)\\b",
+      "examples": {
+        "match": [
+          "Scan my QR code to receive the payment",
+          "Use the QR code to claim your refund"
+        ],
+        "nomatch": [
+          "Scan the QR code to download the app",
+          "Use a QR code to get the menu"
+        ]
+      }
+    },
+    {
+      "id": "util-001",
+      "severity": "high",
+      "category": "utility",
+      "flags": "i",
+      "description": "Power cut unless you pay now",
+      "pattern": "\\b(power|electricity|electric|gas|water)( service| supply)?\\b[^.!?\\n]{0,30}\\b(disconnected|shut off|cut off|turned off)\\b[^.!?\\n]{0,40}\\b(unless|until|pay|payment|within)\\b",
+      "examples": {
+        "match": [
+          "Your electricity will be disconnected in 30 minutes unless you pay",
+          "Power will be shut off today, payment required"
+        ],
+        "nomatch": [
+          "Water supply was cut off by the storm yesterday",
+          "Learn how to turn off gas safely"
+        ]
+      }
+    },
+    {
+      "id": "util-002",
+      "severity": "medium",
+      "category": "utility",
+      "flags": "i",
+      "description": "Utility bill paid an unusual way",
+      "pattern": "\\b(utility|electric|power|gas) (company|bill|provider)\\b[^.!?\\n]{0,50}\\b(prepaid card|bitcoin|crypto|zelle|cash app|gift card)\\b",
+      "examples": {
+        "match": [
+          "The electric company only accepts payment by prepaid card today",
+          "Pay your gas bill with Bitcoin to avoid a cut"
+        ],
+        "nomatch": [
+          "Compare gas providers in your area",
+          "The power company sent a new bill"
+        ]
+      }
     }
   ],
-  "sources": {},
+  "sources": {
+    "theonion.com": {
+      "bias": "satire",
+      "accuracy": "varies",
+      "label": "The Onion",
+      "rating": "Satire. The stories are made up on purpose."
+    },
+    "babylonbee.com": {
+      "bias": "satire",
+      "accuracy": "varies",
+      "label": "The Babylon Bee",
+      "rating": "Satire. The stories are made up on purpose."
+    },
+    "clickhole.com": {
+      "bias": "satire",
+      "accuracy": "varies",
+      "label": "ClickHole",
+      "rating": "Satire. The stories are made up on purpose."
+    },
+    "thedailymash.co.uk": {
+      "bias": "satire",
+      "accuracy": "varies",
+      "label": "The Daily Mash",
+      "rating": "Satire. The stories are made up on purpose."
+    },
+    "medium.com": {
+      "bias": "platform",
+      "accuracy": "varies",
+      "label": "Medium",
+      "rating": "Anyone can publish here. Check who wrote the post."
+    },
+    "substack.com": {
+      "bias": "platform",
+      "accuracy": "varies",
+      "label": "Substack",
+      "rating": "Anyone can publish here. Check who wrote the post."
+    },
+    "blogspot.com": {
+      "bias": "platform",
+      "accuracy": "varies",
+      "label": "Blogger",
+      "rating": "Anyone can publish here. Check who wrote the post."
+    },
+    "wordpress.com": {
+      "bias": "platform",
+      "accuracy": "varies",
+      "label": "WordPress.com",
+      "rating": "Anyone can publish here. Check who wrote the post."
+    }
+  },
   "surface_adapters": {
     "facebook": {
       "host": "(^|\\.)facebook\\.com$",

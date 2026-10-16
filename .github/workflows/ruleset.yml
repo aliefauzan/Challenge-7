@@ -1,0 +1,70 @@
+# Builds, signs and publishes the remote ruleset to GitHub Pages.
+#
+# Template: it runs only when started by hand until hosting and the signing
+# key are set up. To turn on the daily refresh:
+#   1. Add the private key as the repository secret RULESET_SIGNING_KEY
+#      (the PEM text from `npm run keygen`).
+#   2. Set the repository variable RULESET_URL to the published address
+#      (also put it in src/config.js) and enable Pages with "GitHub Actions"
+#      as the source.
+#   3. Uncomment the schedule below.
+name: ruleset
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "17 3 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ruleset
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint:rules
+      - name: Fetch feeds
+        run: npm run feeds
+      - name: Build and sign
+        env:
+          RULESET_SIGNING_KEY: ${{ secrets.RULESET_SIGNING_KEY }}
+          RULESET_URL: ${{ vars.RULESET_URL }}
+        run: |
+          set -euo pipefail
+          test -n "$RULESET_SIGNING_KEY" || { echo "RULESET_SIGNING_KEY is not set"; exit 1; }
+          key="$RUNNER_TEMP/ruleset-signing.key"
+          umask 077
+          printf '%s\n' "$RULESET_SIGNING_KEY" > "$key"
+          # Clients only accept a higher version than the one they have.
+          prev=0
+          if [ -n "$RULESET_URL" ]; then
+            prev=$(curl -fsS "$RULESET_URL" | node -e 'let s="";process.stdin.on("data",(d)=>(s+=d)).on("end",()=>{try{console.log(JSON.parse(JSON.parse(s).payload).version)}catch{console.log(0)}})' || echo 0)
+          fi
+          npm run ruleset -- --key "$key" --prev-version "$prev" --out dist-ruleset
+          rm -f "$key"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist-ruleset
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

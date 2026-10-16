@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "version": 1,
+  "version": 3,
   "generated": "2026-10-16",
   "thresholds": {
     "deep_subdomain_labels": 4,
@@ -24,7 +24,38 @@
     "chase.com",
     "wellsfargo.com",
     "bankofamerica.com",
-    "coinbase.com"
+    "coinbase.com",
+    "ebay.com",
+    "walmart.com",
+    "target.com",
+    "bestbuy.com",
+    "costco.com",
+    "citi.com",
+    "capitalone.com",
+    "usbank.com",
+    "americanexpress.com",
+    "discover.com",
+    "venmo.com",
+    "zellepay.com",
+    "cash.app",
+    "wise.com",
+    "intuit.com",
+    "norton.com",
+    "mcafee.com",
+    "att.com",
+    "verizon.com",
+    "t-mobile.com",
+    "xfinity.com",
+    "royalmail.com",
+    "evri.com",
+    "barclays.co.uk",
+    "natwest.com",
+    "hsbc.co.uk",
+    "lloydsbank.com",
+    "outlook.com",
+    "live.com",
+    "office.com",
+    "icloud.com"
   ],
   "phrase_allowlist": [
     "ftc.gov",
@@ -37,7 +68,17 @@
     "snopes.com",
     "factcheck.org",
     "scamwatch.gov.au",
-    "actionfraud.police.uk"
+    "actionfraud.police.uk",
+    "usa.gov",
+    "consumer.ftc.gov",
+    "identitytheft.gov",
+    "ncsc.gov.uk",
+    "which.co.uk",
+    "citizensadvice.org.uk",
+    "politifact.com",
+    "fullfact.org",
+    "reuters.com",
+    "apnews.com"
   ],
   "scam_domains": [
     "scamshield-test.example"
@@ -63,7 +104,20 @@
     "coinbase",
     "facebook",
     "instagram",
-    "whatsapp"
+    "whatsapp",
+    "hmrc",
+    "dvla",
+    "royalmail",
+    "evri",
+    "barclays",
+    "natwest",
+    "hsbc",
+    "lloyds",
+    "norton",
+    "mcafee",
+    "citi",
+    "capitalone",
+    "amex"
   ],
   "lookalike_brands": [
     "paypal",
@@ -73,7 +127,12 @@
     "bankofamerica",
     "microsoft",
     "icloud",
-    "venmo"
+    "venmo",
+    "royalmail",
+    "barclays",
+    "natwest",
+    "capitalone",
+    "americanexpress"
   ],
   "phishing_context": [
     "login",
@@ -138,6 +197,30 @@
     "urgency": {
       "label": "Pressure to act now",
       "why": "Scammers set short deadlines so you act before you can think or ask someone."
+    },
+    "safe_account": {
+      "label": "\"Safe account\" story",
+      "why": "Your bank will never ask you to move your money to keep it safe. Anyone who does is stealing it."
+    },
+    "family_emergency": {
+      "label": "Family emergency",
+      "why": "Scammers pretend to be a relative in trouble. Hang up and call that person on the number you already have."
+    },
+    "subscription": {
+      "label": "Fake renewal charge",
+      "why": "Fake invoices want you to call them. The number reaches the scammer, not the company."
+    },
+    "recovery": {
+      "label": "Money recovery offer",
+      "why": "People who lost money get offers to win it back for a fee. Those offers are a second scam."
+    },
+    "qr_payment": {
+      "label": "QR code trick",
+      "why": "You never need to scan a code to receive money. Scanning can send your money away or open a fake page."
+    },
+    "utility": {
+      "label": "Utility cut-off threat",
+      "why": "Power, gas and water companies send written notices first. They do not demand instant payment to stop a cut-off."
     }
   },
   "scam_phrases": [
@@ -292,9 +375,242 @@
       "flags": "i",
       "description": "Short deadline with a threat",
       "pattern": "\\b(within|in the next) (24|48|72) hours\\b[^.!?\\n]{0,40}\\b(suspended|closed|deleted|arrested|legal action|terminated)\\b"
+    },
+    {
+      "id": "tech-004",
+      "severity": "high",
+      "category": "tech_support",
+      "flags": "i",
+      "description": "Asks you to install remote access",
+      "pattern": "\\b(download|install|open|run)\\b[^.!?\\n]{0,30}\\b(anydesk|teamviewer|ultraviewer|quick ?assist|remote (access|desktop|support) (app|tool|software))\\b"
+    },
+    {
+      "id": "gov-003",
+      "severity": "medium",
+      "category": "government",
+      "flags": "i",
+      "description": "Demand for unpaid taxes",
+      "pattern": "\\b(you owe|unpaid|outstanding|overdue|delinquent) (back )?tax(es)?\\b[^.!?\\n]{0,50}\\b(pay|payment|arrest|warrant|penalty|penalties|today|immediately)\\b"
+    },
+    {
+      "id": "prize-003",
+      "severity": "high",
+      "category": "prize",
+      "flags": "i",
+      "description": "Fee to release a prize",
+      "pattern": "\\b(prize|winnings|reward|jackpot|lottery)\\b[^.!?\\n]{0,40}\\b(processing|release|clearance|transfer|delivery) (fee|charge|tax)\\b"
+    },
+    {
+      "id": "invest-003",
+      "severity": "high",
+      "category": "investment",
+      "flags": "i",
+      "description": "Fee to withdraw your profits",
+      "pattern": "\\b(withdraw|unlock|release)\\b[^.!?\\n]{0,30}\\b(profits?|earnings|funds|balance)\\b[^.!?\\n]{0,30}\\b(fee|tax|deposit|commission)\\b"
+    },
+    {
+      "id": "delivery-003",
+      "severity": "medium",
+      "category": "delivery",
+      "flags": "i",
+      "description": "Customs fee to release a parcel",
+      "pattern": "\\b(pay|settle)\\b[^!?\\n]{0,30}\\b(customs|import) (duty|duties|tax|fee)\\b[^!?\\n]{0,30}\\b(release|deliver|receive)\\b"
+    },
+    {
+      "id": "account-002",
+      "severity": "medium",
+      "category": "account",
+      "flags": "i",
+      "description": "Unusual sign-in, use this link",
+      "pattern": "\\b(unusual|suspicious|unauthori[sz]ed) (sign-?in|log-?in|activity)\\b[^\\n]{0,60}\\b(click|tap|follow|use) (here|the link|this link|below)\\b"
+    },
+    {
+      "id": "pay-002",
+      "severity": "medium",
+      "category": "payment_method",
+      "flags": "i",
+      "description": "Pay by money transfer service",
+      "pattern": "\\b(send|pay|transfer)\\b[^.!?\\n]{0,30}\\b(via|by|through|with|using) (western union|moneygram|wire transfer|zelle|cash app|venmo)\\b"
+    },
+    {
+      "id": "refund-002",
+      "severity": "medium",
+      "category": "refund",
+      "flags": "i",
+      "description": "Asks you to send back the difference",
+      "pattern": "\\b(send|pay|return|transfer) (back )?the (difference|extra|excess|overpayment)\\b"
+    },
+    {
+      "id": "urgency-002",
+      "severity": "medium",
+      "category": "urgency",
+      "flags": "i",
+      "description": "Final notice with a threat",
+      "pattern": "\\b(final|last) (notice|warning|reminder)\\b[^.!?\\n]{0,60}\\b(suspend|suspended|terminate|terminated|disconnect|disconnected|legal action|arrest)\\b"
+    },
+    {
+      "id": "safe-001",
+      "severity": "high",
+      "category": "safe_account",
+      "flags": "i",
+      "description": "Move money to a \"safe account\"",
+      "pattern": "\\b(move|transfer|send)\\b[^.!?\\n]{0,40}\\b(safe|secure|protected|holding) account\\b"
+    },
+    {
+      "id": "safe-002",
+      "severity": "high",
+      "category": "safe_account",
+      "flags": "i",
+      "description": "\"Bank\" asks you to take out cash",
+      "pattern": "\\b(bank|fraud) (department|team|investigator|officer) (needs|asks|wants|requires|is asking|has asked) you to (withdraw|transfer|move) (your |the |all )?(cash|money|savings|funds)\\b"
+    },
+    {
+      "id": "safe-003",
+      "severity": "high",
+      "category": "safe_account",
+      "flags": "i",
+      "description": "Someone will collect your cash or card",
+      "pattern": "\\b(courier|driver|agent|officer)\\b[^.!?\\n]{0,30}\\b(collect|pick up|come for)\\b[^.!?\\n]{0,30}\\b(cash|cards?|gold|money)\\b"
+    },
+    {
+      "id": "family-001",
+      "severity": "high",
+      "category": "family_emergency",
+      "flags": "i",
+      "description": "Relative in trouble needs money",
+      "pattern": "\\bi('m| am) in (jail|trouble|the hospital|hospital)\\b[^.!?\\n]{0,60}\\b(send|need|wire|transfer)\\b"
+    },
+    {
+      "id": "family-002",
+      "severity": "high",
+      "category": "family_emergency",
+      "flags": "i",
+      "description": "\"New number\" asking for money",
+      "pattern": "\\b(this is my new (number|phone)|i (lost|broke|dropped) my phone)\\b[^\\n]{0,80}\\b(send|transfer|pay|lend)\\b"
+    },
+    {
+      "id": "family-003",
+      "severity": "medium",
+      "category": "family_emergency",
+      "flags": "i",
+      "description": "Bail or hospital money request",
+      "pattern": "\\b(bail|lawyer'?s? fee|legal fee|hospital bill)s?\\b[^.!?\\n]{0,40}\\b(send|wire|transfer|gift cards?|cash)\\b"
+    },
+    {
+      "id": "sub-001",
+      "severity": "medium",
+      "category": "subscription",
+      "flags": "i",
+      "description": "Unexpected renewal charge",
+      "pattern": "\\b(your|the) (norton|mcafee|geek squad|antivirus|subscription)\\b[^.!?\\n]{0,40}\\b(auto-?renewed|renewed|charged|renewal)\\b[^.!?\\n]{0,40}\\$ ?\\d{2,4}"
+    },
+    {
+      "id": "sub-002",
+      "severity": "medium",
+      "category": "subscription",
+      "flags": "i",
+      "description": "Call to cancel a charge",
+      "pattern": "\\b(cancel|dispute|stop) (this|the) (charge|order|renewal|payment|transaction)\\b[^.!?\\n]{0,30}\\bcall\\b"
+    },
+    {
+      "id": "rec-001",
+      "severity": "medium",
+      "category": "recovery",
+      "flags": "i",
+      "description": "Offer to recover lost money",
+      "pattern": "\\b(recover|get back|retrieve)\\b[^.!?\\n]{0,20}\\b(lost|stolen|scammed) (money|funds|crypto|bitcoin|savings)\\b"
+    },
+    {
+      "id": "rec-002",
+      "severity": "high",
+      "category": "recovery",
+      "flags": "i",
+      "description": "Recovery service wants a fee first",
+      "pattern": "\\b(recovery|refund) (agent|agency|service|team|specialist|lawyer)s?\\b[^.!?\\n]{0,60}\\b(fee|deposit|upfront|advance)\\b"
+    },
+    {
+      "id": "qr-001",
+      "severity": "medium",
+      "category": "qr_payment",
+      "flags": "i",
+      "description": "Scan a code to pay or verify",
+      "pattern": "\\bscan (the|this) qr ?code\\b[^.!?\\n]{0,40}\\b(pay|payment|verify|confirm|unlock)\\b"
+    },
+    {
+      "id": "qr-002",
+      "severity": "high",
+      "category": "qr_payment",
+      "flags": "i",
+      "description": "Scan a code to receive money",
+      "pattern": "\\b(scan|use)\\b[^.!?\\n]{0,20}\\bqr ?code\\b[^.!?\\n]{0,30}\\b(receive|claim|get) (the |your )?(money|payment|refund|funds|prize)\\b"
+    },
+    {
+      "id": "util-001",
+      "severity": "high",
+      "category": "utility",
+      "flags": "i",
+      "description": "Power cut unless you pay now",
+      "pattern": "\\b(power|electricity|electric|gas|water)( service| supply)?\\b[^.!?\\n]{0,30}\\b(disconnected|shut off|cut off|turned off)\\b[^.!?\\n]{0,40}\\b(unless|until|pay|payment|within)\\b"
+    },
+    {
+      "id": "util-002",
+      "severity": "medium",
+      "category": "utility",
+      "flags": "i",
+      "description": "Utility bill paid an unusual way",
+      "pattern": "\\b(utility|electric|power|gas) (company|bill|provider)\\b[^.!?\\n]{0,50}\\b(prepaid card|bitcoin|crypto|zelle|cash app|gift card)\\b"
     }
   ],
-  "sources": {},
+  "sources": {
+    "theonion.com": {
+      "bias": "satire",
+      "accuracy": "varies",
+      "label": "The Onion",
+      "rating": "Satire. The stories are made up on purpose."
+    },
+    "babylonbee.com": {
+      "bias": "satire",
+      "accuracy": "varies",
+      "label": "The Babylon Bee",
+      "rating": "Satire. The stories are made up on purpose."
+    },
+    "clickhole.com": {
+      "bias": "satire",
+      "accuracy": "varies",
+      "label": "ClickHole",
+      "rating": "Satire. The stories are made up on purpose."
+    },
+    "thedailymash.co.uk": {
+      "bias": "satire",
+      "accuracy": "varies",
+      "label": "The Daily Mash",
+      "rating": "Satire. The stories are made up on purpose."
+    },
+    "medium.com": {
+      "bias": "platform",
+      "accuracy": "varies",
+      "label": "Medium",
+      "rating": "Anyone can publish here. Check who wrote the post."
+    },
+    "substack.com": {
+      "bias": "platform",
+      "accuracy": "varies",
+      "label": "Substack",
+      "rating": "Anyone can publish here. Check who wrote the post."
+    },
+    "blogspot.com": {
+      "bias": "platform",
+      "accuracy": "varies",
+      "label": "Blogger",
+      "rating": "Anyone can publish here. Check who wrote the post."
+    },
+    "wordpress.com": {
+      "bias": "platform",
+      "accuracy": "varies",
+      "label": "WordPress.com",
+      "rating": "Anyone can publish here. Check who wrote the post."
+    }
+  },
   "surface_adapters": {
     "facebook": {
       "host": "(^|\\.)facebook\\.com$",
@@ -304,5 +620,6 @@
       "dm_item_selector": null,
       "skip_link_hosts": "(^|\\.)(facebook|fbcdn|instagram|whatsapp|meta|messenger)\\.com$"
     }
-  }
+  },
+  "feeds": {}
 }

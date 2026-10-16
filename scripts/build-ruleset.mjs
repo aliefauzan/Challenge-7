@@ -5,6 +5,8 @@
 //     [--bundle] [--dry-run]
 // Steps: read the source, merge feed domains (*.txt, one per line), dedupe,
 // drop allowlisted domains, lint, bump the version, validate, sign.
+// `--feeds none` builds from the source list only (used for the bundled
+// default: feed entries go stale within days, so they ship remotely).
 import { sign, createPrivateKey } from "node:crypto";
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
@@ -35,10 +37,13 @@ const src = JSON.parse(readFileSync(srcPath, "utf8"));
 const lintErrors = lintSource(src);
 if (lintErrors.length) fail(`lint failed:\n  - ${lintErrors.join("\n  - ")}`);
 
-const feedDomains = existsSync(feedsDir)
-  ? readdirSync(feedsDir).filter((f) => f.endsWith(".txt")).flatMap((f) =>
-      readFileSync(join(feedsDir, f), "utf8").split("\n").map((l) => l.trim()).filter((l) => l && !l.startsWith("#")))
-  : [];
+const feedFiles = feedsDir !== "none" && existsSync(feedsDir) ? readdirSync(feedsDir).filter((f) => f.endsWith(".txt")).sort() : [];
+const feedCounts = {};
+const feedDomains = feedFiles.flatMap((f) => {
+  const hosts = readFileSync(join(feedsDir, f), "utf8").split("\n").map((l) => l.trim()).filter((l) => l && !l.startsWith("#"));
+  feedCounts[f.replace(/\.txt$/, "")] = hosts.length;
+  return hosts;
+});
 const allow = new DomainSet(src.allowlist);
 const domains = [...new Set([...src.scam_domains, ...feedDomains].map(normalizeHost).filter(Boolean))]
   .filter((d) => !allow.has(d))
@@ -53,6 +58,8 @@ const payloadObj = {
   version: Math.max(src.version, prev + 1),
   generated: new Date().toISOString().slice(0, 10),
   scam_domains: domains,
+  // Where the domain list came from (host count per feed); clients ignore it.
+  feeds: feedCounts,
 };
 const { ok, errors } = validatePayload(payloadObj);
 if (!ok) fail(`invalid payload:\n  - ${errors.join("\n  - ")}`);
