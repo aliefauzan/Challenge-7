@@ -1,0 +1,25 @@
+{
+  "name": "scamshield",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser extension that warns about scam pages and shows news-source context",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test \"test/unit/**/*.test.js\"",
+    "test:e2e": "node --test \"test/e2e/**/*.test.js\"",
+    "lint:rules": "node scripts/lint-rules.mjs",
+    "keygen": "node scripts/keygen.mjs",
+    "ruleset": "node scripts/build-ruleset.mjs",
+    "feeds": "node scripts/fetch-feeds.mjs",
+    "plan:status": "node scripts/plan-status.mjs"
+  },
+  "dependencies": {
+    "tldts": "^6.1.86"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "playwright": "^1.64.1",
+    "safe-regex2": "^5.1.2"
+  }
+}
