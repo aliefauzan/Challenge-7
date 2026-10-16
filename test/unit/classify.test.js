@@ -21,6 +21,18 @@ test("engine/classify: only real Google hosts are unwrapped", () => {
   assert.equal(unwrapRedirect(`https://google.evil.com/url?q=${target}`), `https://google.evil.com/url?q=${target}`);
   assert.equal(unwrapRedirect(`https://mail.google.com/url?q=${target}`), `https://mail.google.com/url?q=${target}`);
   assert.equal(classifyLink(`https://google.scam.com/url?q=${target}`, rules).kind, "scam");
+  assert.equal(unwrapRedirect(`https://google.netlify.app/url?q=${target}`), `https://google.netlify.app/url?q=${target}`);
+  assert.equal(unwrapRedirect(`https://www.google.com.au/url?q=${target}`), "https://clean.example/");
+});
+
+test("engine/classify: a chain too deep to resolve fails closed", () => {
+  let deep = "https://www.facebook.com/";
+  for (let i = 0; i < 8; i++) deep = `https://l.facebook.com/l.php?u=${encodeURIComponent(deep)}`;
+  const r = classifyLink(deep, rules);
+  assert.equal(r.kind, "scam");
+  assert.equal(r.signal.id, "hidden-destination");
+  const item = { text: "", links: [deep] };
+  assert.equal(classifySocialItem(item, rules, { skipLinkHost: /(^|\.)facebook\.com$/ }).signal.id, "hidden-destination");
 });
 
 test("engine/classify: nested wrappers are unwrapped and every hop is checked", () => {

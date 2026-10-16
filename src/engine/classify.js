@@ -1,19 +1,16 @@
 // Link and social-item classification.
 import { analyzeUrl, parseHttpUrl } from "./url.js";
-import { splitHost } from "./host.js";
 import { scanText } from "./text.js";
 
 const MAX_HOPS = 5;
 
 const isFacebookWrapper = (u) => /^lm?\.facebook\.com$/.test(u.hostname) && u.pathname === "/l.php";
 
-// Only Google's own registrable domains (google.com, google.co.id, …), with no
-// subdomain other than www. "google.evil.com" is not Google.
-function isGoogleWrapper(u) {
-  if (u.pathname !== "/url") return false;
-  const h = splitHost(u.hostname);
-  return h.mainLabel === "google" && h.subdomainLabels.length === 0 && !h.isIp;
-}
+// Google's own country domains only (google.com, google.de, google.co.id,
+// google.com.au), optionally with www. Hosts under a private suffix such as
+// google.<something>.app or google.evil.com are not Google.
+const GOOGLE_HOST = /^(www\.)?google\.(com|[a-z]{2}|com?\.[a-z]{2})$/;
+const isGoogleWrapper = (u) => u.pathname === "/url" && GOOGLE_HOST.test(u.hostname);
 
 function unwrapOnce(u) {
   if (isFacebookWrapper(u)) return u.searchParams.get("u");
@@ -28,6 +25,12 @@ function unwrapOnce(u) {
  * @returns {URL[]}
  */
 export function redirectChain(href) {
+  return walk(href).chain;
+}
+
+// `truncated` is true when the last hop is still a wrapper because the hop
+// limit was reached; the real destination is then unknown.
+function walk(href) {
   let u = parseHttpUrl(href);
   const chain = [];
   while (u && chain.length <= MAX_HOPS) {
@@ -35,7 +38,7 @@ export function redirectChain(href) {
     const next = unwrapOnce(u);
     u = next ? parseHttpUrl(next) : null;
   }
-  return chain;
+  return { chain, truncated: u !== null };
 }
 
 /**
@@ -54,7 +57,7 @@ export function unwrapRedirect(href) {
  * @returns {import("./types.js").Classification | null}
  */
 export function classifyLink(href, rules) {
-  const chain = redirectChain(href);
+  const { chain, truncated } = walk(href);
   if (!chain.length) return null;
   const u = chain[chain.length - 1];
   // A listed domain anywhere in the chain counts, including the wrapper itself.
@@ -68,7 +71,18 @@ export function classifyLink(href, rules) {
       },
     };
   }
-  const signals = analyzeUrl(u.href, rules);
+  // Fail closed: a link wrapped too many times to resolve hides its target.
+  if (truncated) {
+    return {
+      kind: "scam", basis: "link", url: u.href,
+      signal: {
+        source: "url", severity: "high", id: "hidden-destination",
+        description: "Link hides where it goes",
+        why: "This link is wrapped many times so you cannot see where it really leads.",
+      },
+    };
+  }
+  const signals = chain.flatMap((hop) => analyzeUrl(hop.href, rules));
   if (signals.length) {
     return { kind: "scam", basis: "link", url: u.href, signal: signals.find((s) => s.severity === "high") ?? signals[0] };
   }
@@ -84,9 +98,9 @@ export function classifyLink(href, rules) {
  */
 export function classifySocialItem(item, rules, opts = {}) {
   const links = (item.links ?? []).filter((href) => {
-    const chain = redirectChain(href);
+    const { chain, truncated } = walk(href);
     const last = chain[chain.length - 1];
-    return last && !(opts.skipLinkHost && opts.skipLinkHost.test(last.hostname));
+    return last && (truncated || !(opts.skipLinkHost && opts.skipLinkHost.test(last.hostname)));
   });
   const results = links.map((href) => classifyLink(href, rules)).filter(Boolean);
   const scam = results.find((r) => r.kind === "scam");
