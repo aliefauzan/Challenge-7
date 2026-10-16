@@ -1,0 +1,308 @@
+{
+  "schema": 1,
+  "version": 1,
+  "generated": "2026-10-16",
+  "thresholds": {
+    "deep_subdomain_labels": 4,
+    "block_high_count": 2,
+    "max_text_chars": 100000,
+    "max_high_hits": 3
+  },
+  "allowlist": [
+    "amazon.com",
+    "apple.com",
+    "google.com",
+    "microsoft.com",
+    "paypal.com",
+    "netflix.com",
+    "usps.com",
+    "ups.com",
+    "fedex.com",
+    "dhl.com",
+    "irs.gov",
+    "ssa.gov",
+    "chase.com",
+    "wellsfargo.com",
+    "bankofamerica.com",
+    "coinbase.com"
+  ],
+  "phrase_allowlist": [
+    "ftc.gov",
+    "consumerfinance.gov",
+    "ic3.gov",
+    "fbi.gov",
+    "aarp.org",
+    "bbb.org",
+    "consumerreports.org",
+    "snopes.com",
+    "factcheck.org",
+    "scamwatch.gov.au",
+    "actionfraud.police.uk"
+  ],
+  "scam_domains": [
+    "scamshield-test.example"
+  ],
+  "impersonated_brands": [
+    "amazon",
+    "apple",
+    "icloud",
+    "microsoft",
+    "outlook",
+    "paypal",
+    "netflix",
+    "venmo",
+    "zelle",
+    "usps",
+    "ups",
+    "fedex",
+    "dhl",
+    "irs",
+    "chase",
+    "wellsfargo",
+    "bankofamerica",
+    "coinbase",
+    "facebook",
+    "instagram",
+    "whatsapp"
+  ],
+  "lookalike_brands": [
+    "paypal",
+    "netflix",
+    "coinbase",
+    "wellsfargo",
+    "bankofamerica",
+    "microsoft",
+    "icloud",
+    "venmo"
+  ],
+  "phishing_context": [
+    "login",
+    "signin",
+    "verify",
+    "verification",
+    "secure",
+    "security",
+    "account",
+    "update",
+    "support",
+    "billing",
+    "refund",
+    "unlock",
+    "suspended",
+    "confirm",
+    "wallet",
+    "recovery",
+    "my"
+  ],
+  "categories": {
+    "tech_support": {
+      "label": "Fake tech support",
+      "why": "Real security warnings never ask you to call a phone number or let a stranger control your computer."
+    },
+    "gift_card": {
+      "label": "Gift card payment",
+      "why": "No real company, bank or government office takes payment in gift cards."
+    },
+    "isolation": {
+      "label": "Asks for secrecy",
+      "why": "Scammers ask you to keep quiet so nobody you trust can warn you."
+    },
+    "delivery": {
+      "label": "Parcel fee",
+      "why": "Couriers do not ask for small fees by text message or pop-up."
+    },
+    "prize": {
+      "label": "Prize claim",
+      "why": "If you have to pay or share details to get a prize, it is not a prize."
+    },
+    "government": {
+      "label": "Government threat",
+      "why": "Government offices send letters. They do not threaten arrest by phone or web page."
+    },
+    "account": {
+      "label": "Account threat",
+      "why": "Banks and shops do not lock your account and then ask you to log in through a link."
+    },
+    "investment": {
+      "label": "Too-good investment",
+      "why": "Nobody can promise guaranteed profits. Promises like this are a common way to steal savings."
+    },
+    "payment_method": {
+      "label": "Unusual payment",
+      "why": "Requests to pay with crypto, wire transfers or cash machines are hard to reverse. Scammers like them for that reason."
+    },
+    "refund": {
+      "label": "Overpayment refund",
+      "why": "The 'we refunded too much, please send it back' story is a trick. The first payment is never real."
+    },
+    "urgency": {
+      "label": "Pressure to act now",
+      "why": "Scammers set short deadlines so you act before you can think or ask someone."
+    }
+  },
+  "scam_phrases": [
+    {
+      "id": "tech-001",
+      "severity": "high",
+      "category": "tech_support",
+      "flags": "i",
+      "description": "Fake virus alert",
+      "pattern": "\\b(your|this) (computer|pc|device|mac|iphone|laptop) (is|has been|was) (infected|compromised|hacked|locked)\\b"
+    },
+    {
+      "id": "tech-002",
+      "severity": "high",
+      "category": "tech_support",
+      "flags": "i",
+      "description": "Asks you to call fake support",
+      "pattern": "\\bcall (microsoft|apple|windows|amazon|paypal) (support|technicians?|help ?desk)\\b"
+    },
+    {
+      "id": "tech-003",
+      "severity": "medium",
+      "category": "tech_support",
+      "flags": "i",
+      "description": "Tells you not to close the page",
+      "pattern": "\\b(do not|don'?t) (close|restart|turn off|shut down) (this|your) (window|page|tab|computer|browser)\\b"
+    },
+    {
+      "id": "gift-001",
+      "severity": "high",
+      "category": "gift_card",
+      "flags": "i",
+      "description": "Gift card payment request",
+      "pattern": "\\b(pay|payment|paid|purchase|buy|send)\\b[^.!?\\n]{0,40}\\bgift ?cards?\\b"
+    },
+    {
+      "id": "gift-002",
+      "severity": "high",
+      "category": "gift_card",
+      "flags": "i",
+      "description": "Asks for the code on a card",
+      "pattern": "\\b(scratch|read|send)( off)? (me )?the (codes?|numbers|pin) (on|from) the (back of the )?cards?\\b"
+    },
+    {
+      "id": "secret-001",
+      "severity": "high",
+      "category": "isolation",
+      "flags": "i",
+      "description": "Asks you to keep it secret",
+      "pattern": "\\b(do not|don'?t|never) (tell|inform|talk to) (anyone|anybody|your (family|bank|children|kids|spouse|husband|wife))\\b"
+    },
+    {
+      "id": "secret-002",
+      "severity": "medium",
+      "category": "isolation",
+      "flags": "i",
+      "description": "Wants it kept between you",
+      "pattern": "\\bkeep (this|it) (confidential|secret|between us|private)\\b"
+    },
+    {
+      "id": "delivery-001",
+      "severity": "medium",
+      "category": "delivery",
+      "flags": "i",
+      "description": "Parcel fee request",
+      "pattern": "\\b(small|unpaid|outstanding|pending) (delivery|redelivery|shipping|customs|handling) (fee|charge|payment)\\b"
+    },
+    {
+      "id": "delivery-002",
+      "severity": "medium",
+      "category": "delivery",
+      "flags": "i",
+      "description": "Parcel said to be on hold",
+      "pattern": "\\b(package|parcel|shipment)( is| has been)? (on hold|held|suspended|undeliverable)\\b"
+    },
+    {
+      "id": "prize-001",
+      "severity": "high",
+      "category": "prize",
+      "flags": "i",
+      "description": "Prize or lottery win",
+      "pattern": "\\bcongrat(ulation)?s[!,. ]{0,3}you('ve| have) (won|been (selected|chosen))\\b"
+    },
+    {
+      "id": "prize-002",
+      "severity": "medium",
+      "category": "prize",
+      "flags": "i",
+      "description": "Claim your prize",
+      "pattern": "\\b(claim|collect|redeem) your (prize|reward|winnings|jackpot)\\b"
+    },
+    {
+      "id": "gov-001",
+      "severity": "high",
+      "category": "government",
+      "flags": "i",
+      "description": "Social Security number threat",
+      "pattern": "\\bsocial security (number|account)( has been| is| was| will be)? (suspended|blocked|frozen|compromised|cancell?ed)\\b"
+    },
+    {
+      "id": "gov-002",
+      "severity": "high",
+      "category": "government",
+      "flags": "i",
+      "description": "Arrest unless you pay",
+      "pattern": "\\b(warrant|arrest|arrested|jail)\\b[^.!?\\n]{0,40}\\b(unless|until|if you do not|if you don'?t) (you )?pay\\b"
+    },
+    {
+      "id": "account-001",
+      "severity": "medium",
+      "category": "account",
+      "flags": "i",
+      "description": "Account locked, log in to fix",
+      "pattern": "\\baccount( has been| is| was| will be)? (suspended|locked|limited|disabled|restricted)\\b[^.!?\\n]{0,40}\\b(verify|confirm|update|log ?in|sign ?in)\\b"
+    },
+    {
+      "id": "invest-001",
+      "severity": "medium",
+      "category": "investment",
+      "flags": "i",
+      "description": "Guaranteed profit claim",
+      "pattern": "\\b(guaranteed|risk[- ]free) (returns?|profits?|income|earnings)\\b"
+    },
+    {
+      "id": "invest-002",
+      "severity": "high",
+      "category": "investment",
+      "flags": "i",
+      "description": "Promise to multiply your money",
+      "pattern": "\\b(double|triple) your (bitcoin|crypto|btc|eth|money|investment|savings)\\b"
+    },
+    {
+      "id": "pay-001",
+      "severity": "high",
+      "category": "payment_method",
+      "flags": "i",
+      "description": "Pay at a crypto cash machine",
+      "pattern": "\\b(bitcoin|crypto|btc) (atm|machine|kiosk)\\b"
+    },
+    {
+      "id": "refund-001",
+      "severity": "medium",
+      "category": "refund",
+      "flags": "i",
+      "description": "Says you were overpaid",
+      "pattern": "\\b(we|i) (accidentally|mistakenly) (sent|refunded|deposited|transferred) (you )?(too much|extra|an extra|the wrong amount)\\b"
+    },
+    {
+      "id": "urgency-001",
+      "severity": "medium",
+      "category": "urgency",
+      "flags": "i",
+      "description": "Short deadline with a threat",
+      "pattern": "\\b(within|in the next) (24|48|72) hours\\b[^.!?\\n]{0,40}\\b(suspended|closed|deleted|arrested|legal action|terminated)\\b"
+    }
+  ],
+  "sources": {},
+  "surface_adapters": {
+    "facebook": {
+      "host": "(^|\\.)facebook\\.com$",
+      "item_selector": "[role=\"article\"]",
+      "dm_host": "(^|\\.)messenger\\.com$",
+      "dm_path": "/messages",
+      "dm_item_selector": null,
+      "skip_link_hosts": "(^|\\.)(facebook|fbcdn|instagram|whatsapp|meta|messenger)\\.com$"
+    }
+  }
+}

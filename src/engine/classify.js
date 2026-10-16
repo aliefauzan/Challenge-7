@@ -1,26 +1,51 @@
 // Link and social-item classification.
 import { analyzeUrl, parseHttpUrl } from "./url.js";
+import { splitHost } from "./host.js";
 import { scanText } from "./text.js";
 
-const REDIRECTS = [
-  { host: /^l[m]?\.facebook\.com$/, path: "/l.php", param: "u" },
-  { host: /^(www\.)?google\.[a-z.]+$/, path: "/url", param: "q" },
-  { host: /^(www\.)?google\.[a-z.]+$/, path: "/url", param: "url" },
-];
+const MAX_HOPS = 5;
+
+const isFacebookWrapper = (u) => /^lm?\.facebook\.com$/.test(u.hostname) && u.pathname === "/l.php";
+
+// Only Google's own registrable domains (google.com, google.co.id, …), with no
+// subdomain other than www. "google.evil.com" is not Google.
+function isGoogleWrapper(u) {
+  if (u.pathname !== "/url") return false;
+  const h = splitHost(u.hostname);
+  return h.mainLabel === "google" && h.subdomainLabels.length === 0 && !h.isIp;
+}
+
+function unwrapOnce(u) {
+  if (isFacebookWrapper(u)) return u.searchParams.get("u");
+  if (isGoogleWrapper(u)) return u.searchParams.get("q") ?? u.searchParams.get("url");
+  return null;
+}
 
 /**
- * Return the destination of a known redirect wrapper, or the input unchanged.
+ * Every URL in a chain of known redirect wrappers, outermost first, ending at
+ * the final destination (at most 5 hops). Non-http input gives [].
+ * @param {string} href
+ * @returns {URL[]}
+ */
+export function redirectChain(href) {
+  let u = parseHttpUrl(href);
+  const chain = [];
+  while (u && chain.length <= MAX_HOPS) {
+    chain.push(u);
+    const next = unwrapOnce(u);
+    u = next ? parseHttpUrl(next) : null;
+  }
+  return chain;
+}
+
+/**
+ * Return the final destination of a chain of known redirect wrappers, or the
+ * input unchanged.
  * @param {string} href
  */
 export function unwrapRedirect(href) {
-  const u = parseHttpUrl(href);
-  if (!u) return href;
-  for (const r of REDIRECTS) {
-    if (!r.host.test(u.hostname) || u.pathname !== r.path) continue;
-    const target = u.searchParams.get(r.param);
-    if (target && parseHttpUrl(target)) return target;
-  }
-  return href;
+  const chain = redirectChain(href);
+  return chain.length > 1 ? chain[chain.length - 1].href : href;
 }
 
 /**
@@ -29,9 +54,11 @@ export function unwrapRedirect(href) {
  * @returns {import("./types.js").Classification | null}
  */
 export function classifyLink(href, rules) {
-  const u = parseHttpUrl(unwrapRedirect(href));
-  if (!u) return null;
-  if (rules.scamDomains.has(u.hostname)) {
+  const chain = redirectChain(href);
+  if (!chain.length) return null;
+  const u = chain[chain.length - 1];
+  // A listed domain anywhere in the chain counts, including the wrapper itself.
+  if (chain.some((hop) => rules.scamDomains.has(hop.hostname))) {
     return {
       kind: "scam", basis: "link", url: u.href,
       signal: {
@@ -57,8 +84,9 @@ export function classifyLink(href, rules) {
  */
 export function classifySocialItem(item, rules, opts = {}) {
   const links = (item.links ?? []).filter((href) => {
-    const u = parseHttpUrl(unwrapRedirect(href));
-    return u && !(opts.skipLinkHost && opts.skipLinkHost.test(u.hostname));
+    const chain = redirectChain(href);
+    const last = chain[chain.length - 1];
+    return last && !(opts.skipLinkHost && opts.skipLinkHost.test(last.hostname));
   });
   const results = links.map((href) => classifyLink(href, rules)).filter(Boolean);
   const scam = results.find((r) => r.kind === "scam");

@@ -2,6 +2,6 @@
 // bundled ruleset is used instead (phase 04).
 export const RULESET_URL = "";
 // Base64 raw Ed25519 public key that signs the ruleset envelope. Generate one with `npm run keygen`.
-export const RULESET_PUBLIC_KEY = "";
+export const RULESET_PUBLIC_KEY = "54GBozjhyb/1W59SAZOAp1IwsrPCG07n4IgTAx/2Of8=";
 export const REFRESH_MINUTES = 720;
 export const WELCOME_URL = "";

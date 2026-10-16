@@ -15,6 +15,32 @@ test("engine/classify: unwraps social and search redirect links", () => {
   assert.equal(unwrapRedirect("::"), "::");
 });
 
+test("engine/classify: only real Google hosts are unwrapped", () => {
+  const target = encodeURIComponent("https://clean.example/");
+  assert.equal(unwrapRedirect(`https://www.google.co.id/url?q=${target}`), "https://clean.example/");
+  assert.equal(unwrapRedirect(`https://google.evil.com/url?q=${target}`), `https://google.evil.com/url?q=${target}`);
+  assert.equal(unwrapRedirect(`https://mail.google.com/url?q=${target}`), `https://mail.google.com/url?q=${target}`);
+  assert.equal(classifyLink(`https://google.scam.com/url?q=${target}`, rules).kind, "scam");
+});
+
+test("engine/classify: nested wrappers are unwrapped and every hop is checked", () => {
+  const inner = `https://www.google.com/url?q=${encodeURIComponent("https://fake-parcel.net/pay")}`;
+  const outer = `https://l.facebook.com/l.php?u=${encodeURIComponent(inner)}`;
+  assert.equal(unwrapRedirect(outer), "https://fake-parcel.net/pay");
+  assert.equal(classifyLink(outer, rules).kind, "scam");
+  let deep = "https://fake-parcel.net/pay";
+  for (let i = 0; i < 8; i++) deep = `https://l.facebook.com/l.php?u=${encodeURIComponent(deep)}`;
+  assert.notEqual(unwrapRedirect(deep), "https://fake-parcel.net/pay");
+  const viaScamWrapper = `https://scam.com/go?u=${encodeURIComponent("https://clean.example/")}`;
+  assert.equal(classifyLink(viaScamWrapper, rules).kind, "scam");
+});
+
+test("engine/classify: skip hosts apply to the final destination", () => {
+  const wrapped = `https://l.facebook.com/l.php?u=${encodeURIComponent("https://fake-parcel.net/pay")}`;
+  const item = { text: "", links: [wrapped] };
+  assert.equal(classifySocialItem(item, rules, { skipLinkHost: /(^|\.)facebook\.com$/ }).kind, "scam");
+});
+
 test("engine/classify: link priority is scam domain, then URL signal, then source", () => {
   assert.equal(classifyLink("https://x.scam.com/", rules).kind, "scam");
   assert.equal(classifyLink("https://x.scam.com/", rules).signal.source, "domain");
