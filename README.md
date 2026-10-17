@@ -62,13 +62,18 @@ npm run test:safari    # macOS Safari via safaridriver; see test/safari/checklis
 ```
 
 `test:e2e` needs `npm run build -- --target chrome` first and a Playwright
-Chromium (`npx playwright install chromium`). `test:safari` needs the Safari
-setup above, `safaridriver --enable`, Develop → **Allow Remote Automation** (Safari 27: Settings → Developer),
-and a build that bundles the test ruleset:
+Chromium (`npx playwright install chromium`). `test:safari` needs
+`safaridriver --enable`, Develop → **Allow Remote Automation** and **Allow
+Unsigned Extensions** (Safari 27: Settings → Developer), and a build that
+bundles the test ruleset:
 
 ```bash
-npm run safari:build -- --mac-only --test-ruleset && npm run safari:open
+npm run safari:build -- --mac-only --test-ruleset
 ```
+
+The test loads `dist/safari` into its own automation window, so the app does
+not need to be open. safaridriver can only reach a Safari that it started: if
+the session times out, quit Safari and run the test again.
 
 Never ship a `--test-ruleset` build. What automation cannot see (the warning
 contents, the popup, the badge, iOS) is in

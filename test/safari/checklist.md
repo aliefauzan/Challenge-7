@@ -23,7 +23,10 @@ macOS (one time; some settings reset when Safari quits):
    (Safari 27: Settings → Developer, "Allow remote automation and external
    agents" and "Allow unsigned extensions").
 4. `npm run safari:open`, then Safari → Settings → Extensions → ScamShield on,
-   allowed on all websites.
+   allowed on all websites. This is for the hand checks: `npm run test:safari`
+   loads `dist/safari` into its own automation window.
+5. Quit Safari before `npm run test:safari` if the session times out:
+   safaridriver can only reach a Safari that it started.
 
 iOS Simulator:
 
@@ -52,28 +55,32 @@ bypass are remembered per site.
 | 12 | any warned page | Open the ScamShield popup | Lists the phrase warning(s) with "why" text | [x] | [x] |
 | 13 | any warned page | Look at the toolbar button | Badge `!` (where Safari shows badges; otherwise the popup text) | [x] | [x] |
 | 14 | `http://<site>.localhost:8787/clean.html` | Open | Nothing shown | [x] | [x] |
-| 15 | any page, website access not granted | Open the popup | Permission card explaining how to allow access | [ ] | [ ] |
+| 15 | any page, website access not granted | Open the popup | Permission card explaining how to allow access (iOS: Safari asks for access before the popup opens) | [ ] | n/a |
 | 16 | iOS: rows 2, 4, 12 | Look at phone width | Text readable without zoom, blocker buttons reachable, popup usable | n/a | [x] |
-| 17 | all of the above | Web Inspector console (background page and page) | No errors from the extension | [x] | [ ] |
+| 17 | all of the above | Web Inspector console (background page and page) | No errors from the extension | [x] | [x] |
 
 ## Results
 
 iOS Simulator: iPhone 17 Pro, iOS 26.4, checked on 17 Oct 2026.
 
-- Row 15: Safari on iOS answers "not granted" for all websites even when All
-  Websites is set to Allow, so the popup showed the permission card on a
-  warned tab. The popup now also accepts a verdict for the tab, or access to
-  the tab's own site, as proof of access; after that change the card is gone
-  with Allow set. The card with access really withheld is covered by the unit
-  tests and not yet re-checked on the Simulator.
-- Row 17 needs Web Inspector from the Mac's Safari, which needs the macOS
-  setup above.
+- Row 15: with access not granted, tapping ScamShield in Safari's
+  extensions menu always shows Safari's own prompt ("Allow for One Day",
+  "Always Allow…", "Cancel"), even with All Websites set to Deny. Cancel opens
+  nothing, so the popup's permission card cannot appear on iOS; Safari's
+  prompt does its job. After "Allow for One Day" the popup shows the verdict
+  and no card. Safari on iOS answers "not granted" for all websites even with
+  All Websites set to Allow, so the popup also accepts a verdict for the tab,
+  or access to the tab's own site, as proof of access.
+- Row 17: Web Inspector from the Mac's Safari (Develop → Inspect Apps and
+  Devices). Page console shows only `tm:content loaded` (debug). The
+  background worker's console stayed empty while the known-scam, two-high
+  and one-phrase pages loaded, and its session storage held a verdict for
+  each page.
 
-macOS: Safari 27.0.1 on macOS 27.0.1, checked by hand on 17 Oct 2026.
+macOS: Safari 27.0.1 on macOS 27.0.1, checked on 17 Oct 2026.
 
-- `npm run test:safari` could not start: safaridriver timed out creating a
-  session (see docs/SAFARI_COMPAT.md, "Developer setup on macOS"). Every
-  row it covers (1, 2, 4, 6, 7, 10, 14) was checked by hand instead.
+- `npm run test:safari`: 7 of 7 pass (rows 1, 2, 4, 6, 7, 10, 14), the same
+  over eight runs in a row. The rows were also checked by hand.
 - Row 9: removing `<tm-root>` from the Web Inspector console left 0 hosts;
   two seconds later there was 1 again and the banner was back.
 - Row 13: the toolbar button shows a red `!` badge on warned pages and none

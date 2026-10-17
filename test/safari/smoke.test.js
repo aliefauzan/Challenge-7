@@ -1,8 +1,14 @@
 // Safari smoke test: drives Safari through safaridriver (W3C WebDriver over
 // plain fetch, no extra dependency) against the end-to-end fixtures.
 //
-//   npm run safari:build -- --mac-only --test-ruleset && npm run safari:open
+//   npm run safari:build -- --mac-only --test-ruleset
 //   npm run test:safari
+//
+// Automation windows run no installed extensions, so the test loads
+// dist/safari into its session as a temporary extension (WebDriver
+// "Install WebExtension") and removes it at the end. safaridriver can only
+// reach a Safari that it started itself: quit Safari before the first run
+// after turning on remote automation.
 //
 // macOS only; skipped elsewhere. The extension's UI lives in a closed shadow
 // root, so every assertion reads the page DOM only: whether <tm-root> is on
@@ -13,15 +19,18 @@ import { describe, test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { createServer } from "node:net";
+import { fileURLToPath } from "node:url";
 import { startServer } from "../e2e/server.js";
+
+const EXTENSION = fileURLToPath(new URL("../../dist/safari", import.meta.url));
 
 const SETUP = [
   "Safari automation or the ScamShield extension is not available.",
   "See the setup section of test/safari/checklist.md:",
   "  1. safaridriver --enable (asks for the admin password)",
-  "  2. Safari → Settings → Advanced → Show features for web developers; Develop → Allow Remote Automation",
-  "  3. Develop → Allow Unsigned Extensions, then Settings → Extensions → ScamShield on, allowed on all websites",
-  "  4. npm run safari:build -- --mac-only --test-ruleset && npm run safari:open",
+  "  2. Safari → Settings → Developer → Allow remote automation; Allow unsigned extensions",
+  "  3. If the session times out: quit Safari and run again, so safaridriver starts it",
+  "  4. npm run safari:build -- --mac-only --test-ruleset (builds dist/safari with the test ruleset)",
 ].join("\n");
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -51,12 +60,26 @@ function webdriver(base) {
       method,
       headers: { "content-type": "application/json" },
       body: body === undefined ? undefined : JSON.stringify(body),
+      signal: AbortSignal.timeout(20000),
     });
     const json = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(`${method} ${path}: ${json.value?.error ?? res.status} ${json.value?.message ?? ""}`.trim());
     return json.value;
   }
   let id = null;
+  const handles = () => call("GET", `/session/${id}/window/handles`);
+  const use = (handle) => call("POST", `/session/${id}/window`, { handle });
+  // When a tab moves to an extension page, Safari gives it a new window
+  // handle and commands on the old one fail with "no such window".
+  async function current(fn) {
+    try {
+      return await fn();
+    } catch (err) {
+      if (!/no such window/.test(err.message)) throw err;
+      await use((await handles()).at(-1));
+      return fn();
+    }
+  }
   return {
     status: () => call("GET", "/status"),
     async start() {
@@ -64,9 +87,31 @@ function webdriver(base) {
       id = value.sessionId;
     },
     stop: () => (id ? call("DELETE", `/session/${id}`).catch(() => {}) : undefined),
-    go: (url) => call("POST", `/session/${id}/url`, { url }).catch(() => {}),
-    url: () => call("GET", `/session/${id}/url`),
-    run: (script, ...args) => call("POST", `/session/${id}/execute/sync`, { script, args }),
+    install: async (path) => (await call("POST", `/session/${id}/webextension`, { type: "path", path })).extension,
+    uninstall: (ext) => call("DELETE", `/session/${id}/webextension/${encodeURIComponent(ext)}`).catch(() => {}),
+    // Each page opens in a new tab and the old tabs close: navigating away
+    // from an extension page can hang the session.
+    async go(url) {
+      // Just after a redirect the list can still name the retired handle,
+      // so try each one until a tab opens.
+      let old, handle;
+      for (let tries = 0; !handle; tries++) {
+        old = await handles();
+        for (const h of [...old].reverse()) {
+          handle = await use(h)
+            .then(() => call("POST", `/session/${id}/window/new`, { type: "tab" }))
+            .then((res) => res.handle, () => null);
+          if (handle) break;
+        }
+        if (!handle && tries === 10) throw new Error("no window to open a tab from");
+        if (!handle) await new Promise((r) => setTimeout(r, 300));
+      }
+      for (const h of old) await use(h).then(() => call("DELETE", `/session/${id}/window`)).catch(() => {});
+      await use(handle);
+      await call("POST", `/session/${id}/url`, { url }).catch(() => {});
+    },
+    url: () => current(() => call("GET", `/session/${id}/url`)),
+    run: (script, ...args) => current(() => call("POST", `/session/${id}/execute/sync`, { script, args })),
   };
 }
 
@@ -77,7 +122,7 @@ const RUN = Date.now().toString(36);
 const site = (name) => `${name}-${RUN}`;
 
 describe("Safari smoke", { skip: process.platform !== "darwin" && "macOS only" }, () => {
-  let server, driver, wd;
+  let server, driver, wd, ext;
   const hasRoot = () => wd.run("return document.querySelectorAll('tm-root').length === 1");
   const scrollLocked = () => wd.run("return document.documentElement.style.overflow === 'hidden'");
 
@@ -90,6 +135,7 @@ describe("Safari smoke", { skip: process.platform !== "darwin" && "macOS only" }
     try {
       await waitFor(async () => (await wd.status())?.ready !== undefined, { timeout: 5000, message: "safaridriver" });
       await wd.start();
+      ext = await wd.install(EXTENSION);
     } catch (err) {
       throw new Error(`${SETUP}\n(${err.message})`);
     }
@@ -97,10 +143,11 @@ describe("Safari smoke", { skip: process.platform !== "darwin" && "macOS only" }
     // the automation window with the test ruleset.
     await wd.go(server.url("known-scam", "/clean.html"));
     const ok = await waitFor(async () => onBlockedPage(await wd.url()), { timeout: 8000, message: "blocked page" }).catch(() => false);
-    if (!ok) throw new Error(`${SETUP}\n(known-scam.localhost was not sent to the blocked page: the extension is off in automation windows or the build lacks --test-ruleset)`);
+    if (!ok) throw new Error(`${SETUP}\n(known-scam.localhost was not sent to the blocked page: dist/safari lacks the test ruleset; build it with --test-ruleset)`);
   });
 
   after(async () => {
+    if (ext) await wd.uninstall(ext);
     await wd?.stop();
     driver?.kill();
     await server?.close();

@@ -81,7 +81,9 @@ On macOS 27.0.1 (Safari 27.0.1), Safari once stopped the extension's background 
 
 - Safari 27 moves the developer switches to Settings → Developer: "Allow remote automation and external agents" and "Allow unsigned extensions". The unsigned switch resets each time Safari quits, and the extension then disappears from Settings → Extensions until the switch is on again.
 - An archive leaves a second copy of the app under `ArchiveIntermediates`, and macOS registers its extension with the same bundle ID. Safari then lists neither copy. `npm run safari:open` unregisters every copy except the one it opens.
-- On macOS 27.0.1, `safaridriver` could not create a session ("The session timed out while connecting to a Safari instance"), with remote automation on, after a Safari restart, and with no Simulators running. The macOS rows of `test/safari/checklist.md` were checked by hand instead.
+- `safaridriver` can only reach a Safari that it started. With Safari already open, creating a session fails with "The session timed out while connecting to a Safari instance". Quit Safari and the next session starts it.
+- Automation windows run no installed extensions, even ones allowed on every website. `test/safari/smoke.test.js` loads `dist/safari` into its session as a temporary extension (WebDriver `POST /session/{id}/webextension` with `{"type": "path"}`) and removes it at the end. "Allow unsigned extensions" must be on.
+- When a tab moves to an extension page such as `blocked.html`, Safari gives it a new window handle, and commands on the old handle fail with "no such window". For a moment the handle list can still name the old handle. Navigating away from an extension page can also hang the session, so the test opens each page in a new tab and closes the old ones.
 
 ### Manifest
 
