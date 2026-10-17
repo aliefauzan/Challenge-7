@@ -75,17 +75,20 @@ warning signs), never code.
 
 Privacy policy URL: the published copy of [PRIVACY.md](PRIVACY.md).
 
-## Screenshots to capture (1280×800)
+## Screenshots (1280×800)
 
-1. The full-page warning on a fake virus-alert page, with both reasons listed.
-2. The banner on a parcel-fee page.
-3. The popup open on a warned page, listing what was found and why.
-4. The explanation page shown instead of a known scam website.
-5. The popup on a normal page, with the three on/off switches.
+Ready in [docs/store-screenshots](docs/store-screenshots):
 
-Use the test pages from `test/e2e/fixtures` served by `node test/e2e/server.js`.
-For screenshot 4, use a build with the test ruleset, which lists
-`known-scam.localhost`.
+1. `chrome-1-warning.png`: the full-page warning on a fake virus-alert page, with the reasons listed.
+2. `chrome-2-banner.png`: the banner on a parcel-fee page.
+3. `chrome-3-popup.png`: the popup open on a warned page, listing what was found and why.
+4. `chrome-4-blocked.png`: the explanation page shown instead of a known scam website.
+5. `chrome-5-clean.png`: the popup on a normal page, with the three on/off switches.
+
+They show the demo pages in `test/e2e/fixtures` (`demo-alert.html`,
+`demo-parcel.html`, `demo-news.html`) with the end-to-end test ruleset, which
+lists `known-scam.localhost`. Headless Chromium has no toolbar, so the popup
+in shots 3 and 5 is drawn onto the page where Chrome shows it.
 
 ## Small promo tile (440×280)
 

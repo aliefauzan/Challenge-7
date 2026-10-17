@@ -101,12 +101,16 @@ No sign-in is needed.
 
 ## Screenshots
 
-Capture from the Simulator and the Mac with the test pages in
-`test/e2e/fixtures` (`node test/e2e/server.js`; the Simulator reaches them at
-`http://<name>.localhost:8787/…`).
+Ready in [docs/store-screenshots](docs/store-screenshots):
 
-| Device | Size | Shots |
+| Device | Size | Files |
 |---|---|---|
-| iPhone 6.9" (iPhone 17 Pro Max Simulator) | 1320×2868 | full-page warning, banner, popup with reasons, explanation page for a blocked website |
-| iPad 13" (iPad Pro 13-inch Simulator) | 2064×2752 | full-page warning, popup with reasons |
-| Mac | 2880×1800 | full-page warning in Safari, banner, the ScamShield app window |
+| iPhone 6.9" (iPhone 17 Pro Max Simulator) | 1320×2868 | `iphone-1-warning.png` full-page warning, `iphone-2-banner.png` banner, `iphone-3-popup.png` popup with reasons, `iphone-4-blocked.png` explanation page for a blocked website |
+| iPad 13" (iPad Pro 13-inch Simulator) | 2064×2752 | `ipad-1-warning.png` full-page warning, `ipad-2-popup.png` popup with reasons |
+| Mac | 2880×1800 | not taken yet: full-page warning in Safari, banner, the ScamShield app window |
+
+They show the demo pages in `test/e2e/fixtures` (`demo-alert.html`,
+`demo-parcel.html`, `demo-news.html`), served by `node test/e2e/server.js`.
+The Simulator reaches them at `http://<name>.localhost:8787/…`. The blocked
+website shot needs a `--test-ruleset` build, which lists
+`known-scam.localhost`.

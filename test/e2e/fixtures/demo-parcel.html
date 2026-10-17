@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delivery update</title>
+<style>
+  body { margin: 0; font: 17px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1f2933; background: #f4f6f8; }
+  header { background: #2f4858; color: #fff; padding: 18px 20px; font-weight: 700; font-size: 20px; }
+  main { max-width: 640px; margin: 0 auto; padding: 20px; }
+  .card { background: #fff; border-radius: 14px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  h1 { margin: 0 0 8px; font-size: 24px; }
+  .track { color: #52606d; font-size: 15px; }
+  .steps { list-style: none; padding: 0; margin: 18px 0; }
+  .steps li { padding: 8px 0 8px 28px; position: relative; }
+  .steps li::before { content: ""; position: absolute; left: 4px; top: 15px; width: 10px; height: 10px; border-radius: 50%; background: #9aa5b1; }
+  .steps li.now::before { background: #d97706; }
+  .fee { display: flex; justify-content: space-between; border-top: 1px solid #e4e7eb; padding-top: 14px; font-weight: 600; }
+  button { margin-top: 18px; width: 100%; padding: 14px; border: 0; border-radius: 10px; background: #d97706; color: #fff; font: inherit; font-weight: 700; }
+</style>
+</head>
+<body>
+  <header>Parcel Delivery Service</header>
+  <main>
+    <div class="card">
+      <h1>Delivery update</h1>
+      <p class="track">Tracking number 4821 0093 7710</p>
+      <ul class="steps">
+        <li>Parcel received at sorting centre</li>
+        <li>Delivery attempted, nobody home</li>
+        <li class="now">Your package is on hold at our depot</li>
+      </ul>
+      <p>To arrange delivery, pay the small redelivery fee below.</p>
+      <div class="fee"><span>Redelivery fee</span><span>$1.99</span></div>
+      <button type="button">Pay and reschedule</button>
+    </div>
+  </main>
+</body>
+</html>

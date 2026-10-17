@@ -2,15 +2,14 @@
 // with h(); no extension APIs here, popup.js passes the handlers in.
 import { h } from "../ui/dom.js";
 
+// Plain ASCII inside a CSS badge: Safari on iOS has no emoji font in the
+// popup and draws symbols such as U+26D4 as an empty box. The check mark for
+// a clean page is drawn in CSS.
 const STATUS_ICON = {
-  blocked: "⛔",
-  warning: "⚠",
-  hidden: "⚠",
-  source: "ℹ",
-  clean: "✓",
-  off: "○",
-  "no-access": "○",
-  unchecked: "○",
+  blocked: "!",
+  warning: "!",
+  hidden: "!",
+  source: "i",
 };
 
 function accessCard(access, { onRequestAccess }) {
@@ -41,7 +40,7 @@ function statusCard(status) {
   return h(
     "section",
     { class: "card status", "data-kind": status.kind, "aria-live": "polite" },
-    h("h2", null, h("span", { class: "icon", "aria-hidden": "true" }, STATUS_ICON[status.kind] ?? "○"), status.title),
+    h("h2", null, h("span", { class: "icon", "aria-hidden": "true" }, STATUS_ICON[status.kind] ?? ""), status.title),
     status.domain ? h("p", { class: "domain" }, "Website: ", h("b", null, status.domain)) : null,
     status.detail ? h("p", null, status.detail) : null,
     reasons,

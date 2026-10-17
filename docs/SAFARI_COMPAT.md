@@ -44,6 +44,12 @@ The popup checks `permissions.contains({origins: ["<all_urls>"]})` and shows the
 
 On iOS 26.4 (Simulator) that call answers `false` even with All Websites set to **Allow** and content scripts running. The popup therefore also counts two other answers as access: a stored verdict for the tab (the content script ran there, which it can only do with access) and `permissions.contains` for the tab's own origin. Only when all three say no does it show the steps.
 
+### Popup on iPhone and iPad
+
+On iOS 26.4 (Simulator) the popup has no emoji font. A symbol such as U+26D4 shows as an empty box, even with "Apple Color Emoji" named in `font-family`. The popup's status icon is therefore plain ASCII (`!`, `i`) inside a CSS circle, and the check mark for a clean page is drawn with CSS borders.
+
+On iPhone the popup is a full-width sheet, so the 380px width cap only applies to mouse pointers (`@media (pointer: coarse)` lifts it). On iPad it is a popover of fixed height; longer content scrolls inside it.
+
 ### Loopback hosts
 
 Safari applies no DNR rules to `localhost` or `127.0.0.1`. Tests that need Safari to block must use a public test hostname.
