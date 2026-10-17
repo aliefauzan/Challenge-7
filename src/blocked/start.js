@@ -6,6 +6,7 @@ import { parseHttpUrl } from "../engine/url.js";
 import { decodeHash } from "../popup/model.js";
 import { isSafeHttpUrl } from "../ui/dom.js";
 import { reportHref } from "../ui/report.js";
+import { ask } from "../platform/ask.js";
 
 /** The blocked site's host name, or "" when the hash is not an http(s) address. */
 export function blockedHost(hash) {
@@ -43,7 +44,7 @@ export async function startBlockedPage({ api, win, reportBase }) {
   const hash = new URL(win.location.href).hash;
   let host = blockedHost(hash);
   if (host) {
-    const reply = await api.runtime.sendMessage({ type: "blocked-check", href: decodeHash(hash) }).catch(() => null);
+    const reply = await ask(api, { type: "blocked-check", href: decodeHash(hash) });
     if (reply?.listed !== true) host = "";
   }
 

@@ -68,12 +68,12 @@ Unsigned Extensions** (Safari 27: Settings → Developer), and a build that
 bundles the test ruleset:
 
 ```bash
-npm run safari:build -- --mac-only --test-ruleset
+npm run safari:build -- --mac-only --test-ruleset && npm run safari:open
 ```
 
-The test loads `dist/safari` into its own automation window, so the app does
-not need to be open. safaridriver can only reach a Safari that it started: if
-the session times out, quit Safari and run the test again.
+When Safari runs the installed app in automation windows, the test uses it;
+otherwise it loads `dist/safari` into its session itself. If creating the
+session times out, quit Safari and run the test again.
 
 Never ship a `--test-ruleset` build. What automation cannot see (the warning
 contents, the popup, the badge, iOS) is in

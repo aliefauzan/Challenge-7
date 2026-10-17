@@ -69,21 +69,32 @@ These ways of reaching `blocked.html` were tested on Safari iOS:
 
 So on Safari:
 
-1. A small content script runs at `document_start` in the top frame. It asks the worker whether the domain is a known scam domain.
+1. A small content script runs at `document_start` in the top frame. It asks the worker whether the domain is a known scam domain, and checks the stored list itself if the worker does not answer within a second.
 2. If it is, the content script calls `location.replace(runtime.getURL("blocked.html#" + encodeURIComponent(href)))`.
 3. The worker keeps a `tabs.onUpdated` backstop that does the same with `tabs.update`, in case the content script did not run.
 
 On Safari the scam page's first request is still sent. The page is never shown, and the user lands on the same explanation page as on Chrome.
 
-On macOS 27.0.1 (Safari 27.0.1), Safari once stopped the extension's background worker when its Web Inspector window closed, then did not start it again. While the worker was gone, the guard's message went unanswered and the backstop did not run. The content script still showed the full-page warning for the known scam domain, because it reads the ruleset from storage itself. Reloading the extension (rebuilding and opening the app) brought the worker back.
+On macOS 27.0.1 (Safari 27.0.1), Safari once stopped the extension's background worker when its Web Inspector window closed, then did not start it again. While the worker was gone, the guard's message went unanswered and the backstop did not run. The guard now falls back to the stored scam list in that case (see "Stopped background worker" below), so the page still lands on `blocked.html`. Reloading the extension (rebuilding and opening the app) brings the worker back.
 
 ### Developer setup on macOS
 
 - Safari 27 moves the developer switches to Settings → Developer: "Allow remote automation and external agents" and "Allow unsigned extensions". The unsigned switch resets each time Safari quits, and the extension then disappears from Settings → Extensions until the switch is on again.
 - An archive leaves a second copy of the app under `ArchiveIntermediates`, and macOS registers its extension with the same bundle ID. Safari then lists neither copy. `npm run safari:open` unregisters every copy except the one it opens.
-- `safaridriver` can only reach a Safari that it started. With Safari already open, creating a session fails with "The session timed out while connecting to a Safari instance". Quit Safari and the next session starts it.
-- Automation windows run no installed extensions, even ones allowed on every website. `test/safari/smoke.test.js` loads `dist/safari` into its session as a temporary extension (WebDriver `POST /session/{id}/webextension` with `{"type": "path"}`) and removes it at the end. "Allow unsigned extensions" must be on.
+- Creating a `safaridriver` session can time out ("The session timed out while connecting to a Safari instance"). Quitting Safari lets the next session start it. Only one session can drive Safari at a time; a leftover `safaridriver` process blocks the next one ("already paired with another WebDriver session").
+- When Safari already runs the installed app (unsigned extensions allowed), its automation windows run that copy. A copy loaded through WebDriver (`POST /session/{id}/webextension` with `{"type": "path"}`) next to it does not run. `test/safari/smoke.test.js` therefore checks first whether a warning appears, and loads `dist/safari` only when none does.
 - When a tab moves to an extension page such as `blocked.html`, Safari gives it a new window handle, and commands on the old handle fail with "no such window". For a moment the handle list can still name the old handle. Navigating away from an extension page can also hang the session, so the test opens each page in a new tab and closes the old ones.
+- Extension pages that are not web-accessible (the popup) cannot be opened from WebDriver: Safari shows its error page. A web-accessible extension page (`blocked.html`) can, and can then move to the popup.
+
+### Permissions
+
+- In automation windows Safari answers "not granted" to `permissions.contains({origins: ["<all_urls>"]})`, as Safari on iOS does with All Websites set to Allow, while it answers "granted" for a single site. The popup therefore also asks about the tab's own site, and on Safari shows the permission card over websites only.
+- Safari rejects a match pattern with a port (`http://host:8787/*` "is not a valid pattern"). Patterns are built from the host name alone.
+- Safari 27 on macOS offers no per-site access setting for this extension: Settings → Websites lists no extensions, and Edit Websites… in Settings → Extensions does nothing.
+
+### Stopped background worker
+
+The guard script waits at most one second for the worker's `nav-check` answer. Without an answer it reads the stored scam list itself and still leaves for `blocked.html`. The blocked page likewise stops waiting for `blocked-check` after one second and then leaves out the site's name. Checked by closing the worker's Web Inspector until Develop → Web Extension Background Content showed none, then opening `known-scam.localhost`.
 
 ### Manifest
 

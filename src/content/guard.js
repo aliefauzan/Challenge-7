@@ -2,17 +2,8 @@
 // this script asks the background whether the page is on a known scam
 // domain and, if so, leaves it for the blocked page before it renders.
 import { api } from "../platform/api.js";
+import { guardPage } from "./nav-guard.js";
 
-async function guard() {
-  if (window.top !== window) return;
-  if (location.protocol !== "http:" && location.protocol !== "https:") return;
-  const href = location.href;
-  try {
-    const reply = await api.runtime.sendMessage({ type: "nav-check", href });
-    if (reply?.block) location.replace(api.runtime.getURL(`blocked.html#${encodeURIComponent(href)}`));
-  } catch {
-    // Background unavailable: the tabs.onUpdated backstop still applies.
-  }
-}
-
-guard();
+guardPage({ api, win: window }).catch(() => {
+  // The tabs.onUpdated backstop and the content script's warning still apply.
+});

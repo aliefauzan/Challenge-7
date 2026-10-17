@@ -3,21 +3,24 @@
 // with a fake `api` and DOM.
 import { buildPopupView, platformOf, blockedPageAddress } from "./model.js";
 import { renderPopup } from "./view.js";
+import { parseHttpUrl } from "../engine/url.js";
 
 const PREFS_KEY = "tm.prefs";
 const META_KEY = "tm.rulesetMeta";
 const ALL_SITES = { origins: ["<all_urls>"] };
 
 // Safari on iOS answers false for "<all_urls>" even when All Websites is set
-// to Allow, so that answer alone is not trusted. A verdict for the tab means
+// to Allow, and so does Safari on macOS in automation windows, so that answer
+// alone is not trusted. A verdict for the tab means
 // the content script ran there, which needs access; otherwise the tab's own
 // site is asked about too.
 async function hasSiteAccess(api, tab, verdict) {
   if (verdict) return true;
   try {
     if (await api.permissions?.contains(ALL_SITES)) return true;
-    const origin = /^https?:/.test(tab?.url ?? "") ? new URL(tab.url).origin : null;
-    return origin ? Boolean(await api.permissions?.contains({ origins: [`${origin}/*`] })) : false;
+    // Match patterns carry no port: Safari rejects "http://host:8787/*".
+    const page = parseHttpUrl(tab?.url ?? "");
+    return page ? Boolean(await api.permissions?.contains({ origins: [`${page.protocol}//${page.hostname}/*`] })) : false;
   } catch {
     return false;
   }

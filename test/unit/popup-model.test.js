@@ -98,6 +98,16 @@ test("popup model: no website access shows the steps for the current browser", (
   assert.equal(chrome.access.canRequest, true);
 });
 
+test("popup model: on Safari a browser page gets no permission card", () => {
+  for (const url of ["favorites://", "safari-web-extension://abc/blocked.html#https%3A%2F%2Fscam.com%2F", undefined]) {
+    const mac = buildPopupView(base({ target: "safari", platform: "macos", hasAccess: false, tab: { id: 7, url } }));
+    assert.equal(mac.access, null, String(url));
+    assert.notEqual(mac.status.kind, "no-access");
+  }
+  const chrome = buildPopupView(base({ hasAccess: false, tab: { id: 7, url: "chrome://newtab/" } }));
+  assert.equal(chrome.access.canRequest, true, "Chrome still offers to ask for access");
+});
+
 test("popup model: toggles mirror prefs, defaults on", () => {
   const v = buildPopupView(base({ prefs: { scam: true, bias: false } }));
   assert.deepEqual(v.toggles.map((t) => [t.key, t.on]), [["scam", true], ["bias", false], ["social", true]]);

@@ -23,10 +23,10 @@ macOS (one time; some settings reset when Safari quits):
    (Safari 27: Settings → Developer, "Allow remote automation and external
    agents" and "Allow unsigned extensions").
 4. `npm run safari:open`, then Safari → Settings → Extensions → ScamShield on,
-   allowed on all websites. This is for the hand checks: `npm run test:safari`
-   loads `dist/safari` into its own automation window.
-5. Quit Safari before `npm run test:safari` if the session times out:
-   safaridriver can only reach a Safari that it started.
+   allowed on all websites. `npm run test:safari` uses this app when Safari
+   runs it in automation windows, and otherwise loads `dist/safari` itself.
+5. If `npm run test:safari` times out creating a session, quit Safari and run
+   it again.
 
 iOS Simulator:
 
@@ -55,7 +55,7 @@ bypass are remembered per site.
 | 12 | any warned page | Open the ScamShield popup | Lists the phrase warning(s) with "why" text | [x] | [x] |
 | 13 | any warned page | Look at the toolbar button | Badge `!` (where Safari shows badges; otherwise the popup text) | [x] | [x] |
 | 14 | `http://<site>.localhost:8787/clean.html` | Open | Nothing shown | [x] | [x] |
-| 15 | any page, website access not granted | Open the popup | Permission card explaining how to allow access (iOS: Safari asks for access before the popup opens) | [ ] | n/a |
+| 15 | any page, website access not granted | Open the popup | Permission card explaining how to allow access (iOS: Safari asks for access before the popup opens) | [x] | n/a |
 | 16 | iOS: rows 2, 4, 12 | Look at phone width | Text readable without zoom, blocker buttons reachable, popup usable | n/a | [x] |
 | 17 | all of the above | Web Inspector console (background page and page) | No errors from the extension | [x] | [x] |
 
@@ -80,14 +80,25 @@ iOS Simulator: iPhone 17 Pro, iOS 26.4, checked on 17 Oct 2026.
 macOS: Safari 27.0.1 on macOS 27.0.1, checked on 17 Oct 2026.
 
 - `npm run test:safari`: 7 of 7 pass (rows 1, 2, 4, 6, 7, 10, 14), the same
-  over eight runs in a row. The rows were also checked by hand.
+  over every run since the last change. The rows were also checked by hand.
 - Row 9: removing `<tm-root>` from the Web Inspector console left 0 hosts;
   two seconds later there was 1 again and the banner was back.
 - Row 13: the toolbar button shows a red `!` badge on warned pages and none
   after the banner is closed.
-- Row 15: not checked; it needs website access taken away.
+- Row 15: Safari 27 offers no way to take website access away from
+  ScamShield (Settings → Websites lists no extensions; Edit Websites… does
+  nothing). In automation windows Safari answers "not granted" for all
+  websites, so the popup opened there showed the permission card with the
+  macOS steps. The same windows answer "granted" for a single site, which is
+  what the popup asks about a website's tab. On Safari the card now shows
+  over websites only: over a page of the browser itself it was a false
+  alarm. The card for a website without access is covered by the unit tests.
+- Known-scam with the background worker stopped (after closing its Web
+  Inspector, Develop → Web Extension Background Content shows none): the
+  page still lands on `blocked.html`, because the guard script falls back to
+  the stored scam list when the worker does not answer within a second.
 - Row 17: page console shows only `tm:content loaded` (debug); background
   console shows only `tm:background loaded` and `tm:block 0 rules` (debug).
 - Row 1 once showed the in-page known-scam warning instead of `blocked.html`:
   the background worker had stopped after its Web Inspector closed and Safari
-  did not restart it. The warning still covered the page.
+  did not restart it. Fixed by the guard fallback above.

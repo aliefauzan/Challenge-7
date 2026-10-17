@@ -139,8 +139,13 @@ function statusOf({ tab, verdict, prefs, hasAccess, blockedListed }) {
  */
 export function buildPopupView(input) {
   const prefs = { scam: true, bias: true, social: true, ...(input.prefs ?? {}) };
+  // Safari can answer "not granted" for every website while access is
+  // granted (see start.js), and a page of the browser itself has no site of
+  // its own to ask about, so on Safari the card shows on websites only.
+  const onWebsite = Boolean(parseHttpUrl(input.tab?.url ?? ""));
+  const showAccess = !input.hasAccess && (input.target !== "safari" || onWebsite);
   return {
-    access: input.hasAccess ? null : accessCard(input.target, input.platform),
+    access: showAccess ? accessCard(input.target, input.platform) : null,
     status: statusOf({ ...input, prefs }),
     toggles: TOGGLES.map((t) => ({ ...t, on: prefs[t.key] !== false })),
     ruleset: {

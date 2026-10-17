@@ -23,9 +23,9 @@ const main = () => win.document.querySelector("main");
 const byTag = (node, tag) => node.findAll((e) => e.tagName === tag.toUpperCase());
 const switches = () => main().findAll((e) => e.getAttribute("role") === "switch");
 
-async function popup({ verdict, prefs, meta, hostAccess = true, grantedOrigins = [], target = "chrome", nav } = {}) {
+async function popup({ verdict, prefs, meta, hostAccess = true, grantedOrigins = [], target = "chrome", nav, url = "https://shop.example/cart" } = {}) {
   const api = makeFakeApi();
-  api.activeTab = { id: 7, url: "https://shop.example/cart" };
+  api.activeTab = { id: 7, url };
   api.hostAccess = hostAccess;
   api.grantedOrigins = grantedOrigins;
   if (verdict) await api.storage.session.set({ "tm.verdict.7": verdict });
@@ -90,6 +90,13 @@ test("popup page: Safari answering false for all sites, a verdict for the tab st
 test("popup page: access to the tab's own site counts as access", async () => {
   await popup({ hostAccess: false, grantedOrigins: ["https://shop.example/*"], target: "safari", nav: IOS });
   assert.equal(accessCardShown(), false);
+});
+
+test("popup page: the site question leaves out the port, as Safari requires", async () => {
+  await popup({ hostAccess: false, grantedOrigins: ["http://shop.localhost/*"], target: "safari", nav: IOS, url: "http://shop.localhost:8787/cart" });
+  assert.equal(accessCardShown(), false);
+  await popup({ hostAccess: false, grantedOrigins: ["http://shop.localhost/*"], target: "safari", nav: IOS, url: "http://other.localhost:8787/" });
+  assert.equal(accessCardShown(), true, "really no access still shows the card");
 });
 
 test("popup page: Chrome without access offers a button that asks for it", async () => {
