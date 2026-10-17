@@ -39,7 +39,7 @@ settings first:
 
 1. Safari → Settings → Advanced → turn on **Show features for web developers**.
 2. Develop → **Allow Unsigned Extensions** (asks for your password; resets when Safari quits). In Safari 27 this switch is in Settings → Developer.
-3. Safari → Settings → Extensions → turn on **ScamShield** → **Always Allow on Every Website**.
+3. Safari → Settings → Extensions → turn on **ScamShield** → **Always Allow on Every Website…**.
 
 ### Safari on iOS (Simulator)
 

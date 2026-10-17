@@ -54,7 +54,8 @@ function accessCard(target, platform) {
   return {
     title,
     intro: "Safari needs your permission first. In Safari, go to:",
-    path: ["Safari", "Settings", "Extensions", "ScamShield", "Always Allow on Every Website"],
+    path: ["Safari", "Settings", "Extensions", "ScamShield", "Always Allow on Every Website…"],
+    note: "Look under Permissions. The button is below \"You have not allowed this extension on any websites yet.\"",
     canRequest: false,
   };
 }

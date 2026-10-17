@@ -85,14 +85,18 @@ macOS: Safari 27.0.1 on macOS 27.0.1, checked on 17 Oct 2026.
   two seconds later there was 1 again and the banner was back.
 - Row 13: the toolbar button shows a red `!` badge on warned pages and none
   after the banner is closed.
-- Row 15: Safari 27 offers no way to take website access away from
-  ScamShield (Settings → Websites lists no extensions; Edit Websites… does
-  nothing). In automation windows Safari answers "not granted" for all
-  websites, so the popup opened there showed the permission card with the
-  macOS steps. The same windows answer "granted" for a single site, which is
-  what the popup asks about a website's tab. On Safari the card now shows
-  over websites only: over a page of the browser itself it was a false
-  alarm. The card for a website without access is covered by the unit tests.
+- Row 15: before website access is given, Safari → Settings → Extensions
+  shows "You have not allowed this extension on any websites yet." with
+  **Edit Websites…** and **Always Allow on Every Website…** (seen for a second
+  extension without access). The popup card and the app name that button.
+  Once access is given there is no way to take it away again (Settings →
+  Websites lists no extensions; Edit Websites… does nothing). In automation
+  windows Safari answers "not granted" for all websites, so the popup opened
+  there showed the permission card with the macOS steps. The same windows
+  answer "granted" for a single site, which is what the popup asks about a
+  website's tab. On Safari the card now shows over websites only: over a page
+  of the browser itself it was a false alarm. The card for a website without
+  access is covered by the unit tests.
 - Known-scam with the background worker stopped (after closing its Web
   Inspector, Develop → Web Extension Background Content shows none): the
   page still lands on `blocked.html`, because the guard script falls back to

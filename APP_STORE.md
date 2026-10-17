@@ -53,7 +53,7 @@ YOUR PRIVACY
 HOW TO TURN IT ON
 
 - iPhone and iPad: Settings → Apps → Safari → Extensions → ScamShield. Turn it on, then set All Websites to Allow.
-- Mac: open the ScamShield app and click Open Safari Settings. Turn on ScamShield, then choose Always Allow on Every Website.
+- Mac: open the ScamShield app and click Open Safari Settings. Turn on ScamShield, then click Always Allow on Every Website….
 
 ## Keywords (100 characters max)
 
@@ -92,7 +92,7 @@ ScamShield is a Safari web extension. The app only explains how to turn it on.
 To test:
 
 1. Install the app and open it once.
-2. iOS: Settings → Apps → Safari → Extensions → ScamShield → turn on, then All Websites → Allow. macOS: Safari → Settings → Extensions → ScamShield → turn on, then Always Allow on Every Website.
+2. iOS: Settings → Apps → Safari → Extensions → ScamShield → turn on, then All Websites → Allow. macOS: Safari → Settings → Extensions → ScamShield → turn on, then click Always Allow on Every Website….
 3. Open a page that contains scam wording. For example, a page that says "Your computer is infected. Call Microsoft support now at 1-800-555-0100."
 4. Expected: a full-page warning listing "Fake virus alert" and "Asks you to call fake support". "I understand the risk — continue" lets you through.
 5. Tap the ScamShield button in Safari's toolbar (iOS: the puzzle-piece button in the address bar) to see what was found.

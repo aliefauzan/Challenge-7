@@ -92,7 +92,9 @@ test("popup model: no website access shows the steps for the current browser", (
   assert.equal(ios.status.kind, "no-access");
 
   const mac = buildPopupView(base({ target: "safari", platform: "macos", hasAccess: false }));
-  assert.deepEqual(mac.access.path, ["Safari", "Settings", "Extensions", "ScamShield", "Always Allow on Every Website"]);
+  // The wording Safari 27 shows in Settings → Extensions before access is given.
+  assert.deepEqual(mac.access.path, ["Safari", "Settings", "Extensions", "ScamShield", "Always Allow on Every Website…"]);
+  assert.match(mac.access.note, /You have not allowed this extension on any websites yet/);
 
   const chrome = buildPopupView(base({ hasAccess: false }));
   assert.equal(chrome.access.canRequest, true);

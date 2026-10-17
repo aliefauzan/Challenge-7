@@ -38,7 +38,7 @@ After the extension is turned on in iOS Settings, "All Websites" defaults to **A
 Everything works only after the user sets:
 
 - iOS: Settings → Apps → Safari → Extensions → ScamShield → All Websites → **Allow**
-- macOS: Safari → Settings → Extensions → ScamShield → **Always Allow on Every Website**
+- macOS: Safari → Settings → Extensions → ScamShield → **Always Allow on Every Website…**
 
 The popup checks `permissions.contains({origins: ["<all_urls>"]})` and shows these steps when it is false. The container app shows the same steps.
 
@@ -90,7 +90,9 @@ On macOS 27.0.1 (Safari 27.0.1), Safari once stopped the extension's background 
 
 - In automation windows Safari answers "not granted" to `permissions.contains({origins: ["<all_urls>"]})`, as Safari on iOS does with All Websites set to Allow, while it answers "granted" for a single site. The popup therefore also asks about the tab's own site, and on Safari shows the permission card over websites only.
 - Safari rejects a match pattern with a port (`http://host:8787/*` "is not a valid pattern"). Patterns are built from the host name alone.
-- Safari 27 on macOS offers no per-site access setting for this extension: Settings → Websites lists no extensions, and Edit Websites… in Settings → Extensions does nothing.
+- Safari 27 on macOS, Settings → Extensions, for an extension that has no website access yet: under Permissions it says "You have not allowed this extension on any websites yet." with the buttons **Edit Websites…** and **Always Allow on Every Website…**. Once access is given on every website, the second button goes away and a notice says the extension "can read and alter webpages you visit and see your browsing history on all websites". The popup card, the container app and the README use this wording.
+- After access is given, Settings → Websites lists no extensions and Edit Websites… does nothing, so there was no way to take access away again for a test of the card.
+- Safari refuses to turn on an extension whose manifest has no `description` ("Missing or empty description manifest entry").
 
 ### Stopped background worker
 
