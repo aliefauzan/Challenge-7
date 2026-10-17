@@ -8,25 +8,25 @@ Tested on 2026-10-16:
 |---|---|---|
 | Chromium | 156 | Playwright, unpacked extension, headless |
 | Safari iOS | 26.4 (iPhone 17 Pro Simulator) | Converted with `safari-web-extension-converter`, installed with `simctl` |
-| Safari macOS | 27.0.1 (macOS 27) | Built and registered with Safari; turning it on in Safari Settings is a manual step and was not done in this run |
+| Safari macOS | 27.0.1 (macOS 27) | Loaded through safaridriver (WebDriver "Install WebExtension") on 2026-10-17. That copy had no website access, so probes 4, 5 and 10–12 come from ScamShield itself (test/safari/checklist.md) |
 
 ## Results
 
 | # | Probe | Chrome | Safari iOS | Safari macOS | What the code does |
 |---|---|---|---|---|---|
-| 1 | `background.service_worker` starts and is woken by an alarm after it stops | yes | yes (worker restarted by the alarm) | pending | Use `service_worker` on both targets |
-| 2 | `crypto.subtle.verify("Ed25519", …)` in the worker | yes | yes | pending | WebCrypto only; no bundled Ed25519 library |
-| 3 | DNR `updateDynamicRules` with `requestDomains` | yes | yes | pending | `requestDomains` on both targets |
-| 4 | DNR `redirect` to the extension's `blocked.html` (`regexSubstitution` or `extensionPath`) | yes, both | **no**, neither (rules are accepted; the page loads normally) | pending | Safari: no DNR redirect. The content script sends the tab to `blocked.html` (see below) |
-| 5 | Block happens before the request is sent | yes (the server saw no request) | DNR `block` yes, but Safari shows its own "The URL was blocked by a content blocker" page and the tab cannot be moved to `blocked.html` afterwards | pending | Safari: content script at `document_start` |
-| 6 | `storage.session` from the worker | yes | yes | pending | Use `storage.session` |
-| 7 | `storage.session.setAccessLevel` exists | yes | yes | pending | Not used: content scripts ask the worker for flags by message |
-| 8 | `storage.sync` set/get | yes | yes (cross-device sync not tested) | pending | Code does not depend on sync |
-| 9 | `action.setBadgeText` / `setBadgeBackgroundColor` | yes | yes | pending | Badge on both targets |
-| 10 | Content script runs in cross-origin iframes (`all_frames`) | yes | yes | pending | `all_frames: true` |
-| 11 | Closed `attachShadow` from a content script, with styles | yes | yes | pending | Closed shadow root |
-| 12 | `tabs.query` returns `url` for the active tab | yes | yes | pending | Popup reads the active tab URL directly |
-| 13 | What the user sees before granting website access | permission granted at install | see below | pending | Onboarding card in the popup and the container app |
+| 1 | `background.service_worker` starts and is woken by an alarm after it stops | yes | yes (worker restarted by the alarm) | yes (started; the alarm wake-up was not waited for) | Use `service_worker` on both targets |
+| 2 | `crypto.subtle.verify("Ed25519", …)` in the worker | yes | yes | yes | WebCrypto only; no bundled Ed25519 library |
+| 3 | DNR `updateDynamicRules` with `requestDomains` | yes | yes | yes | `requestDomains` on both targets |
+| 4 | DNR `redirect` to the extension's `blocked.html` (`regexSubstitution` or `extensionPath`) | yes, both | **no**, neither (rules are accepted; the page loads normally) | rules accepted; not seen to act (the test copy had no website access). ScamShield uses the iOS path and it works | Safari: no DNR redirect. The content script sends the tab to `blocked.html` (see below) |
+| 5 | Block happens before the request is sent | yes (the server saw no request) | DNR `block` yes, but Safari shows its own "The URL was blocked by a content blocker" page and the tab cannot be moved to `blocked.html` afterwards | not run (no website access); ScamShield's `document_start` guard reaches `blocked.html` | Safari: content script at `document_start` |
+| 6 | `storage.session` from the worker | yes | yes | yes | Use `storage.session` |
+| 7 | `storage.session.setAccessLevel` exists | yes | yes | yes | Not used: content scripts ask the worker for flags by message |
+| 8 | `storage.sync` set/get | yes | yes (cross-device sync not tested) | yes (cross-device sync not tested) | Code does not depend on sync |
+| 9 | `action.setBadgeText` / `setBadgeBackgroundColor` | yes | yes | yes | Badge on both targets |
+| 10 | Content script runs in cross-origin iframes (`all_frames`) | yes | yes | yes (ScamShield, checklist row 11) | `all_frames: true` |
+| 11 | Closed `attachShadow` from a content script, with styles | yes | yes | yes (ScamShield's banner and blocker) | Closed shadow root |
+| 12 | `tabs.query` returns `url` for the active tab | yes | yes | yes (ScamShield popup, checklist row 12) | Popup reads the active tab URL directly |
+| 13 | What the user sees before granting website access | permission granted at install | see below | see below | Onboarding card in the popup and the container app |
 | 14 | Same probes on iOS | n/a | this column | n/a | No iOS-only gaps beyond probes 4, 5 and 13 |
 
 ## Safari details
@@ -34,6 +34,8 @@ Tested on 2026-10-16:
 ### Website access (probe 13)
 
 After the extension is turned on in iOS Settings, "All Websites" defaults to **Ask**. In that state Safari showed no prompt in our tests, the content script did not run, and even DNR `block` rules had no effect. The background worker still ran.
+
+On macOS, Safari → Settings → Extensions shows an extension without access as "You have not allowed this extension on any websites yet.", with the buttons **Edit Websites…** and **Always Allow on Every Website…**. Its permission note says the extension "may request access" when the toolbar button is used. A copy loaded through safaridriver had no website access either: its worker ran, its content script did not.
 
 Everything works only after the user sets:
 
