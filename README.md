@@ -154,6 +154,26 @@ flowchart LR
 Safari differences and the reasons for them are in
 [docs/SAFARI_COMPAT.md](docs/SAFARI_COMPAT.md).
 
+## What it cannot do yet
+
+`test/unit/edge-cases.test.js` runs legit pages, scam pages and the cases
+below through the scanner. Pages that only ask for an email address, phone
+number, tracking number or one-time code stay clean.
+
+Missed today:
+
+- Scam text in languages other than English (the phrases are English only).
+- Digits or symbols in place of letters ("c0mputer").
+- Scam text drawn in an image.
+- A fake sign-in page with no scam wording, for a brand that is not in
+  `impersonated_brands`.
+
+False alarms today:
+
+- Advice pages and news stories that quote a scam line word for word, unless
+  the site is in `phrase_allowlist`.
+- Shops that invite you to "buy a gift card".
+
 ## Reporting a mistake
 
 The blocked page and the full-page warning have a **Report a mistake** link.
