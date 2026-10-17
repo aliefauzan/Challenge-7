@@ -107,10 +107,10 @@ Ready in [docs/store-screenshots](docs/store-screenshots):
 |---|---|---|
 | iPhone 6.9" (iPhone 17 Pro Max Simulator) | 1320×2868 | `iphone-1-warning.png` full-page warning, `iphone-2-banner.png` banner, `iphone-3-popup.png` popup with reasons, `iphone-4-blocked.png` explanation page for a blocked website |
 | iPad 13" (iPad Pro 13-inch Simulator) | 2064×2752 | `ipad-1-warning.png` full-page warning, `ipad-2-popup.png` popup with reasons |
-| Mac | 2880×1800 | not taken yet: full-page warning in Safari, banner, the ScamShield app window |
+| Mac (Safari 27 on macOS 27) | 2560×1600 | `mac-1-warning.png` full-page warning, `mac-2-banner.png` banner, `mac-3-popup.png` popup with reasons, `mac-4-blocked.png` explanation page for a blocked website, `mac-5-app.png` the ScamShield app window |
 
 They show the demo pages in `test/e2e/fixtures` (`demo-alert.html`,
 `demo-parcel.html`, `demo-news.html`), served by `node test/e2e/server.js`.
-The Simulator reaches them at `http://<name>.localhost:8787/…`. The blocked
+The Simulator and Safari on the Mac reach them at `http://<name>.localhost:8787/…`. The Mac shots are the Safari window at 1280×800 points; the app window is placed on a plain background. The blocked
 website shot needs a `--test-ruleset` build, which lists
 `known-scam.localhost`.

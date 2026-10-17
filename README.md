@@ -38,7 +38,7 @@ A locally built extension is not signed for distribution, so Safari needs two
 settings first:
 
 1. Safari → Settings → Advanced → turn on **Show features for web developers**.
-2. Develop → **Allow Unsigned Extensions** (asks for your password; resets when Safari quits).
+2. Develop → **Allow Unsigned Extensions** (asks for your password; resets when Safari quits). In Safari 27 this switch is in Settings → Developer.
 3. Safari → Settings → Extensions → turn on **ScamShield** → **Always Allow on Every Website**.
 
 ### Safari on iOS (Simulator)
@@ -63,7 +63,7 @@ npm run test:safari    # macOS Safari via safaridriver; see test/safari/checklis
 
 `test:e2e` needs `npm run build -- --target chrome` first and a Playwright
 Chromium (`npx playwright install chromium`). `test:safari` needs the Safari
-setup above, `safaridriver --enable`, Develop → **Allow Remote Automation**,
+setup above, `safaridriver --enable`, Develop → **Allow Remote Automation** (Safari 27: Settings → Developer),
 and a build that bundles the test ruleset:
 
 ```bash

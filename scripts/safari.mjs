@@ -104,6 +104,20 @@ function archive(args) {
   }
 }
 
+// An archive leaves a second copy of the app under ArchiveIntermediates, and
+// macOS registers its extension under the same bundle ID. Safari then lists
+// neither copy. Unregister every copy except the one about to be opened.
+const LSREGISTER = "/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister";
+function unregisterOtherCopies() {
+  const list = spawnSync("pluginkit", ["-mADvvv", "-i", `${BUNDLE_ID}.Extension`], { encoding: "utf8" }).stdout ?? "";
+  for (const [, appex] of list.matchAll(/^\s*Path = (.+\.appex)$/gm)) {
+    if (appex.startsWith(`${MAC_APP}/`)) continue;
+    spawnSync("pluginkit", ["-r", appex]);
+    spawnSync(LSREGISTER, ["-u", dirname(dirname(dirname(appex)))]);
+    console.log(`unregistered ${appex}`);
+  }
+}
+
 function need(path) {
   if (!existsSync(path)) {
     console.error(`${path} is missing: run npm run safari:build first`);
@@ -116,6 +130,7 @@ if (command === "build") await build(args);
 else if (command === "archive") archive(args);
 else if (command === "open") {
   need(MAC_APP);
+  unregisterOtherCopies();
   run("open", [MAC_APP]);
   console.log("opened ScamShield; now turn it on in Safari Settings → Extensions");
 } else if (command === "sim") {

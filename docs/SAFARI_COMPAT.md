@@ -75,6 +75,14 @@ So on Safari:
 
 On Safari the scam page's first request is still sent. The page is never shown, and the user lands on the same explanation page as on Chrome.
 
+On macOS 27.0.1 (Safari 27.0.1), Safari once stopped the extension's background worker when its Web Inspector window closed, then did not start it again. While the worker was gone, the guard's message went unanswered and the backstop did not run. The content script still showed the full-page warning for the known scam domain, because it reads the ruleset from storage itself. Reloading the extension (rebuilding and opening the app) brought the worker back.
+
+### Developer setup on macOS
+
+- Safari 27 moves the developer switches to Settings → Developer: "Allow remote automation and external agents" and "Allow unsigned extensions". The unsigned switch resets each time Safari quits, and the extension then disappears from Settings → Extensions until the switch is on again.
+- An archive leaves a second copy of the app under `ArchiveIntermediates`, and macOS registers its extension with the same bundle ID. Safari then lists neither copy. `npm run safari:open` unregisters every copy except the one it opens.
+- On macOS 27.0.1, `safaridriver` could not create a session ("The session timed out while connecting to a Safari instance"), with remote automation on, after a Safari restart, and with no Simulators running. The macOS rows of `test/safari/checklist.md` were checked by hand instead.
+
 ### Manifest
 
 Safari rejects a manifest without a non-empty `description`.
